@@ -2,6 +2,7 @@
 using QuanLyVeTau.Tools;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,7 +12,14 @@ namespace QuanLyVeTau.Controllers
 {
     public class TaiKhoanController : Controller
     {
-        private QuanLyVeTauDBDataContext db = new QuanLyVeTauDBDataContext("Data Source=DESKTOP-7TLHHMR;Initial Catalog=QL_VETAU;Integrated Security=True;Encrypt=False");
+        private QuanLyVeTauDBDataContext db;
+
+        public TaiKhoanController()
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString;
+            db = new QuanLyVeTauDBDataContext(connectionString);
+        }
+
         // GET: TaiKhoan
         public ActionResult Index()
         {

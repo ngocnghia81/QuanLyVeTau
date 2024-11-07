@@ -41,19 +41,13 @@
                                     <input type="date" class="form-control" name="date" id="date" required="">
                                 </div>
                                 <div class="col-6">
-                                    <label for="classes" class="form-label">Hạng</label>
-                                    <select id="classes" name="classes" class="form-select">
-                                        <option selected="">All Classes</option>
-                                        <option>AC 2 Tier (2A)</option>
-                                        <option>AC 3 Tier (3A)</option>
-                                        <option>Sleeper (SL)</option>
-                                        <option>Second Sitting (2S)</option>
-                                    </select>
+                                    <label for="returnDate" class="form-label">Ngày về</label>
+                                    <input type="date" class="form-control" name="returnDate" id="returnDate" disabled>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="roundTrip" id="gridCheck">
-                                        <label class="form-check-label" for="gridCheck">
+                                        <input class="form-check-input" type="checkbox" name="roundTrip" id="roundTripCheck">
+                                        <label class="form-check-label" for="roundTripCheck">
                                             Khứ hồi
                                         </label>
                                     </div>
@@ -72,3 +66,9 @@
         </div>
     </section>
 </div>
+
+<script>
+    document.getElementById("roundTripCheck").addEventListener("change", function() {
+        document.getElementById("returnDate").disabled = !this.checked;
+    });
+</script>

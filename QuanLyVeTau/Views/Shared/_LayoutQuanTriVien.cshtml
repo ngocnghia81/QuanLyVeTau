@@ -1,13 +1,117 @@
 ﻿<!DOCTYPE html>
+<html lang="en">
 
-<html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap CSS và Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" />
+    <link rel="shortcut icon" href="Images/IRCTC-Logo-PNG-768x768.webp" type="image/x-icon" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/Content/admin.css" />
+    <title>Quản trị Đường sắt</title>
 </head>
+
 <body>
-    <div>
-        @RenderBody()
+    <!-- Sidebar Start -->
+    <div class="d-flex" id="wrapper">
+        <nav class="bg-dark border-end" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 text-white fs-4 fw-bold">Quản trị Đường sắt</div>
+            <div class="list-group list-group-flush">
+                <a href="#dashboard" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
+                <a href="#manageUsers" class="list-group-item list-group-item-action bg-dark text-white">Quản lý Người dùng</a>
+                <a href="#manageTickets" class="list-group-item list-group-item-action bg-dark text-white">Quản lý Vé</a>
+                <a href="#reports" class="list-group-item list-group-item-action bg-dark text-white">Báo cáo</a>
+                <a href="#settings" class="list-group-item list-group-item-action bg-dark text-white">Cài đặt</a>
+                <a href="#logout" class="list-group-item list-group-item-action bg-dark text-white">Đăng xuất</a>
+            </div>
+        </nav>
+        <!-- Sidebar End -->
+        <!-- Page Content Start -->
+        <div id="page-content-wrapper" class="flex-grow-1">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <button class="btn btn-primary" id="menu-toggle"><i class="bi bi-list"></i></button>
+                    <a class="navbar-brand ms-3" href="#">Quản trị Đường sắt</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#profile">Xin chào, Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#logout">Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="container-fluid p-4">
+                <h1 class="fs-3 mb-4">Dashboard</h1>
+                <div class="row">
+                    <!-- Các thống kê -->
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-primary">
+                            <div class="card-body">
+                                <h5 class="card-title">Người dùng</h5>
+                                <p class="card-text">Tổng số người dùng: 150</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-success">
+                            <div class="card-body">
+                                <h5 class="card-title">Vé bán</h5>
+                                <p class="card-text">Tổng số vé đã bán: 450</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-warning">
+                            <div class="card-body">
+                                <h5 class="card-title">Doanh thu</h5>
+                                <p class="card-text">Doanh thu: 1.2 tỷ VND</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-danger">
+                            <div class="card-body">
+                                <h5 class="card-title">Phản hồi</h5>
+                                <p class="card-text">Số phản hồi mới: 20</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @RenderBody()
+
+            <!-- Footer -->
+            <footer class="bg-dark text-white pt-4 pb-2">
+                <div class="container text-center">
+                    <p class="mb-0">© 2024 Đường sắt Việt Nam. Bản quyền thuộc về công ty.</p>
+                </div>
+            </footer>
+        </div>
+        <!-- Page Content End -->
     </div>
+
+
+    <!-- Bootstrap và JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // Toggle Sidebar
+        document.getElementById("menu-toggle").addEventListener("click", function () {
+            document.getElementById("wrapper").classList.toggle("toggled");
+        });
+    </script>
 </body>
+
 </html>

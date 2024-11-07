@@ -260,6 +260,7 @@
     <Content Include="Views\Shared\_LayoutQuanTriVien.cshtml" />
     <Content Include="Views\Shared\_LayoutNguoiDung.cshtml" />
     <Content Include="Views\Ve\Index.cshtml" />
+    <Content Include="Views\QuanTri\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

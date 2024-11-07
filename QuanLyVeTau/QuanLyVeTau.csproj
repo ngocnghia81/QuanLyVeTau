@@ -161,9 +161,12 @@
     <Content Include="Content\Images\20230525133823.jpg" />
     <Content Include="Content\Images\6a724b9501764fd83a4abcd37b58144d.png" />
     <Content Include="Content\Images\admin.jpg" />
+    <Content Include="Content\Images\cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTA5L3Jhd3BpeGVsb2ZmaWNlMV9zdGVhbV90cmFpbl9pbl90aGVfYmVhdXRpZnVsX3RyYWluX2JyaWRnZV93aXRoX19iMzBkZTliZi03NzRhLTQzZDMtODZmOS00ZDczYTc1ODRkZmVfMS5.png" />
+    <Content Include="Content\Images\cHJpdmF0ZS9zdGF0aWMvaW1hZ2VzL3dlYnNpdGUvMjAyMi0wNS9mbDE0NDMxMjI4ODI2LWltYWdlLWpvYjg0Ni0wMS5wbmc-removebg-preview.png" />
     <Content Include="Content\Images\da6e895893602b3e7271.jpg" />
     <Content Include="Content\Images\he-thong-duong-sat-viet-nam.jpg" />
     <Content Include="Content\Images\hotel Image.jpg" />
+    <Content Include="Content\Images\—Pngtree—vietnam flag transparent background in_6979301.png" />
     <Content Include="Content\index.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -261,6 +264,7 @@
     <Content Include="Views\Shared\_LayoutNguoiDung.cshtml" />
     <Content Include="Views\Ve\Index.cshtml" />
     <Content Include="Views\QuanTri\Index.cshtml" />
+    <Content Include="Views\Ve\TimVe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

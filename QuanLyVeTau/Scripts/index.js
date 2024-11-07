@@ -13,6 +13,7 @@ function getAllUserData() {
     let userData = JSON.parse(localStorage.getItem("userData")) ?? [];
     return userData;
 }
+}
 
 function createPData() {
     let passengerList = JSON.parse(localStorage.getItem("passengerList")) ?? [];

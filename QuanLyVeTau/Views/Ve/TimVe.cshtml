@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "TimVe";
+    Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+}
+<div class="tab-content" id="myTabContent">
+    <!-- Hero Section Start  -->
+    <section class="heroSection fade show active" id="heroSection" role="tabpanel" aria-labelledby="heroSection-tab">
+        <div class="content active">
+            <div class="bgImg">
+                <div class="container pt-5">
+                    <div class="card p-1 mt-5" style="width: 32rem">
+                        <div class="img d-flex">
+                            <img src="~/Content/Images/—Pngtree—vietnam flag transparent background in_6979301.png" alt="Train Icon" class="img-fluid" style="width: 200px; height: auto">
+                            <p class="fw-bold" style="color: var(--irctc-primary-color); font-size: 1.6em">
+                                Đặt vé
+                            </p>
+                            <img src="~/Content/Images/cHJpdmF0ZS9zdGF0aWMvaW1hZ2VzL3dlYnNpdGUvMjAyMi0wNS9mbDE0NDMxMjI4ODI2LWltYWdlLWpvYjg0Ni0wMS5wbmc-removebg-preview.png" alt="Train Icon" class="img-fluid" style="width: 200px; height: auto">
+                        </div>
+                        <div class="card-body">
+                            <!-- Đặt form bao bọc toàn bộ để có thể sử dụng FormCollection -->
+                            <form method="post" action="/YourController/YourAction" class="row g-3" id="trainSearchBtw1">
+                                <div class="col-md-5 col-10 dropBox">
+                                    <label for="from" class="form-label">Từ</label>
+                                    <input type="text" class="form-control search" name="from" id="from" required="">
+                                    <ul class="showList">
+                                    </ul>
+                                </div>
+                                <div class="col-md-2 col-2 align-self-end">
+                                    <div class="btn" id="interchangeBtn">
+                                        <img src="~/Content/Icons/arrows.png" alt="Interchange" class="img-fluid">
+                                    </div>
+                                </div>
+                                <div class="col-md-5 col-12 dropBox">
+                                    <label for="to" class="form-label">Đến</label>
+                                    <input type="text" class="form-control search" name="to" id="to" required="">
+                                    <ul class="showList">
+                                    </ul>
+                                </div>
+                                <div class="col-6">
+                                    <label for="date" class="form-label">Ngày đi</label>
+                                    <input type="date" class="form-control" name="date" id="date" required="">
+                                </div>
+                                <div class="col-6">
+                                    <label for="classes" class="form-label">Hạng</label>
+                                    <select id="classes" name="classes" class="form-select">
+                                        <option selected="">All Classes</option>
+                                        <option>AC 2 Tier (2A)</option>
+                                        <option>AC 3 Tier (3A)</option>
+                                        <option>Sleeper (SL)</option>
+                                        <option>Second Sitting (2S)</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="roundTrip" id="gridCheck">
+                                        <label class="form-check-label" for="gridCheck">
+                                            Khứ hồi
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn submitBtn px-4 fw-bold">
+                                        Tìm
+                                    </button>
+                                </div>
+                            </form>
+                            <!-- Kết thúc form -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

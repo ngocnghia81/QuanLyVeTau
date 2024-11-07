@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 App_Start
+Web.config

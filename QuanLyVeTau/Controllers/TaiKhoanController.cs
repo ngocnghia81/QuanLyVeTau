@@ -13,5 +13,10 @@ namespace QuanLyVeTau.Controllers
         {
             return View();
         }
+
+        public ActionResult DangNhap()
+        {
+            return View();
+        }
     }
 }

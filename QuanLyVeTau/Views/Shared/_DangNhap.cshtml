@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "DangNhap";
+}
+
+<!-- Form đăng nhập -->
+@using (Html.BeginForm("DangNhap", "TaiKhoan", FormMethod.Post))
+{
+    <div class="row g-3">
+        <div class="col-md-12">
+            <label for="pUsername" class="form-label">Email</label>
+            @Html.TextBox("pUsername", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-12">
+            <label for="pPassword" class="form-label">Mật khẩu</label>
+            <div class="input-group">
+                @Html.Password("pPassword", null, new { @class = "form-control", id = "pPassword" })
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword" style="cursor: pointer;">
+                    <i class="bi bi-eye-slash" id="passwordIcon"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </div>
+
+        <div class="col-12 text-center mt-3">
+            <a href="@Url.Action("DangKy", "TaiKhoan")" class="btn btn-link">Đăng ký tài khoản</a> | 
+            <a href="@Url.Action("QuenMatKhau", "TaiKhoan")" class="btn btn-link">Quên mật khẩu?</a>
+        </div>
+    </div>
+}
+
+<!-- JavaScript để ẩn/hiện mật khẩu -->
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        var passwordField = document.getElementById('pPassword');
+        var passwordIcon = document.getElementById('passwordIcon');
+
+        // Toggle the input type and icon
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            passwordIcon.classList.remove('bi-eye-slash');
+            passwordIcon.classList.add('bi-eye');
+        } else {
+            passwordField.type = 'password';
+            passwordIcon.classList.remove('bi-eye');
+            passwordIcon.classList.add('bi-eye-slash');
+        }
+    });
+</script>

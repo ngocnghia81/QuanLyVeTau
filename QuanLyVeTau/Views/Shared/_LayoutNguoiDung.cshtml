@@ -38,7 +38,7 @@
                         <button class="nav-link text-white" id="showCurrentTime"></button>
                     </li>
                     <li class="nav-item" id="log">
-                        <button class="nav-link pLogActive" id="pLogSwitch" data-bs-toggle="modal" data-bs-target="#plogModal">
+                        <button href="@Url.Action("DangNhap", "TaiKhoan")" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-toggle="modal" data-bs-target="#plogModal">
                             Đăng nhập
                         </button>
 
@@ -107,12 +107,27 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <img style="width: 50px" src="Images/IRCTC-Logo-PNG-768x768.webp" alt="" />
+                    <img style="width: 50px" src="~/Content/Images/6a724b9501764fd83a4abcd37b58144d.png" alt="" />
                 </div>
             </div>
         </div>
     </nav>
     <!-- second header end -->
+    <!-- Gọi Partial View vào trong modal -->
+    <div id="plogModal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">Đăng nhập</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_DangNhap")  
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     @RenderBody()
 

@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "DangNhap";
+}
+
+<!-- Login modal start -->
+<div class="modal fade" id="plogModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+                <button type="button" id="closeModal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3" id="pLog">
+                    <div class="col-md-12">
+                        <label for="pUsername" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="pUsername" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="pPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="pPassword" />
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Login modal end -->

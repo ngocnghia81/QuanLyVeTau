@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\login.css" />
     <Content Include="Content\Icons\arrows.png" />
     <Content Include="Content\Icons\Azadi-Ka-Amrit-Mahotsav-Logo.png" />
     <Content Include="Content\Icons\card.png" />

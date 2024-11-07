@@ -37,21 +37,36 @@
                     <li class="nav-item">
                         <button class="nav-link text-white" id="showCurrentTime"></button>
                     </li>
-                    <li class="nav-item" id="log">
-                        <button href="@Url.Action("DangNhap", "TaiKhoan")" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-toggle="modal" data-bs-target="#plogModal">
-                            Đăng nhập
-                        </button>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item" id="log">
+                            <a href="@Url.Action("DangNhap", "TaiKhoan")" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-target="#plogModal">
+                                Tài khoản
+                            </a>
+                        </li>
 
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Đăng ký</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-danger" href="admin.html" id="aLogin" data-bs-toggle="modal" data-bs-target="#alogModal">Đăng nhập quản trị</a>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" id="pLogSwitch2">Đăng xuất</button>
-                    </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link" id="pLogSwitch2" onclick="window.location.href='@Url.Action("DangXuat", "TaiKhoan")'">Đăng xuất</button>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li class="nav-item" id="log">
+                            <a href="@Url.Action("DangNhap", "TaiKhoan")" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-target="#plogModal">
+                                Đăng nhập
+                            </a>
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Đăng ký</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="admin.html" id="aLogin" data-bs-toggle="modal" data-bs-target="#alogModal">Đăng nhập quản trị</a>
+                        </li>
+                    }
+
                 </ul>
             </div>
         </div>
@@ -65,46 +80,55 @@
                     <img style="width: 50px" src="~/Content/Images/6a724b9501764fd83a4abcd37b58144d.png" alt="Railways Logo" />
                 </a>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a href="index.html" class="nav-link active" id="heroSection-tab" data-bs-toggle="tab"
-                           data-bs-target="#heroSection" type="button" role="tab" aria-controls="heroSection" aria-selected="true">
-                            <i class="bi bi-house-door-fill"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                           type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                            Đặt vé
-                        </a>
-                    </li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
 
-                    <li class="nav-item" role="presentation">
-                        <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                           type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                            Huỷ vé
-                        </a>
-                    </li>
 
-                    <li class="nav-item" role="presentation">
-                        <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                           type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                            Lịch sử mua vé
-                        </a>
-                    </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="index.html" class="nav-link active" id="heroSection-tab" data-bs-toggle="tab"
+                               data-bs-target="#heroSection" type="button" role="tab" aria-controls="heroSection" aria-selected="true">
+                                <i class="bi bi-house-door-fill"></i>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item" role="presentation">
+                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
+                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
+                                Đặt vé
+                            </a>
+                        </li>
 
-                    <li class="nav-item" role="presentation">
-                        <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                           type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                            Vé đã mua
-                        </a>
-                    </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
+                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
+                                Huỷ vé
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <button class="nav-link t" id="contactUsSection-tab" data-bs-toggle="tab" data-bs-target="#contactUsSection"
-                                type="button" role="tab" aria-controls="contactUsSection" aria-selected="false">
-                            Liên hệ
-                        </button>
-                    </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
+                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
+                                Lịch sử mua vé
+                            </a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
+                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
+                                Vé đã mua
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link t" id="contactUsSection-tab" data-bs-toggle="tab" data-bs-target="#contactUsSection"
+                                    type="button" role="tab" aria-controls="contactUsSection" aria-selected="false">
+                                Liên hệ
+                            </button>
+                        </li>
+                    }
+
                 </ul>
                 <div class="d-flex">
                     <img style="width: 50px" src="~/Content/Images/6a724b9501764fd83a4abcd37b58144d.png" alt="" />
@@ -113,20 +137,7 @@
         </div>
     </nav>
     <!-- second header end -->
-    <!-- Gọi Partial View vào trong modal -->
-    <div id="plogModal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">Đăng nhập</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @Html.Partial("_DangNhap")  
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
 
     @RenderBody()

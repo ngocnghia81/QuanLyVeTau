@@ -23,14 +23,20 @@
             <button type="submit" class="btn btn-primary">Đăng nhập</button>
         </div>
 
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="col-12 text-danger text-center mt-3">
+                <strong>@ViewBag.ErrorMessage</strong>
+            </div>
+        }
+
         <div class="col-12 text-center mt-3">
-            <a href="@Url.Action("DangKy", "TaiKhoan")" class="btn btn-link">Đăng ký tài khoản</a> | 
+            <a href="@Url.Action("DangKy", "TaiKhoan")" class="btn btn-link">Đăng ký tài khoản</a> |
             <a href="@Url.Action("QuenMatKhau", "TaiKhoan")" class="btn btn-link">Quên mật khẩu?</a>
         </div>
     </div>
 }
 
-<!-- JavaScript để ẩn/hiện mật khẩu -->
 <script>
     document.getElementById('togglePassword').addEventListener('click', function () {
         var passwordField = document.getElementById('pPassword');

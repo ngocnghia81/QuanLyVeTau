@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Đăng Nhập";
+    Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+}
+
+<!-- Form đăng nhập -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div >
+                <div class="card-header text-center">
+                    <h3>Đăng nhập</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("DangNhap", "TaiKhoan", FormMethod.Post))
+                    {
+                        <div class="mb-3">
+                            <label for="pUsername" class="form-label">Email</label>
+                            @Html.TextBox("pUsername", null, new { @class = "form-control", placeholder = "Nhập email của bạn" })
+                        </div>
+                        <div class="mb-3">
+                            <label for="pPassword" class="form-label">Mật khẩu</label>
+                            <div class="input-group">
+                                @Html.Password("pPassword", null, new { @class = "form-control", id = "pPassword", placeholder = "Nhập mật khẩu" })
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                    <i class="bi bi-eye-slash" id="passwordIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                        </div>
+
+                        if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger text-center">
+                                <strong>@ViewBag.ErrorMessage</strong>
+                            </div>
+                        }
+
+                        <div class="text-center">
+                            <a href="@Url.Action("DangKy", "TaiKhoan")" class="btn btn-link">Đăng ký tài khoản</a> |
+                            <a href="@Url.Action("QuenMatKhau", "TaiKhoan")" class="btn btn-link">Quên mật khẩu?</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        var passwordField = document.getElementById('pPassword');
+        var passwordIcon = document.getElementById('passwordIcon');
+
+        // Toggle the input type and icon
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            passwordIcon.classList.remove('bi-eye-slash');
+            passwordIcon.classList.add('bi-eye');
+        } else {
+            passwordField.type = 'password';
+            passwordIcon.classList.remove('bi-eye');
+            passwordIcon.classList.add('bi-eye-slash');
+        }
+    });
+</script>

@@ -236,7 +236,6 @@
     <Content Include="Content\Images\contactUs.webp" />
     <Content Include="Content\Images\IRCTC-Logo-PNG-768x768.webp" />
     <Content Include="Content\Images\Vande_Bharat__1676446328347_1676446328597_1676446328597.webp" />
-    <Content Include="Content\Icons\Cellular-Communications-in-a-5G-Era-PPT.pptx" />
     <Content Include="Content\Icons\G20_theme_logo.png.webp" />
     <Content Include="Models\QuanLyVeTauDB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

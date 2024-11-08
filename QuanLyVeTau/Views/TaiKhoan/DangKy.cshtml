@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "DangKy";
+    Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+}
+<link rel="stylesheet" href="~/Content/css/LabelInput.css" />
+<!-- Form đăng ký -->
+<<!-- Form đăng ký -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Đăng ký tài khoản</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("DangKy", "TaiKhoan", FormMethod.Post))
+                    {
+                        <div class="mb-3">
+                            @Html.TextBox("pEmail", null, new { @class = "form-control", placeholder = " " })
+                            <label for="pEmail" class="form-label">Email</label>
+                        </div>
+                        <div class="mb-3">
+                            @Html.Password("pPassword", null, new { @class = "form-control", placeholder = " " })
+                            <label for="pPassword" class="form-label">Mật khẩu</label>
+                        </div>
+                        <div class="mb-3">
+                            @Html.Password("pConfirmPassword", null, new { @class = "form-control", placeholder = " " })
+                            <label for="pConfirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                        </div>
+                        <div class="mb-3">
+                            @Html.TextBox("pTen", null, new { @class = "form-control", placeholder = " " })
+                            <label for="pTen" class="form-label">Tên</label>
+                        </div>
+                        <div class="mb-3">
+                            @Html.TextBox("pSDT", null, new { @class = "form-control", placeholder = " " })
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                        </div>
+                        <div class="mb-3 d-flex align-items-center">
+                            <label for="day" style="width:500px;margin-right:20px">Ngày sinh:</label>
+                            @Html.DropDownList("pDay", Enumerable.Range(1, 31).Select(i => new SelectListItem { Value = i.ToString(), Text = "Ngày "+ i.ToString() }), new { @class = "form-control mx-1", @id = "day" })
+                            @Html.DropDownList("pMonth", Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = "Tháng " + i }), new { @class = "form-control mx-1", @id = "month" })
+                            @Html.DropDownList("pYear", Enumerable.Range(DateTime.Now.Year - 100,100-19).Select(i => new SelectListItem { Value = i.ToString(), Text = "Năm "+ i.ToString() }),  new { @class = "form-control mx-1", @id = "year" })
+
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.TextBox("pCccd", null, new { @class = "form-control", placeholder = " " })
+                            <label for="pCccd" class="form-label">CCCD</label>
+                        </div>
+                        <div class="mb-3">
+                            @Html.TextBox("pDiaChi", null, new { @class = "form-control", placeholder = " " })
+                            <label for="pDiaChi" class="form-label">Địa chỉ</label>
+                        </div>
+                        <div class="mb-3 text-center">
+                            <button type="submit" class="btn btn-primary">Đăng ký</button>
+                        </div>
+
+                        if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger text-center">
+                                <strong>@ViewBag.ErrorMessage</strong>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>function formatDate(input) {
+    const date = new Date(input.value);
+    if (!isNaN(date)) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        input.value = `${day}-${month}-${year}`;
+    }
+}</script>
+
+

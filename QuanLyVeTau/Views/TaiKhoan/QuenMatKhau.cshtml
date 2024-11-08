@@ -2,33 +2,34 @@
     ViewBag.Title = "Quên Mật Khẩu";
     Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
 }
+<link href="~/Content/css/LabelInput.css" rel="stylesheet" />
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="text-center text-primary">Quên Mật Khẩu</h2>
 
-<h2 class="text-center">Quên Mật Khẩu</h2>
-
-<div class="container mt-5">
     @if (TempData["Message"] != null)
     {
-        <div class="alert alert-info">
+        <div class="alert alert-info text-center mt-4">
             @TempData["Message"]
         </div>
     }
-    @using (Html.BeginForm("QuenMatKhau", "TaiKhoan", FormMethod.Post))
+
+    @using (Html.BeginForm("QuenMatKhau", "TaiKhoan", FormMethod.Post, new { @class = "mt-4" }))
     {
-        <div class="form-group">
-            <label for="email">Email</label>
-            @Html.TextBox("email", null, new { @class = "form-control", placeholder = "Nhập email của bạn" })
+        <div class="form-group mb-3">
+            @Html.TextBox("email", null, new { @class = "form-control", placeholder = " " })
+            <label for="email" class="form-label">Email</label>
         </div>
 
-        <div class="form-group">
-            <label for="phone">Số điện thoại</label>
-            @Html.TextBox("phone", null, new { @class = "form-control", placeholder = "Nhập số điện thoại của bạn" })
+        <div class="form-group mb-3">
+            @Html.TextBox("phone", null, new { @class = "form-control", placeholder = " " })
+            <label for="phone" class="form-label">Số điện thoại</label>
         </div>
 
-        <div class="form-group">
-            <label for="cccd">Số CCCD</label>
-            @Html.TextBox("cccd", null, new { @class = "form-control", placeholder = "Nhập số CCCD của bạn" })
+        <div class="form-group mb-3">
+            @Html.TextBox("cccd", null, new { @class = "form-control", placeholder = " " })
+            <label for="cccd" class="form-label">Số CCCD</label>
         </div>
 
-        <button type="submit" class="btn btn-primary">Xác nhận</button>
+        <button type="submit" class="btn btn-primary w-100 mb-5">Xác nhận</button>
     }
 </div>

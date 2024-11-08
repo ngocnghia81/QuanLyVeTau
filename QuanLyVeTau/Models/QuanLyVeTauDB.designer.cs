@@ -78,9 +78,9 @@ namespace QuanLyVeTau.Models
     partial void InsertTaiKhoan(TaiKhoan instance);
     partial void UpdateTaiKhoan(TaiKhoan instance);
     partial void DeleteTaiKhoan(TaiKhoan instance);
-    partial void InsertTAIKHOANNHANVIEN(TAIKHOANNHANVIEN instance);
-    partial void UpdateTAIKHOANNHANVIEN(TAIKHOANNHANVIEN instance);
-    partial void DeleteTAIKHOANNHANVIEN(TAIKHOANNHANVIEN instance);
+    partial void InsertTaiKhoanNhanVien(TaiKhoanNhanVien instance);
+    partial void UpdateTaiKhoanNhanVien(TaiKhoanNhanVien instance);
+    partial void DeleteTaiKhoanNhanVien(TaiKhoanNhanVien instance);
     partial void InsertTau(Tau instance);
     partial void UpdateTau(Tau instance);
     partial void DeleteTau(Tau instance);
@@ -244,11 +244,11 @@ namespace QuanLyVeTau.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<TAIKHOANNHANVIEN> TAIKHOANNHANVIENs
+		public System.Data.Linq.Table<TaiKhoanNhanVien> TaiKhoanNhanViens
 		{
 			get
 			{
-				return this.GetTable<TAIKHOANNHANVIEN>();
+				return this.GetTable<TaiKhoanNhanVien>();
 			}
 		}
 		
@@ -2618,7 +2618,7 @@ namespace QuanLyVeTau.Models
 		
 		private EntitySet<PhanCong> _PhanCongs;
 		
-		private EntitySet<TAIKHOANNHANVIEN> _TAIKHOANNHANVIENs;
+		private EntitySet<TaiKhoanNhanVien> _TaiKhoanNhanViens;
 		
 		private EntityRef<ChucVu> _ChucVu;
 		
@@ -2647,7 +2647,7 @@ namespace QuanLyVeTau.Models
 		public NhanVien()
 		{
 			this._PhanCongs = new EntitySet<PhanCong>(new Action<PhanCong>(this.attach_PhanCongs), new Action<PhanCong>(this.detach_PhanCongs));
-			this._TAIKHOANNHANVIENs = new EntitySet<TAIKHOANNHANVIEN>(new Action<TAIKHOANNHANVIEN>(this.attach_TAIKHOANNHANVIENs), new Action<TAIKHOANNHANVIEN>(this.detach_TAIKHOANNHANVIENs));
+			this._TaiKhoanNhanViens = new EntitySet<TaiKhoanNhanVien>(new Action<TaiKhoanNhanVien>(this.attach_TaiKhoanNhanViens), new Action<TaiKhoanNhanVien>(this.detach_TaiKhoanNhanViens));
 			this._ChucVu = default(EntityRef<ChucVu>);
 			OnCreated();
 		}
@@ -2829,16 +2829,16 @@ namespace QuanLyVeTau.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="NhanVien_TAIKHOANNHANVIEN", Storage="_TAIKHOANNHANVIENs", ThisKey="Email", OtherKey="Email")]
-		public EntitySet<TAIKHOANNHANVIEN> TAIKHOANNHANVIENs
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="NhanVien_TaiKhoanNhanVien", Storage="_TaiKhoanNhanViens", ThisKey="Email", OtherKey="Email")]
+		public EntitySet<TaiKhoanNhanVien> TaiKhoanNhanViens
 		{
 			get
 			{
-				return this._TAIKHOANNHANVIENs;
+				return this._TaiKhoanNhanViens;
 			}
 			set
 			{
-				this._TAIKHOANNHANVIENs.Assign(value);
+				this._TaiKhoanNhanViens.Assign(value);
 			}
 		}
 		
@@ -2908,13 +2908,13 @@ namespace QuanLyVeTau.Models
 			entity.NhanVien = null;
 		}
 		
-		private void attach_TAIKHOANNHANVIENs(TAIKHOANNHANVIEN entity)
+		private void attach_TaiKhoanNhanViens(TaiKhoanNhanVien entity)
 		{
 			this.SendPropertyChanging();
 			entity.NhanVien = this;
 		}
 		
-		private void detach_TAIKHOANNHANVIENs(TAIKHOANNHANVIEN entity)
+		private void detach_TaiKhoanNhanViens(TaiKhoanNhanVien entity)
 		{
 			this.SendPropertyChanging();
 			entity.NhanVien = null;
@@ -2970,7 +2970,7 @@ namespace QuanLyVeTau.Models
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaNhatKy", DbType="VarChar(10) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaNhatKy", DbType="VarChar(11) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
 		public string MaNhatKy
 		{
 			get
@@ -3296,7 +3296,7 @@ namespace QuanLyVeTau.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaNhatKy", DbType="VarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaNhatKy", DbType="VarChar(11) NOT NULL", CanBeNull=false)]
 		public string MaNhatKy
 		{
 			get
@@ -3759,8 +3759,8 @@ namespace QuanLyVeTau.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TAIKHOANNHANVIEN")]
-	public partial class TAIKHOANNHANVIEN : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TaiKhoanNhanVien")]
+	public partial class TaiKhoanNhanVien : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -3793,7 +3793,7 @@ namespace QuanLyVeTau.Models
     partial void OnDaXoaChanged();
     #endregion
 		
-		public TAIKHOANNHANVIEN()
+		public TaiKhoanNhanVien()
 		{
 			this._NhanVien = default(EntityRef<NhanVien>);
 			OnCreated();
@@ -3903,7 +3903,7 @@ namespace QuanLyVeTau.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="NhanVien_TAIKHOANNHANVIEN", Storage="_NhanVien", ThisKey="Email", OtherKey="Email", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="NhanVien_TaiKhoanNhanVien", Storage="_NhanVien", ThisKey="Email", OtherKey="Email", IsForeignKey=true)]
 		public NhanVien NhanVien
 		{
 			get
@@ -3920,12 +3920,12 @@ namespace QuanLyVeTau.Models
 					if ((previousValue != null))
 					{
 						this._NhanVien.Entity = null;
-						previousValue.TAIKHOANNHANVIENs.Remove(this);
+						previousValue.TaiKhoanNhanViens.Remove(this);
 					}
 					this._NhanVien.Entity = value;
 					if ((value != null))
 					{
-						value.TAIKHOANNHANVIENs.Add(this);
+						value.TaiKhoanNhanViens.Add(this);
 						this._Email = value.Email;
 					}
 					else
@@ -4462,7 +4462,7 @@ namespace QuanLyVeTau.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaNhatKy", DbType="VarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaNhatKy", DbType="VarChar(11) NOT NULL", CanBeNull=false)]
 		public string MaNhatKy
 		{
 			get

@@ -126,13 +126,13 @@
       <Column Name="NamSinh" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Luong" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
       <Association Name="NhanVien_PhanCong" Member="PhanCongs" ThisKey="MaNhanVien" OtherKey="MaNhanVien" Type="PhanCong" />
-      <Association Name="NhanVien_TAIKHOANNHANVIEN" Member="TAIKHOANNHANVIENs" ThisKey="Email" OtherKey="Email" Type="TAIKHOANNHANVIEN" />
+      <Association Name="NhanVien_TaiKhoanNhanVien" Member="TaiKhoanNhanViens" ThisKey="Email" OtherKey="Email" Type="TaiKhoanNhanVien" />
       <Association Name="ChucVu_NhanVien" Member="ChucVu" ThisKey="MaChucVu" OtherKey="MaChucVu" Type="ChucVu" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.NhatKyTau" Member="NhatKyTaus">
     <Type Name="NhatKyTau">
-      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="MaTau" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="MaLichTrinh" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="NgayGio" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
@@ -147,7 +147,7 @@
     <Type Name="PhanCong">
       <Column Name="MaPhanCong" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="MaNhanVien" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
       <Association Name="NhanVien_PhanCong" Member="NhanVien" ThisKey="MaNhanVien" OtherKey="MaNhanVien" Type="NhanVien" IsForeignKey="true" />
       <Association Name="NhatKyTau_PhanCong" Member="NhatKyTau" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="NhatKyTau" IsForeignKey="true" />
     </Type>
@@ -170,14 +170,14 @@
       <Association Name="KhachHang_TaiKhoan" Member="KhachHang" ThisKey="Email" OtherKey="Email" Type="KhachHang" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.TAIKHOANNHANVIEN" Member="TAIKHOANNHANVIENs">
-    <Type Name="TAIKHOANNHANVIEN">
+  <Table Name="dbo.TaiKhoanNhanVien" Member="TaiKhoanNhanViens">
+    <Type Name="TaiKhoanNhanVien">
       <Column Name="MaTaiKhoan" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="MatKhau" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="VaiTro" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="DaXoa" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="NhanVien_TAIKHOANNHANVIEN" Member="NhanVien" ThisKey="Email" OtherKey="Email" Type="NhanVien" IsForeignKey="true" />
+      <Association Name="NhanVien_TaiKhoanNhanVien" Member="NhanVien" ThisKey="Email" OtherKey="Email" Type="NhanVien" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Tau" Member="Taus">
@@ -203,7 +203,7 @@
   <Table Name="dbo.Ve" Member="Ves">
     <Type Name="Ve">
       <Column Name="MaVe" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
       <Column Name="MaHoaDon" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="GiaVe" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="MaKhoang" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />

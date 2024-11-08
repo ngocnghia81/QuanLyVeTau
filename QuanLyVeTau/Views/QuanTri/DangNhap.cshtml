@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Đăng Nhập";
+    Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+}
+<link rel="stylesheet" href="~/Content/css/LabelInput.css" />
+
+<!-- Form đăng nhập -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header text-center bg-primary text-white rounded-top">
+                    <h3>Đăng nhập với quyền quản trị viên</h3>
+                </div>
+
+                <!-- Ghi chú thẩm quyền đăng nhập -->
+                <div class="alert alert-warning text-center mt-3 rounded-pill shadow-sm" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    <strong>Chỉ các tài khoản có quyền quản trị viên mới được phép truy cập vào hệ thống này.</strong>
+                </div>
+
+                <!-- Hiển thị thông báo thành công nếu có -->
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success text-center mt-3 rounded-pill shadow-sm" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <strong>@TempData["Message"]</strong>
+                    </div>
+                }
+
+            <div class="card-body p-4">
+                @using (Html.BeginForm("DangNhap", "QuanTri", FormMethod.Post))
+                {
+                    <div class="mb-3 position-relative">
+                        @Html.TextBox("pUsername", null, new { @class = "form-control", placeholder = " " })
+                        <label for="pUsername" class="form-label">Email</label>
+                    </div>
+
+                    <div class="mb-3 position-relative">
+                        <div class="input-group">
+                            @Html.Password("pPassword", null, new { @class = "form-control", id = "pPassword", placeholder = " " })
+                            <label for="pPassword" class="form-label">Mật khẩu</label>
+                            <button type="button" class="btn btn-transparent" id="togglePassword">
+                                <i class="bi bi-eye-slash" id="passwordIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="mb-3 text-center">
+                        <button type="submit" class="btn btn-primary px-4 rounded-pill shadow">Đăng nhập</button>
+                    </div>
+
+                    <!-- Show Error Message if Any -->
+                    if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger text-center mt-3 rounded-pill shadow-sm" role="alert">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                            <strong>@ViewBag.ErrorMessage</strong>
+                        </div>
+                    }
+                }
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        var passwordField = document.getElementById('pPassword');
+        var passwordIcon = document.getElementById('passwordIcon');
+
+        // Toggle hiển thị mật khẩu và icon
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            passwordIcon.classList.remove('bi-eye-slash');
+            passwordIcon.classList.add('bi-eye');
+        } else {
+            passwordField.type = 'password';
+            passwordIcon.classList.remove('bi-eye');
+            passwordIcon.classList.add('bi-eye-slash');
+        }
+    });
+</script>

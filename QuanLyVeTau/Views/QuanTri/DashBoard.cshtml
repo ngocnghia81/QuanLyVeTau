@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "DashBoard";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<!-- Main Content -->
+<div class="container-fluid p-4">
+    <h1 class="fs-3 mb-4">Dashboard</h1>
+
+    <!-- Dashboard Cards -->
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Người dùng</h5>
+                    <p class="card-text">Tổng số người dùng: @ViewBag.tongNguoiDung</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Vé bán</h5>
+                    <p class="card-text">Tổng số vé đã bán: @ViewBag.tongVeDaBan</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Doanh thu</h5>
+                    <p class="card-text">Doanh thu: @ViewBag.tongDoanhThu VND</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Phản hồi</h5>
+                    <p class="card-text">Số phản hồi mới: @ViewBag.tongPhanHoi</p>
+                </div>
+            </div>
+        </div>
+        <!-- Khuyến mãi -->
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">Khuyến mãi</h5>
+                    <p class="card-text">Số khuyến mãi: @ViewBag.soKhuyenMai</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Chart Selection -->
+    <div class="mb-4">
+        <select id="chartSelect" class="form-select" onchange="toggleChart(this.value)">
+            <option value="doanhThu">Doanh thu</option>
+            <option value="soVe">Số vé bán</option>
+        </select>
+    </div>
+
+    <!-- Doanh thu Biểu đồ -->
+    <div class="row" id="doanhThuChartContainer">
+        <div class="col-md-12">
+            <canvas id="doanhThuChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Số vé bán Biểu đồ -->
+    <div class="row" id="soVeChartContainer" style="display: none;">
+        <div class="col-md-12">
+            <canvas id="soVeChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="~/Scripts/chart.js"></script>
+<script>
+    // Data from ViewBag
+    var doanhThuTheoThang = @Html.Raw(ViewBag.donThuTheoThang);
+    var soVeTheoThang = @Html.Raw(ViewBag.soVeTheoThang);
+
+    // Doanh thu Chart (Line Chart)
+    var thang = doanhThuTheoThang.map(d => `${d.Thang}/${d.Nam}`);
+    var doanhThu = doanhThuTheoThang.map(d => d.TongDoanhThu);
+
+    var ctxDoanhThu = document.getElementById('doanhThuChart').getContext('2d');
+    var doanhThuChart = new Chart(ctxDoanhThu, {
+        type: 'line',
+        data: {
+            labels: thang,
+            datasets: [{
+                label: 'Doanh thu theo tháng',
+                data: doanhThu,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Số vé bán Chart (Bar Chart)
+    var thangVe = soVeTheoThang.map(d => `${d.Thang}/${d.Nam}`);
+    var soVe = soVeTheoThang.map(d => d.SoVeBan);
+
+    var ctxVe = document.getElementById('soVeChart').getContext('2d');
+    var soVeChart = new Chart(ctxVe, {
+        type: 'bar',
+        data: {
+            labels: thangVe,
+            datasets: [{
+                label: 'Số vé bán theo tháng',
+                data: soVe,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Function to toggle charts based on selection
+    function toggleChart(chartType) {
+        if (chartType === 'doanhThu') {
+            document.getElementById('doanhThuChartContainer').style.display = 'block';
+            document.getElementById('soVeChartContainer').style.display = 'none';
+        } else if (chartType === 'soVe') {
+            document.getElementById('doanhThuChartContainer').style.display = 'none';
+            document.getElementById('soVeChartContainer').style.display = 'block';
+        }
+    }
+</script>

@@ -1,0 +1,41 @@
+﻿/* Style tổng quát cho form */
+.form-label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transition: 0.3s ease all;
+    color: #aaa;
+    font-size: 16px;
+}
+
+/* Style cho hiệu ứng focus và khi input có nội dung */
+.form-control:focus ~ .form-label,
+.form-control:not(:placeholder-shown) ~ .form-label {
+    top: -10px;
+    font-size: 12px;
+    color: #007bff;
+}
+
+/* Căn chỉnh và thêm border bottom cho input */
+.form-control {
+    border: none; /* Bỏ toàn bộ border */
+    border-bottom: 2px solid #aaa; /* Chỉ hiện border dưới */
+    border-radius: 0; /* Loại bỏ bo tròn ở góc */
+    padding: 12px 10px;
+    transition: border-color 0.3s ease;
+}
+
+    /* Thay đổi màu border-bottom khi focus */
+    .form-control:focus {
+        border-bottom: 2px solid #007bff;
+        outline: none; /* Loại bỏ viền mặc định khi focus */
+        box-shadow :none
+    }
+
+/* Căn chỉnh thẻ chứa các trường */
+.mb-3 {
+    position: relative;
+    margin-top: 2rem;
+}
+

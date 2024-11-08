@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 
 
+
 namespace QuanLyVeTau.Controllers
 {
     public class TaiKhoanController : Controller
@@ -73,13 +74,13 @@ namespace QuanLyVeTau.Controllers
         [HttpPost]
         public ActionResult DangKy(FormCollection collection)
         {
-            if (KiemTraDuLieu.KiemTraEmail(collection["pEmail"]))
+            if (!KiemTraDuLieu.KiemTraEmail(collection["pEmail"]))
             {
                 ViewBag.ErrorMessage = "Định dạng email không hợp lệ!";
                 return View();
             }
 
-            if (KiemTraDuLieu.KiemTraSDT_VN(collection["pSDT"]))
+            if (!KiemTraDuLieu.KiemTraSDT_VN(collection["pSDT"]))
             {
                 ViewBag.ErrorMessage = "Số điện thoại không hợp lệ";
                 return View();
@@ -99,23 +100,33 @@ namespace QuanLyVeTau.Controllers
 
 
             string tenKhach = collection["pTen"];
-            string namSinh = collection["pYear"] + collection["pMonth"] + collection["pDay"];
+            string namSinh = collection["pYear"] +"-"+ collection["pMonth"] +"-"+ collection["pDay"];
             string email = collection["pEmail"];
             string sdt = collection["pSDT"];
             string cccd = collection["pCCCD"];
             string diaChi = collection["pDiaChi"];
             string matKhau = collection["pPassword"];
 
+
             // Gọi stored procedure mà không sử dụng SqlParameter
             string sql = string.Format(
-             "EXEC DangKy '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}'",
+             "EXEC DangKy N'{0}', '{1}', '{2}', '{3}', '{4}', N'{5}', '{6}'",
              tenKhach, namSinh, email, sdt, cccd, diaChi, matKhau
             );
-            db.ExecuteCommand(sql);
+            try
+            {
+                db.ExecuteCommand(sql);
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.ErrorMessage = string.Format("Email, số điện thoại, hoặc CCCD đã được đăng ký. {0}",ex);
+                return View();
+            }
 
 
             // Nếu thành công, chuyển hướng đến trang đăng nhập hoặc thông báo thành công
-            ViewBag.Message = "Đăng ký thành công!";
+            TempData["Message"] = "Đăng ký thành công!";
             return RedirectToAction("DangNhap", "TaiKhoan");  // Ví dụ chuyển hướng đến trang đăng nhập          
         }
     }

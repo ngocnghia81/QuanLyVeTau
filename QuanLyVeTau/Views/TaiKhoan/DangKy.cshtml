@@ -74,7 +74,21 @@
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         input.value = `${day}-${month}-${year}`;
+        }
     }
-}</script>
+
+
+    function togglePassword() {
+        var password = document.getElementById("pPassword");
+        var confirmPassword = document.getElementById("pConfirmPassword");
+        if (password.type === "password") {
+            password.type = "text";
+            confirmPassword.type = "text";
+        } else {
+            password.type = "password";
+            confirmPassword.type = "password";
+        }
+    }
+</script>
 
 

@@ -3,43 +3,58 @@
     Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
 }
 <link rel="stylesheet" href="~/Content/css/LabelInput.css" />
+
 <!-- Form đăng nhập -->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div>
+            <div >
                 <div class="card-header text-center">
                     <h3>Đăng nhập</h3>
                 </div>
+
+                <!-- Display Message if Exists -->
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success text-center mt-3 rounded-pill shadow-sm" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <strong>@TempData["Message"]</strong>
+                    </div>
+                }
+
                 <div class="card-body">
                     @using (Html.BeginForm("DangNhap", "TaiKhoan", FormMethod.Post))
                     {
-                        <div class="mb-3">
+                        <div class="mb-3 position-relative">
                             @Html.TextBox("pUsername", null, new { @class = "form-control", placeholder = " " })
                             <label for="pUsername" class="form-label">Email</label>
                         </div>
-                        <div class="mb-3">
+
+                        <div class="mb-3 position-relative">
                             <div class="input-group">
                                 @Html.Password("pPassword", null, new { @class = "form-control", id = "pPassword", placeholder = " " })
                                 <label for="pPassword" class="form-label">Mật khẩu</label>
-                                <button type="button" class="btn " id="togglePassword">
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                                     <i class="bi bi-eye-slash" id="passwordIcon"></i>
                                 </button>
                             </div>
-                          
-
                         </div>
+
+                        <!-- Submit Button -->
                         <div class="mb-3 text-center">
-                            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                            <button type="submit" class="btn btn-primary px-4 rounded-pill shadow">Đăng nhập</button>
                         </div>
 
+                        <!-- Show Error Message if Any -->
                         if (ViewBag.ErrorMessage != null)
                         {
-                            <div class="alert alert-danger text-center">
+                            <div class="alert alert-danger text-center mt-3 rounded-pill shadow-sm" role="alert">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i>
                                 <strong>@ViewBag.ErrorMessage</strong>
                             </div>
                         }
 
+                        <!-- Additional Links -->
                         <div class="text-center">
                             <a href="@Url.Action("DangKy", "TaiKhoan")" class="btn btn-link">Đăng ký tài khoản</a> |
                             <a href="@Url.Action("QuenMatKhau", "TaiKhoan")" class="btn btn-link">Quên mật khẩu?</a>

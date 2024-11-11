@@ -140,14 +140,14 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\TrangChinhController.cs" />
     <Compile Include="Controllers\VeController.cs" />
-    <Compile Include="Tools\EmailSender.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\EmailSender.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\KiemTraDuLieu.cs" />

@@ -1,0 +1,202 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    width: 80%;
+    margin: 0 auto;
+}
+
+h3{
+    display: block;
+    width: 100%;
+}
+
+h3 span{
+    font-weight: lighter;
+}
+
+.train_list{
+    margin: 20px;
+    margin-bottom: 50px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; 
+}
+
+.train__item{
+    /* margin: 20px; */
+    background: #999;
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    user-select: none;
+}
+
+.train__item.selected{
+    background: #0091d4;
+}
+
+.train__item:hover .train_wheel>span{
+    background-color: yellow;
+    color: yellow;
+}
+
+.train__item:hover .train_name{
+    background-color: yellow;
+}
+
+.train_name{
+    width: 45%;
+    background-color: #f3f1f1;
+    margin: auto 0;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.train_info{
+    
+    height: 60%;
+    /* padding: 10% 0; */
+    background-color: #f3f1f1;
+    width: 90%;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-flow: column;
+    position: relative;
+}
+
+.train_info div{
+    margin: 2px 0;
+    display: inline;
+    width: 100%;
+    position: relative;
+}
+
+.train_info .title{
+    width: 100%;
+    font-weight: bold;
+    margin-left: 10%;
+}
+
+.train_info .value{
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    font-size: 10px;
+    /* margin-left: 5px; */
+}
+
+.train_wheel{
+    margin: auto 0;
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
+.train_wheel span{
+    width: 20px;
+    background-color: #f3f1f1;
+    border-radius: 50%;
+    color: #f3f1f1;
+    text-align: center;
+}
+
+/* CHỌN TOA */
+.train {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.train__toa {
+    width: 50px;
+    height: 30px;
+    margin: 0 2px;
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.train__toa.blue {
+    background-color: #6cbdd6;
+}
+.train__toa.red {
+    background-color: #de5839;
+}
+.train__toa.green {
+    background-color: #b5c935;
+}
+
+/* Engine style */
+.engine {
+    width: 60px;
+    height: 30px;
+    background-color: #348cb4;
+    position: relative;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.engine::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: -10px;
+    width: 20px;
+    height: 10px;
+    background-color: #348cb4;
+    border-radius: 2px;
+}
+
+.window {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    position: absolute;
+    top: 8px;
+}
+
+.window div {
+    width: 6px;
+    height: 8px;
+    background-color: white;
+    border-radius: 1px;
+}
+
+.train__toa-number {
+    position: absolute;
+    bottom: -15px;
+    font-size: 10px;
+    color: #333;
+}
+
+.engine-number {
+    font-size: 10px;
+    position: absolute;
+    bottom: -15px;
+    color: #333;
+}

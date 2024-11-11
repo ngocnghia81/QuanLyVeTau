@@ -18,7 +18,8 @@
                         </div>
                         <div class="card-body">
                             <!-- Đặt form bao bọc toàn bộ để có thể sử dụng FormCollection -->
-                            <form method="post" action="/YourController/YourAction" class="row g-3" id="trainSearchBtw1">
+                            @using (Html.BeginForm("ChonVe", "Ve", FormMethod.Post, new { @class = "row g-3", id = "trainSearchBtw1" }))
+                            {
                                 <div class="col-md-5 col-10 dropBox">
                                     <label for="from" class="form-label">Từ</label>
                                     <input type="text" class="form-control search" name="from" id="from" required="">
@@ -57,7 +58,8 @@
                                         Tìm
                                     </button>
                                 </div>
-                            </form>
+                            }
+
                             <!-- Kết thúc form -->
                         </div>
                     </div>
@@ -70,5 +72,36 @@
 <script>
     document.getElementById("roundTripCheck").addEventListener("change", function() {
         document.getElementById("returnDate").disabled = !this.checked;
+    });
+    // Đợi khi trang web được tải xong
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lấy phần tử button đổi chỗ
+        var interchangeBtn = document.getElementById('interchangeBtn');
+
+        // Lắng nghe sự kiện click trên nút đổi chỗ
+        interchangeBtn.addEventListener('click', function () {
+            // Lấy giá trị của ô input "Từ" và "Đến"
+            var fromValue = document.getElementById('from').value;
+            var toValue = document.getElementById('to').value;
+
+            // Đổi chỗ giá trị giữa ô input "Từ" và "Đến"
+            document.getElementById('from').value = toValue;
+            document.getElementById('to').value = fromValue;
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var dateInput = document.getElementById('date');
+        var returnDateInput = document.getElementById('returnDate');
+
+        // Khi người dùng chọn ngày đi
+        dateInput.addEventListener('change', function () {
+            var selectedDate = dateInput.value; // Lấy ngày đã chọn từ "Ngày đi"
+
+            // Đặt giá trị min cho "Ngày về" bằng giá trị của "Ngày đi"
+            returnDateInput.setAttribute('min', selectedDate);
+
+            // Bật trường "Ngày về" khi "Ngày đi" có giá trị
+            //returnDateInput.disabled = false;
+        });
     });
 </script>

@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "KetQuaChonVe";
+    Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+}
+
+<link href="~/Content/css/datve.css" rel="stylesheet" />
+<div class="container">
+    <h3>Chiều đi: <span>Ngày @ViewBag.date từ @ViewBag.from đến @ViewBag.to</span></h3>
+    <div class="train_list">
+        @{
+            if (ViewBag.dt.Rows.Count <= 0)
+            {
+                <h3>Không có chuyến tàu phù hợp</h3>
+            }
+            else
+            {
+                foreach (var train in ViewBag.dt.Rows)
+                {
+                    <div class="train__item ">
+                        <div class="train_name">
+                            @train["MaTau"]
+                        </div>
+
+                        <div class="train_info">
+                            <div class="time_start">
+                                <span class="title">TG đi:</span>
+                                <span class="value">@train["ThoiGianDi"].ToString("dd-MM HH:mm") </span>
+                            </div>
+
+                            <div class="time_end">
+                                <span class="title">TG đến:</span>
+                                <span class="value">@train["ThoiGianDen"].ToString("dd-MM HH:mm")</span>
+                            </div>
+
+                            <div class="remain_seat">
+                                <span class="title">SL chỗ trống:</span>
+                                <span class="value">@train["SLChoTrong"]</span>
+                            </div>
+                        </div>
+
+                        <div class="train_wheel">
+                            <span>s</span>
+                            <span>s</span>
+                        </div>
+                    </div>
+                }
+            }
+
+        }
+    </div>
+</div>
+@{
+    if (ViewBag.KhuHoi != null)
+    {
+        <div class="container">
+            <h3>Chiều đi: <span>Ngày @ViewBag.dateReturnd từ @ViewBag.to đến @ViewBag.from</span></h3>
+            <div class="train_list">
+                @{
+                    if (ViewBag.dtReturned.Rows.Count <= 0)
+                    {
+                        <h3>Không có chuyến tàu phù hợp</h3>
+                    }
+                    else
+                    {
+                        foreach (var train in ViewBag.dtReturned.Rows)
+                        {
+                            <div class="train__item ">
+                                <div class="train_name">
+                                    @train["MaTau"]
+                                </div>
+
+                                <div class="train_info">
+                                    <div class="time_start">
+                                        <span class="title">TG đi:</span>
+                                        <span class="value">@train["ThoiGianDi"].ToString("dd-MM HH:mm") </span>
+                                    </div>
+
+                                    <div class="time_end">
+                                        <span class="title">TG đến:</span>
+                                        <span class="value">@train["ThoiGianDen"].ToString("dd-MM HH:mm")</span>
+                                    </div>
+
+                                    <div class="remain_seat">
+                                        <span class="title">SL chỗ trống:</span>
+                                        <span class="value">@train["SLChoTrong"]</span>
+                                    </div>
+                                </div>
+
+                                <div class="train_wheel">
+                                    <span>s</span>
+                                    <span>s</span>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                }
+            </div>
+        </div>
+    }
+
+
+}
+
+
+
+@*JAVASCRIPT*@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const trains = document.querySelectorAll(".train__item");
+
+        trains.forEach(item => {
+            item.addEventListener("click", function () {
+                // Xóa class "selected" khỏi tất cả các train__item-item
+                trains.forEach(el => el.classList.remove("selected"));
+
+                // Thêm class "selected" cho mục được click
+                item.classList.add("selected");
+            });
+        });
+    });
+</script>

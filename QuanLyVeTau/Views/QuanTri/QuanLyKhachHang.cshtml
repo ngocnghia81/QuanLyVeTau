@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "QuanLyKhachHang";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<h2>Quản Lý Khách Hàng</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int stt = 1;
+        }
+        @foreach (var kh in Model)
+        {
+            <tr>
+                <td>@stt++</td>
+                <td>@kh.TenKhach</td>
+                <td>@kh.Email</td>
+                <td>@(kh.TaiKhoan.DaXoa ? "Hoạt động" : "Đã khóa")</td>
+                <td>
+                    @if (kh.TaiKhoan.DaXoa)
+                    {
+                        <form method="post" action="@Url.Action("KhoaTaiKhoan", "QuanTri")">
+                            <input type="hidden" name="id" value="@kh.Id" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn khóa tài khoản này không?')">Khóa tài khoản</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Tài khoản đã bị khóa</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

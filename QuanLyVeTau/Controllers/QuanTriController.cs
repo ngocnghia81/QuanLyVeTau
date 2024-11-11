@@ -14,7 +14,7 @@ namespace QuanLyVeTau.Controllers
     public class QuanTriController : Controller
     {
 
-        private QuanLyVeTauDBDataContext db;
+        private readonly QuanLyVeTauDBDataContext db;
 
         public QuanTriController()
         {
@@ -129,6 +129,27 @@ namespace QuanLyVeTau.Controllers
             return RedirectToAction("Index", "Ve");
         }
 
-       
+
+        public ActionResult QuanLyKhachHang(string searchKeyword = "", bool? isDeleted = null)
+        {
+            var query = db.KhachHangs.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchKeyword))
+            {
+                query = query.Where(kh => kh.TenKhach.Contains(searchKeyword) || kh.Email.Contains(searchKeyword) || kh.MaKhach.Contains(searchKeyword));
+            }
+
+            if (isDeleted.HasValue)
+            {
+                query = query.Where(kh => db.TaiKhoans.Any(tk => tk.Email == kh.Email && tk.DaXoa == isDeleted));
+            }
+
+            var khachHangs = query.ToList();
+
+
+            return View("QuanLyKhachHang", khachHangs);
+        }
+
+
     }
 }

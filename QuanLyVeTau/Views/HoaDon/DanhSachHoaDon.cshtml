@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form method="get" action="@Url.Action("QuanLyHoaDon")">
+            <form method="get" action="@Url.Action("DanhSachHoaDon")">
                 <div class="row">
                     <!-- Mã Tàu -->
                     <div class="col-md-3">
@@ -115,7 +115,7 @@
                                 <div class="border rounded p-2 mb-2">
                                     <strong>Mã Vé:</strong>
                                     <!-- Link to ChiTietVe with MaVe as parameter -->
-                                    <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })">
+                                    <a href="@Url.Action("ChiTietVe","Ve", new { maVe = ve.MaVe })">
                                         @ve.MaVe
                                     </a>
                                     <br />
@@ -145,7 +145,7 @@
         @if (Model.HasPreviousPage)
         {
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = 1 })" aria-label="First">
+                <a class="page-link" href="@Url.Action("DanhSachHoaDon", new { page = 1 })" aria-label="First">
                     <span aria-hidden="true">&laquo;&laquo;</span>
                 </a>
             </li>
@@ -161,7 +161,7 @@
         @if (Model.HasPreviousPage)
         {
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                <a class="page-link" href="@Url.Action("DanhSachHoaDon", new { page = Model.PageNumber - 1 })" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -177,7 +177,7 @@
         @for (var i = 1; i <= Model.PageCount; i++)
         {
             <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = i })">@i</a>
+                <a class="page-link" href="@Url.Action("DanhSachHoaDon", new { page = i })">@i</a>
             </li>
         }
 
@@ -185,7 +185,7 @@
         @if (Model.HasNextPage)
         {
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                <a class="page-link" href="@Url.Action("DanhSachHoaDon", new { page = Model.PageNumber + 1 })" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -200,7 +200,7 @@
         @if (Model.HasNextPage)
         {
             <li class="page-item">
-                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = Model.PageCount })" aria-label="Last">
+                <a class="page-link" href="@Url.Action("DanhSachHoaDon", new { page = Model.PageCount })" aria-label="Last">
                     <span aria-hidden="true">&raquo;&raquo;</span>
                 </a>
             </li>

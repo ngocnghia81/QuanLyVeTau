@@ -1,8 +1,11 @@
-﻿using QuanLyVeTau.Models;
+﻿using PagedList;
+using QuanLyVeTau.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
@@ -24,6 +27,8 @@ namespace QuanLyVeTau.Controllers
             }
             return View("TimVe");
         }
+
+
 
         public ActionResult TimVe()
         {
@@ -162,6 +167,180 @@ namespace QuanLyVeTau.Controllers
 
             return PartialView("HienThiKhoang",dt);
         }
+
+
+        //Admin
+        public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
+        {
+            var ves = db.Ves.AsQueryable();
+
+            if (daThuHoi.HasValue)
+            {
+                ves = ves.Where(v => v.DaThuHoi == daThuHoi);
+            }
+
+            if (!string.IsNullOrEmpty(maTau))
+            {
+                ves = ves.Where(v => v.Khoang.Toa.Tau.MaTau.ToLower().Contains(maTau));
+            }
+
+            if (!string.IsNullOrEmpty(maKhach))
+            {
+                ves = ves.Where(v => v.HoaDon.MaKhach.ToLower().Contains(maKhach.ToLower()));
+            }
+
+            // Lọc theo mã vé
+            if (!string.IsNullOrEmpty(maVe))
+            {
+                ves = ves.Where(v => v.MaVe.ToLower().Contains(maVe.ToLower()));
+            }
+
+            // Lọc theo điểm đi
+            if (!string.IsNullOrEmpty(diemDi))
+            {
+                ves = ves.Where(v => v.ChiTietLichTrinh.Ga.DiaChi.ToLower().Contains(diemDi.ToLower()));
+            }
+
+            // Lọc theo điểm đến
+            if (!string.IsNullOrEmpty(diemDen))
+            {
+                ves = ves.Where(v => v.ChiTietLichTrinh1.Ga.DiaChi.ToLower().Contains(diemDen.ToLower()));
+            }
+
+            // Tạo ViewBag cho liên kết của menu
+            ViewBag.ActiveLink = "manageTicketsLink";
+
+            // Phân trang
+            int pageSize = 12;  // Số vé hiển thị trên mỗi trang
+            var result = ves.ToPagedList(page, pageSize);  // Phân trang danh sách vé
+
+            // Trả về view với danh sách vé đã phân trang
+            return View(result);  // Trả về IPagedList<Ve> cho View
+        }
+
+
+
+        public ActionResult ChiTietVe(string maVe)
+        {
+            var ve = db.Ves
+                       .FirstOrDefault(v => v.MaVe == maVe);
+
+            if (ve == null)
+            {
+                return HttpNotFound();
+            }
+
+            var hoaDon = db.HoaDons
+                           .FirstOrDefault(hd => hd.MaHoaDon == ve.MaHoaDon);
+
+            var khachHang = db.KhachHangs
+                              .FirstOrDefault(kh => kh.MaKhach == hoaDon.MaKhach);
+
+            var khoang = db.Khoangs.FirstOrDefault(k => k.MaKhoang == ve.MaKhoang);
+
+            var toa = db.Toas
+                        .FirstOrDefault(t => t.MaToa == khoang.MaToa);
+
+            var nhatKt = db.NhatKyTaus.FirstOrDefault(nk => nk.MaNhatKy == ve.MaNhatKy);
+
+            var lichTrinh = db.LichTrinhTaus
+                              .FirstOrDefault(lt => lt.MaLichTrinh == nhatKt.MaLichTrinh);
+
+            var chiTietLichTrinhDi = db.ChiTietLichTrinhs
+                                       .FirstOrDefault(ct => ct.MaChiTiet == ve.DiemDi);
+
+            var chiTietLichTrinhDen = db.ChiTietLichTrinhs
+                                        .FirstOrDefault(ct => ct.MaChiTiet == ve.DiemDen);
+
+            var tau = db.Taus
+                        .FirstOrDefault(t => t.MaTau == toa.MaTau);
+
+            DateTime tgkh = nhatKt.NgayGio;
+            DateTime tgDen;
+
+            try
+            {
+                tgDen = LayTongThoiGianDiChuyen(nhatKt.MaNhatKy, tgkh, chiTietLichTrinhDi.MaGa, chiTietLichTrinhDen.MaGa);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Lỗi khi tính thời gian đến: " + ex.Message);
+                return View("Error");
+            }
+
+            double kc = db.ChiTietLichTrinhs
+                          .Where(ct => ct.MaLichTrinh == lichTrinh.MaLichTrinh &&
+                                       ct.Stt_Ga >= chiTietLichTrinhDi.Stt_Ga &&
+                                       ct.Stt_Ga <= chiTietLichTrinhDen.Stt_Ga)
+                          .Sum(ct => ct.KhoangCachTuTramTruoc);
+
+            var veChiTiet = new VeChiTietViewModel
+
+            {
+                MaVe = ve.MaVe,
+                GiaVe = ve.GiaVe,
+                TenKhachHang = khachHang?.TenKhach,
+                TenTau = tau?.TenTau,
+                TenLoaiToa = toa?.MaLoaiToa,
+                TenLichTrinh = lichTrinh?.TenLichTrinh,
+                DiemDi = chiTietLichTrinhDi?.MaGa,
+                DiaChiDiemDi = db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDi.MaGa)?.DiaChi,
+                DiemDen = chiTietLichTrinhDen?.MaGa,
+                DiaChiDiemDen = db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDen.MaGa)?.DiaChi,
+                ThoiGianKhoiHanh = tgkh,
+                ThoiGianDen = tgDen,
+                KhoangCach = kc,
+                SttGhe = ve.Stt_Ghe,
+                ThanhTien = hoaDon?.ThanhTien,
+                ThoiGianLapHoaDon = hoaDon?.ThoiGianLapHoaDon,
+                DaThuHoi = ve.DaThuHoi
+            };
+
+            return View(veChiTiet);
+        }
+
+
+
+        private DateTime LayTongThoiGianDiChuyen(string maNhatKy, DateTime thoiGianDi, string maGaDi, string maGaDen)
+        {
+            DataTable dtReturned = new DataTable();
+            DateTime thoiGianDiChuyen = DateTime.MinValue; // Khởi tạo giá trị mặc định nếu không có dữ liệu
+
+            // Chuỗi truy vấn để gọi hàm SQL với các tham số truyền vào
+            string sql2 = string.Format("SELECT dbo.TinhTongThoiGianDiChuyen('{0}', '{1}', '{2}', '{3}')",
+                                        maNhatKy,
+                                        thoiGianDi.ToString("yyyy-MM-dd HH:mm:ss"),
+                                        maGaDi,
+                                        maGaDen);
+
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString))
+            {
+                // Mở kết nối đến cơ sở dữ liệu
+                connection.Open();
+
+                // Tạo SqlDataAdapter để thực thi truy vấn và điền kết quả vào DataTable
+                using (var adapter = new SqlDataAdapter(sql2, connection))
+                {
+                    // Điền dữ liệu vào DataTable
+                    adapter.Fill(dtReturned);
+                }
+            }
+
+            // Kiểm tra nếu DataTable có ít nhất một hàng kết quả
+            if (dtReturned.Rows.Count > 0)
+            {
+                // Giả sử kết quả trả về chứa thời gian ở cột đầu tiên (cột index 0)
+                thoiGianDiChuyen = Convert.ToDateTime(dtReturned.Rows[0][0]);
+            }
+            else
+            {
+                throw new Exception("Không tìm thấy dữ liệu thời gian di chuyển.");
+            }
+
+            return thoiGianDiChuyen;
+        }
+
+
 
     }
 

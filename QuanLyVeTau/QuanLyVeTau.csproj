@@ -147,7 +147,7 @@
     <Compile Include="Controllers\QuanTriController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\TauController.cs" />
-    <Compile Include="Controllers\TrangChinhController.cs" />
+    <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
@@ -300,16 +300,16 @@
     <Content Include="Views\QuanTri\DangNhap.cshtml" />
     <Content Include="Views\QuanTri\DashBoard.cshtml" />
     <Content Include="Views\QuanTri\QuanLyKhachHang.cshtml" />
-    <Content Include="Views\QuanTri\ChiTietVe.cshtml" />
-    <Content Include="Views\QuanTri\QuanLyVe.cshtml" />
+    <Content Include="Views\Ve\ChiTietVe.cshtml" />
     <Content Include="Views\KhachHang\XemLichSuGiaoDich.cshtml" />
     <Content Include="Views\KhachHang\XemPhanHoi.cshtml" />
-    <Content Include="Views\QuanTri\QuanLyHoaDon.cshtml" />
+    <Content Include="Views\HoaDon\DanhSachHoaDon.cshtml" />
     <Content Include="Views\KhuyenMai\TaoKhuyenMai.cshtml" />
     <Content Include="Views\KhuyenMai\DanhSachKhuyenMai.cshtml" />
     <Content Include="Views\KhuyenMai\ChinhSuaKhuyenMai.cshtml" />
     <Content Include="Views\KhuyenMai\XemHoaDon.cshtml" />
     <Content Include="Views\KhachHang\DanhSachKhachHang.cshtml" />
+    <Content Include="Views\Ve\DanhSachVe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

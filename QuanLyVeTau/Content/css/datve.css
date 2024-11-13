@@ -4,8 +4,19 @@
     box-sizing: border-box;
 }
 
+body{
+    scroll-behavior:smooth;
+
+}
+
+main{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
 .container{
-    width: 80%;
+    width: 60%;
     margin: 0 auto;
 }
 
@@ -119,6 +130,8 @@ h3 span{
     margin: 20px;
     display: flex;
     align-items: center;
+    user-select:none;
+    /*flex-direction:row-reverse;*/ 
 }
 
 .train__toa {
@@ -134,16 +147,20 @@ h3 span{
     font-weight: bold;
     color: white;
     text-align: center;
-}
-
-.train__toa.blue {
+    cursor: pointer;
+    user-select: none;
     background-color: #6cbdd6;
 }
+
 .train__toa.red {
     background-color: #de5839;
 }
-.train__toa.green {
+.train__toa.selected {
     background-color: #b5c935;
+}
+
+.train__toa:hover{
+    transform:scale(1.1);
 }
 
 /* Engine style */
@@ -192,6 +209,7 @@ h3 span{
     bottom: -15px;
     font-size: 10px;
     color: #333;
+    user-select:none;
 }
 
 .engine-number {
@@ -199,4 +217,238 @@ h3 span{
     position: absolute;
     bottom: -15px;
     color: #333;
+}
+
+
+.toa {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    margin-bottom:30px;
+    cursor:pointer;
+}
+
+    .toa .toa__name {
+        font-size: 30px;
+        font-weight: bold;
+        color: aqua;
+        margin-bottom: 20px;
+    }
+
+    .toa .toa__container {
+        border: 2px solid cornflowerblue;
+        border-radius: 20px;
+        width: 760px;
+        height: 120px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        white-space: nowrap; /* Giữ nội dung trên một dòng để cuộn ngang */
+        padding-top: 10px;
+    }
+
+    .toa .toRight {
+        position: absolute;
+        left: 65%;
+        top: 20%;
+        cursor: pointer;
+    }
+
+    .toa .toLeft {
+        position: absolute;
+        left: 14%;
+        top: 20%;
+        cursor: pointer;
+    }
+
+.khoang {
+    margin: 5px;
+    position: relative;
+    margin: 0 auto;
+}
+
+    .khoang .khoang__container {
+        height: 60%;
+        width: 100%;
+        float: left;
+        padding-left: 10px;
+    }
+
+    .khoang .khoang__name {
+        font-size: 10px;
+        text-align: center;
+    }
+
+    .khoang .seat {
+        user-select:none;
+        width: 30px;
+        height: 30px;
+        float: left;
+        margin: 5px;
+    }
+
+    .khoang .seat {
+        position: relative;
+        cursor: pointer;
+    }
+
+        .khoang .seat.reserved {
+            cursor: not-allowed;
+        }
+
+        .khoang .seat i {
+            font-size: 30px;
+            color: goldenrod;
+        }
+
+    .khoang .seat--GI span {
+        position: absolute;
+        top: 0;
+        left: 15px;
+        font-size: 10px;
+    }
+
+    .khoang .seat--GC span {
+        position: absolute;
+        top: -5px;
+        left: 16px;
+        font-size: 10px;
+    }
+
+    .khoang .seat--GM span {
+        position: absolute;
+        top: 0;
+        left: 16px;
+        font-size: 10px;
+    }
+
+    .khoang .seat.reserved i {
+        color: rgba(184, 62, 62, 0.836);
+    }
+
+    .khoang .seat.selected i {
+        color: #a6b727
+    }
+
+
+
+.seat .seat__tooltip{
+    content: "Giá: 200,000đ"; /* Giá ghế */
+    z-index: 10;
+    position: absolute;
+    bottom: 100%; /* Vị trí của tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: whitesmoke;
+    border: 1px solid;
+    color: black;
+    padding: 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.seat.reserved:hover::after {
+    content: "Đã bán"; /* Giá ghế */
+}
+
+.seat::after {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.seat:hover::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    /* bottom: -8px; Đặt tam giác dưới tooltip */
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid black; /* Màu tam giác */
+}
+
+.seat:hover i, .seat:hover span {
+    transform: scale(1.1);
+    font-weight: bold;
+}
+
+
+.khoang .khoang__block {
+    position: absolute;
+    right: 0px;
+    background-color: brown;
+    border-radius: 20px;
+    height: 60%;
+    width: 5%;
+    color: brown;
+}
+
+.cart__info{
+    width:30%;
+    background-color:antiquewhite;
+    height:400px;
+    margin: 0 auto;
+    margin-bottom:20px;
+    border-radius:5px;
+
+}
+
+.cart__info .tenkhachhang {
+    margin: 20px;
+    text-align:center;
+    font-weight:bold;
+    font-size:30px;
+}
+
+.cart__info .cart__info__train{
+    display:flex;
+    flex-wrap:wrap;
+    margin:30px;
+}
+
+.cart__info .cart__info__train:only-child{
+    width:100%;
+    margin:5px 0;
+}
+
+.cart__info__train div{
+    width:100%;
+    display:flex;
+    justify-content:space-between;   
+}
+
+.cart__info__train h6 span{
+    font-weight: normal;
+}
+
+.cart__payment{
+    margin-left:30px;
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.cart__payment h6{
+    width:100%;
+}
+
+.cart__payment div{
+    text-align:center;
+    margin:0 auto;
+    padding:10px;
+    border:3px solid black;
+    border-radius:8px;
+    font-size:20px;
+    font-weight:500;
+    cursor:pointer;
+    user-select:none;
+}
+
+.cart__payment div:hover {
+    transform: scale(1.1);
+    background-color: white;
+
 }

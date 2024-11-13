@@ -1,11 +1,8 @@
 ﻿using QuanLyVeTau.Models;
 using QuanLyVeTau.Tools;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -164,7 +161,7 @@ namespace QuanLyVeTau.Controllers
                     db.SubmitChanges();
 
                     EmailSender emailSender = new EmailSender("smtp.gmail.com", 587, true, "dasnn2004@gmail.com", "ckfq pqmc xkll tgcw");
-                    emailSender.SendEmail(email, "Đặt lại Mật Khẩu", getMailBody(kh.TenKhach,newPass), true);
+                    emailSender.SendEmail(email, "Đặt lại Mật Khẩu", getMailBody(kh.TenKhach, newPass), true);
 
                     TempData["Message"] = "Mật khẩu mới đã được gửi về email của bạn thành công! Vui lòng kiểm tra email.";
 

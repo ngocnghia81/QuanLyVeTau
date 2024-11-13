@@ -170,6 +170,7 @@ namespace QuanLyVeTau.Controllers
                 .ToPagedList(page, pageSize);  // Phân trang
 
             return View(result);
+
         }
 
 

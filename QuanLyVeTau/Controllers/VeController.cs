@@ -18,11 +18,16 @@ namespace QuanLyVeTau.Controllers
         // GET: Ve
         public ActionResult Index()
         {
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View("DangNhap,Ve");
+            }
+            return View("TimVe");
         }
 
         public ActionResult TimVe()
         {
+            
             return View();
         }
 

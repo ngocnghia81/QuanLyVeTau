@@ -288,20 +288,11 @@
     <Content Include="Views\Shared\_DangNhap.cshtml" />
     <Content Include="Views\TaiKhoan\DangNhap.cshtml" />
     <Content Include="Views\TaiKhoan\DangKy.cshtml" />
-<<<<<<< HEAD
-
-    <Content Include="Views\TaiKhoan\QuenMatKhau.cshtml" />
-
     <Content Include="Views\Ve\ChonVe.cshtml" />
     <Content Include="Views\Ve\KetQuaChonVe.cshtml" />
-
-=======
     <Content Include="Views\TaiKhoan\QuenMatKhau.cshtml" />
-    <Content Include="Views\Ve\ChonVe.cshtml" />
-    <Content Include="Views\Ve\KetQuaChonVe.cshtml" />
     <Content Include="Views\Ve\HienThiToa.cshtml" />
     <Content Include="Views\Ve\HienThiKhoang.cshtml" />
->>>>>>> DatVe
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

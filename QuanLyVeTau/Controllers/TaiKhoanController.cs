@@ -16,7 +16,7 @@ namespace QuanLyVeTau.Controllers
 
         public TaiKhoanController()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
@@ -40,7 +40,7 @@ namespace QuanLyVeTau.Controllers
             if (taiKhoan != null)
             {
                 FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);
-                return RedirectToAction("Index", "Ve");
+                return RedirectToAction("TimVe", "Ve");
             }
             else if (!KiemTraDuLieu.KiemTraEmail(username))
             {
@@ -59,7 +59,7 @@ namespace QuanLyVeTau.Controllers
         {
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("Index", "Ve");
+            return RedirectToAction("DangNhap", "TaiKhoan");
         }
 
         public ActionResult DangKy()

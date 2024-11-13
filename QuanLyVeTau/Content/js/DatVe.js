@@ -170,3 +170,33 @@ function updateTotal(amount) {
     total = document.getElementById("totalAmount");
     total.textContent = Total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " VND";
     }
+
+function sendCartToServer() {
+    // Lấy mảng 'cart' từ localStorage (giả sử cart là một mảng đã lưu trữ trong localStorage)
+    let cart = JSON.parse(localStorage.getItem('cart'));  // Dữ liệu lưu trữ dưới dạng JSON, cần phải parse thành mảng
+
+    // Kiểm tra xem có dữ liệu trong cart không
+    if (!cart || cart.length === 0) {
+        console.log('Giỏ hàng rỗng');
+        return;
+    }
+
+    // Gửi dữ liệu tới server
+    fetch('@Url.Action("ThemVe", "Ve")', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',  // Đảm bảo gửi dữ liệu dưới dạng JSON
+        },
+        body: JSON.stringify({
+            selectedSeats: cart  // Gửi mảng ghế đã chọn từ localStorage
+        })
+    })
+        .then(response => response.json())  // Giải mã dữ liệu trả về dưới dạng JSON
+        .then(data => {
+            if (data.success) {
+                console.log('Dữ liệu đã được gửi và lưu thành công');
+            } else {
+                console.log('Lỗi: ' + data.message);
+            }
+        })
+};

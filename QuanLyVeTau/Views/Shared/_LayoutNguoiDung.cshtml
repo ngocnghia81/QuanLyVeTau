@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    var homelink = "/";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -22,7 +26,7 @@
     <!-- top header start -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Đường sắt Việt Nam</a>
+            <a class="navbar-brand" href="@homelink">Đường sắt Việt Nam</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -41,7 +45,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item" id="log">
-                            <a href="@Url.Action("DangNhap", "TaiKhoan")" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-target="#plogModal">
+                            <a href="#" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-target="#plogModal">
                                 Tài khoản
                             </a>
                         </li>
@@ -61,7 +65,7 @@
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Đăng ký</a>
+                            <a class="nav-link" href="@Url.Action("DangKy", "TaiKhoan")">Đăng ký</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="admin.html" id="aLogin" data-bs-toggle="modal" data-bs-target="#alogModal">Đăng nhập quản trị</a>
@@ -77,7 +81,7 @@
     <nav class="navbar navbar-expand-lg scndNavbar" style="background-color: #fff">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarNav">
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="@homelink">
                     <img style="width: 50px" src="~/Content/Images/6a724b9501764fd83a4abcd37b58144d.png" alt="Railways Logo" />
                 </a>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" role="tablist">
@@ -94,39 +98,14 @@
                     }
                     else
                     {
-                        <li class="nav-item" role="presentation">
-                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                                Đặt vé
-                            </a>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                                Huỷ vé
-                            </a>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                                Lịch sử mua vé
-                            </a>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <a href="index.html" class="nav-link t" id="historicalSec-tab" data-bs-toggle="tab" data-bs-target="#historicalSec"
-                               type="button" role="tab" aria-controls="historicalSec" aria-selected="false">
-                                Vé đã mua
-                            </a>
-                        </li>
-
                         <li class="nav-item">
-                            <button class="nav-link t" id="contactUsSection-tab" data-bs-toggle="tab" data-bs-target="#contactUsSection"
-                                    type="button" role="tab" aria-controls="contactUsSection" aria-selected="false">
-                                Liên hệ
-                            </button>
+                            <a class="nav-link" href="@Url.Action("TimVe", "Ve")">Tìm vé</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Huỷ Vé</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Lịch sử vé</a>
                         </li>
                     }
 
@@ -159,7 +138,7 @@
                 <div class="col-md-4 mb-3">
                     <h5>Liên kết nhanh</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white text-decoration-none">Tìm vé</a></li>
+                        <li><a href="@Url.Action("TimVe","Ve")" class="text-white text-decoration-none">Đặt Vé</a></li>
                         <li><a href="#" class="text-white text-decoration-none">Huỷ vé</a></li>
                         <li><a href="#" class="text-white text-decoration-none">Lịch sử mua vé</a></li>
                         <li><a href="#" class="text-white text-decoration-none">Liên hệ</a></li>

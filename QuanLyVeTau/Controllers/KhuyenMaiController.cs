@@ -89,5 +89,91 @@ namespace QuanLyVeTau.Controllers
 
             return View();
         }
+
+
+        [HttpGet]
+        public ActionResult ChinhSuaKhuyenMai(string id)
+        {
+            var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.MaKhuyenMai == id);
+
+            if (khuyenMai == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(khuyenMai);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChinhSuaKhuyenMai(string id, FormCollection collection)
+        {
+            var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.MaKhuyenMai == id);
+
+            if (khuyenMai != null)
+            {
+                // Cập nhật số lượng
+                int soLuongMoi = int.Parse(collection["SoLuong"]);
+                khuyenMai.SoLuong += soLuongMoi;
+
+                // Cập nhật số lượng còn lại, cộng với số lượng mới
+                khuyenMai.SoLuongConLai = khuyenMai.SoLuongConLai + soLuongMoi;
+
+                // Cập nhật tên khuyến mãi
+                khuyenMai.TenKhuyenMai = collection["TenKhuyenMai"];
+
+                // Cập nhật phần trăm giảm
+                khuyenMai.PhanTramGiam = Double.Parse(collection["PhanTramGiam"]);
+
+                // Cập nhật số tiền giảm tối đa
+                khuyenMai.SoTienGiamToiDa = int.Parse(collection["SoTienGiamToiDa"]);
+
+                // Cập nhật ngày bắt đầu và kết thúc
+                khuyenMai.NgayBatDau = DateTime.Parse(collection["NgayBatDau"]);
+                khuyenMai.NgayKetThuc = DateTime.Parse(collection["NgayKetThuc"]);
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                db.SubmitChanges();
+
+                // Chuyển hướng đến trang quản lý khuyến mãi
+                return RedirectToAction("DanhSachKhuyenMai");
+            }
+
+            return HttpNotFound();
+        }
+
+
+
+        public ActionResult XemHoaDon(string maKhuyenMai, int page = 1)
+        {
+            // Lấy danh sách hóa đơn liên quan đến mã khuyến mãi
+            var hoaDons = db.HoaDons
+                .Where(hd => hd.MaKhuyenMai == maKhuyenMai)
+                .Select(hd => new HoaDonViewModel
+                {
+                    HoaDon = hd,
+                    KhuyenMai = hd.KhuyenMai,
+                })
+                .ToList();
+
+            // Kiểm tra xem có hóa đơn không
+            if (hoaDons == null || !hoaDons.Any())
+            {
+                ViewBag.Message = "Không có hóa đơn nào cho khuyến mãi này.";
+            }
+
+            // Số lượng bản ghi hiển thị trên mỗi trang
+            int pageSize = 12;
+            var result = hoaDons
+                .OrderBy(hd => hd.HoaDon.ThoiGianLapHoaDon)  // Sắp xếp theo thời gian lập hóa đơn
+                .ToPagedList(page, pageSize);  // Phân trang
+
+            return View(result);
+
+        }
+
+
+
     }
 }

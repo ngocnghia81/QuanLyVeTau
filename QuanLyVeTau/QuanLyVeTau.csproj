@@ -142,7 +142,7 @@
     <Compile Include="Controllers\HanhLyController.cs" />
     <Compile Include="Controllers\KhuyenMaiController.cs" />
     <Compile Include="Controllers\LichTrinhController.cs" />
-    <Compile Include="Controllers\NguoiDungController.cs" />
+    <Compile Include="Controllers\KhachHangController.cs" />
     <Compile Include="Controllers\PhanHoiController.cs" />
     <Compile Include="Controllers\QuanTriController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
@@ -156,6 +156,7 @@
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\VeChiTietViewModel.cs" />
+    <Compile Include="Models\VeRepository.cs" />
     <Compile Include="Tools\EmailSender.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -301,13 +302,14 @@
     <Content Include="Views\QuanTri\QuanLyKhachHang.cshtml" />
     <Content Include="Views\QuanTri\ChiTietVe.cshtml" />
     <Content Include="Views\QuanTri\QuanLyVe.cshtml" />
-    <Content Include="Views\QuanTri\XemLichSuGiaoDich.cshtml" />
-    <Content Include="Views\QuanTri\XemPhanHoi.cshtml" />
+    <Content Include="Views\KhachHang\XemLichSuGiaoDich.cshtml" />
+    <Content Include="Views\KhachHang\XemPhanHoi.cshtml" />
     <Content Include="Views\QuanTri\QuanLyHoaDon.cshtml" />
     <Content Include="Views\KhuyenMai\TaoKhuyenMai.cshtml" />
     <Content Include="Views\KhuyenMai\DanhSachKhuyenMai.cshtml" />
     <Content Include="Views\KhuyenMai\ChinhSuaKhuyenMai.cshtml" />
     <Content Include="Views\KhuyenMai\XemHoaDon.cshtml" />
+    <Content Include="Views\KhachHang\DanhSachKhachHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

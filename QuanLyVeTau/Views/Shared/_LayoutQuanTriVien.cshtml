@@ -80,34 +80,33 @@
             <div class="list-group list-group-flush">
 
 
-                <a href="dashboard" class="list-group-item list-group-item-action bg-dark text-white"
+                <a href="@Url.Action("dashboard", "QuanTri")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="dashboardLink"
                    @if (ViewBag.ActiveLink == "dashboardLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                 </a>
-                <a href="QuanLyKhachHang" class="list-group-item list-group-item-action bg-dark text-white"
+                <a href="@Url.Action("DanhSachKhachHang", "KhachHang")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageCustomersLink"
                    @if (ViewBag.ActiveLink == "manageCustomersLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
                     <i class="bi bi-person-fill me-2"></i>Quản lý Khách hàng
                 </a>
-                <a href="QuanLyVe" class="list-group-item list-group-item-action bg-dark text-white"
+                <a href="@Url.Action("DanhSachVe", "Ve")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageTicketsLink"
                    @if (ViewBag.ActiveLink == "manageTicketsLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
                     <i class="bi bi-ticket-fill me-2"></i>Quản lý Vé
                 </a>
 
-                <a href="QuanLyHoaDon" class="list-group-item list-group-item-action bg-dark text-white"
+                <a href="@Url.Action("QuanLyHoaDon", "HoaDon")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageInvoices"
                    @if (ViewBag.ActiveLink == "manageInvoices") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
                     <i class="bi bi-ticket-fill me-2"></i>Quản lý Hóa đơn
                 </a>
 
-                <a href="@Url.Action("DanhSachKhuyenMai", "KhuyenMai")"
-                   class="list-group-item list-group-item-action bg-dark text-white @(ViewBag.ActiveLink == "managePromotions" ? "active" : "")"
-                   id="managePromotions">
-                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Khuyến mãi
+                <a href="@Url.Action("DanhSachKhuyenMai", "KhuyenMai")" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="managePromotions"
+                   @if (ViewBag.ActiveLink == "managePromotions") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Hóa đơn
                 </a>
-
 
                 <a href="#manageTrains" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageTrainsLink"><i class="bi bi-train-front-fill me-2"></i>Quản lý Tàu</a>

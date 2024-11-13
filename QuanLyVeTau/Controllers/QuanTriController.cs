@@ -142,91 +142,6 @@ namespace QuanLyVeTau.Controllers
         }
 
 
-        public ActionResult QuanLyKhachHang(string searchKeyword = "", bool? isDeleted = null, int page = 1)
-        {
-            var query = db.KhachHangs.Include(kh => kh.TaiKhoans).AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchKeyword))
-            {
-                query = query.Where(kh => kh.TenKhach.Contains(searchKeyword) ||
-                                          kh.Email.Contains(searchKeyword) ||
-                                          kh.SDT.Contains(searchKeyword) ||
-                                          kh.CCCD.Contains(searchKeyword) ||
-                                          kh.MaKhach.Contains(searchKeyword));
-            }
-
-            if (isDeleted.HasValue)
-            {
-                query = query.Where(kh => kh.TaiKhoans != null && kh.TaiKhoans[0].DaXoa == isDeleted);
-            }
-
-            var khachHangs = query.ToList();
-
-            ViewBag.ActiveLink = "manageCustomersLink";
-
-            // Áp dụng phân trang
-            int pageSize = 12;  // Số vé hiển thị trên mỗi trang
-            var result = khachHangs.ToPagedList(page, pageSize);  // Phân trang danh sách vé
-
-            // Trả về view với danh sách vé đã phân trang
-            return View(result); // Đây sẽ trả về IPagedList<Ve> cho View
-
-        }
-
-
-        public ActionResult KhoaTaiKhoan(FormCollection form)
-        {
-            string id = form["id"];
-
-            if (!string.IsNullOrEmpty(id))
-            {
-                var khachHang = db.KhachHangs.FirstOrDefault(kh => kh.MaKhach == id);
-
-                if (khachHang != null && khachHang.TaiKhoans.Count > 0)
-                {
-                    khachHang.TaiKhoans[0].DaXoa = true;
-                    db.SubmitChanges();
-                    return RedirectToAction("QuanLyKhachHang");
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Khách hàng không tồn tại hoặc tài khoản không hợp lệ.";
-                }
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "ID không hợp lệ.";
-            }
-
-            return View();
-        }
-
-        public ActionResult MoTaiKhoan(FormCollection form)
-        {
-            string id = form["id"];
-
-            if (!string.IsNullOrEmpty(id))
-            {
-                var khachHang = db.KhachHangs.FirstOrDefault(kh => kh.MaKhach == id);
-
-                if (khachHang != null && khachHang.TaiKhoans.Count > 0)
-                {
-                    khachHang.TaiKhoans[0].DaXoa = false;
-                    db.SubmitChanges();
-                    return RedirectToAction("QuanLyKhachHang");
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Khách hàng không tồn tại hoặc tài khoản không hợp lệ.";
-                }
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "ID không hợp lệ.";
-            }
-            return View();
-        }
-
 
         public ActionResult QuanLyVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
         {
@@ -279,28 +194,6 @@ namespace QuanLyVeTau.Controllers
             return View(result);  // Trả về IPagedList<Ve> cho View
         }
 
-        public ActionResult XemLichSuGiaoDich(string id)
-        {
-            var khachHang = db.KhachHangs.FirstOrDefault(kh => kh.MaKhach == id);
-            if (khachHang == null)
-            {
-                return HttpNotFound("Không tìm thấy khách hàng.");
-            }
-
-            var lichSuGiaoDich = db.HoaDons
-                .Where(hd => hd.MaKhach == id)
-                .Select(hd => new HoaDonViewModel
-                {
-                    HoaDon = hd,
-                    Ve = db.Ves.FirstOrDefault(v => v.MaHoaDon == hd.MaHoaDon),
-                    KhuyenMai = db.KhuyenMais.FirstOrDefault(km => km.MaKhuyenMai == hd.MaKhuyenMai)
-                })
-                .ToList();
-
-            ViewBag.KhachHangId = id;
-            ViewBag.TenKhachHang = khachHang.TenKhach;
-            return View(lichSuGiaoDich);
-        }
 
 
         public ActionResult ChiTietVe(string maVe)
@@ -424,11 +317,7 @@ namespace QuanLyVeTau.Controllers
         }
 
 
-        public ActionResult XemPhanHoi(string id = null)
-        {
-            List<PhanHoi> phanHois = db.PhanHois.Where(p=>p.MaKhach == id).ToList();
-            return View(phanHois);
-        }
+        
 
 
         public ActionResult QuanLyHoaDon(string maTau = "", string maKhach = "", bool? daChay = null, int page = 1)
@@ -498,37 +387,6 @@ namespace QuanLyVeTau.Controllers
 
             return View(result);
         }
-
-        public ActionResult QuanLyKhuyenMai(string tenKhuyenMai = "", DateTime? ngayBatDau = null, DateTime? ngayKetThuc = null, int page = 1)
-        {
-            // Truy vấn khuyến mãi từ database
-            var khuyenMais = db.KhuyenMais.AsQueryable();
-
-            // Lọc theo tên khuyến mãi
-            if (!string.IsNullOrEmpty(tenKhuyenMai))
-            {
-                khuyenMais = khuyenMais.Where(km => km.TenKhuyenMai.ToLower().Contains(tenKhuyenMai.ToLower()));
-            }
-
-            // Lọc theo ngày bắt đầu
-            if (ngayBatDau.HasValue)
-            {
-                khuyenMais = khuyenMais.Where(km => km.NgayBatDau >= ngayBatDau.Value);
-            }
-
-            // Lọc theo ngày kết thúc
-            if (ngayKetThuc.HasValue)
-            {
-                khuyenMais = khuyenMais.Where(km => km.NgayKetThuc <= ngayKetThuc.Value);
-            }
-
-            ViewBag.ActiveLink = "managePromotions";
-            int pageSize = 12;
-            var result = khuyenMais.ToPagedList(page, pageSize);
-
-            return View(result);
-        }
-
 
 
     }

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Mail;
 
 namespace QuanLyVeTau.Tools
 {
@@ -36,7 +32,7 @@ namespace QuanLyVeTau.Tools
                 {
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = isBodyHtml 
+                    IsBodyHtml = isBodyHtml
                 };
 
                 using (var smtp = new SmtpClient
@@ -49,15 +45,15 @@ namespace QuanLyVeTau.Tools
                     Credentials = new NetworkCredential(_fromEmail, _fromPassword)
                 })
                 {
-                    smtp.Send(mailMessage); 
+                    smtp.Send(mailMessage);
                 }
 
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(string.Format("Error sending email: {0}",ex.Message));
-                return false; 
+                Console.WriteLine(string.Format("Error sending email: {0}", ex.Message));
+                return false;
             }
         }
 

@@ -1,0 +1,244 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+@using PagedList.Mvc;
+@using System.Data.Linq;
+@model PagedList.IPagedList<QuanLyVeTau.Models.KhachHang>
+@{
+    ViewBag.Title = "Quản lý khách hàng";
+}
+<h2 class="text-center mb-5 font-weight-bold text-primary">Quản Lý Khách Hàng</h2>
+
+<style>
+    /* Thêm lớp CSS tùy chỉnh để làm nổi bật trạng thái tài khoản */
+    .badge-success {
+        background-color: #28a745; /* Màu xanh lá cho tài khoản hoạt động */
+        color: white; /* Đảm bảo màu chữ luôn sáng rõ */
+        font-weight: bold; /* Làm chữ đậm để dễ nhìn */
+        padding: 0.5em 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    .badge-danger {
+        background-color: #dc3545; /* Màu đỏ cho tài khoản đã khóa */
+        color: white; /* Màu chữ trắng để nổi bật trên nền đỏ */
+        font-weight: bold;
+        padding: 0.5em 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    .badge-success:hover {
+        background-color: #218838; /* Màu xanh đậm khi hover */
+        cursor: pointer;
+    }
+
+    .badge-danger:hover {
+        background-color: #c82333; /* Màu đỏ đậm khi hover */
+        cursor: pointer;
+    }
+
+    /* Tùy chỉnh style của các nút */
+    .btn-custom {
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+        .btn-custom:hover {
+            transform: scale(1.05); /* Hiệu ứng phóng to khi hover */
+        }
+
+    /* Tìm kiếm */
+    .search-form {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        width: 300px;
+        z-index: 10;
+    }
+
+        .search-form .input-group {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+    /* Table Style */
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    /* Phân trang */
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .pagination .page-link {
+        transition: background-color 0.3s ease;
+    }
+
+    .pagination .page-item:hover .page-link {
+        background-color: #0056b3;
+        color: white;
+    }
+</style>
+
+<!-- Form Tìm kiếm -->
+<form method="get" action="@Url.Action("QuanLyKhachHang", "QuanTri")" class="search-form mb-4">
+    <div class="input-group">
+        <input type="text" name="searchKeyword" class="form-control" placeholder="Tìm kiếm khách hàng..." value="@Request.QueryString["searchKeyword"]" />
+        <div class="input-group-append">
+            <button type="submit" class="mr-3 btn btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Bảng Danh Sách Khách Hàng -->
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th>STT</th>
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Ngày Sinh</th>
+                <th>Số Điện Thoại</th>
+                <th>CCCD</th>
+                <th>Địa Chỉ</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int stt = 1;
+            }
+            @foreach (var kh in Model)
+            {
+                var isActive = kh.TaiKhoans != null && kh.TaiKhoans.Any() && kh.TaiKhoans[0].DaXoa == false;
+                <tr>
+                    <td class="text-center">@stt</td>
+                    <td>@kh.TenKhach</td>
+                    <td>@kh.Email</td>
+                    <td>@kh.NamSinh.ToString("dd/MM/yyyy") </td>
+                    <td>@kh.SDT</td>
+                    <td>@kh.CCCD</td>
+                    <td>@kh.DiaChi</td>
+                    <td class="text-center">
+                        <span class="badge @(isActive ? "badge-success" : "badge-danger")">
+                            @(isActive ? "Hoạt động" : "Đã khóa")
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <!-- Khóa/Mở tài khoản -->
+                        <form method="post" action="@Url.Action(isActive ? "KhoaTaiKhoan" : "MoTaiKhoan", "QuanTri")" class="d-inline-flex align-items-center mr-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@kh.MaKhach" />
+                            <button type="submit" class="btn btn-sm btn-custom @(isActive ? "btn-danger" : "btn-success")" onclick="return confirm('Bạn có chắc chắn muốn @(isActive ? "khóa" : "mở") tài khoản này không?')">
+                                <i class="fa-regular @(isActive ? "fa-lock" : "fa-unlock")"></i> <!-- Icon thay cho chữ -->
+                            </button>
+                        </form>
+
+                        <!-- Lịch sử giao dịch -->
+                        <form method="get" action="@Url.Action("XemLichSuGiaoDich", "QuanTri")" class="d-inline-flex align-items-center">
+                            <input type="hidden" name="id" value="@kh.MaKhach" />
+                            <button type="submit" class="btn btn-info btn-sm">
+                                <i class="fa-regular fa-history"></i>
+                            </button>
+                        </form>
+
+                        <form method="get" action="@Url.Action("XemPhanHoi", "QuanTri")" class="d-inline-flex align-items-center">
+                            <input type="hidden" name="id" value="@kh.MaKhach" />
+                            <button type="submit" class="btn btn-warning btn-sm">
+                                <i class="fa-regular fa-comment-dots"></i>
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+                stt = stt + 1;
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Phân trang với Bootstrap cải tiến -->
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm">
+        <!-- Nút Trang đầu -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyKhachHang", new { page = 1 })" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;&laquo;</span>
+            </li>
+        }
+
+        <!-- Nút Previous -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyKhachHang", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        }
+
+        <!-- Hiển thị các số trang -->
+        @for (var i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("QuanLyKhachHang", new { page = i })">@i</a>
+            </li>
+        }
+
+        <!-- Nút Next -->
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyKhachHang", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyKhachHang", new { page = Model.PageCount })" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;&raquo;</span>
+            </li>
+        }
+    </ul>
+</div>

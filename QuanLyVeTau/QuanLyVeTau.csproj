@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,24 +41,30 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -115,6 +123,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
@@ -140,12 +149,13 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\TrangChinhController.cs" />
     <Compile Include="Controllers\VeController.cs" />
+    <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\VeRepository.cs" />
+    <Compile Include="Models\VeChiTietViewModel.cs" />
     <Compile Include="Tools\EmailSender.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -154,10 +164,9 @@
     <Compile Include="Tools\KiemTraDuLieu.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\all.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\css\datve.css" />
     <Content Include="Content\css\LabelInput.css" />
-    <Content Include="Content\css\toa.css" />
     <Content Include="Content\Icons\arrows.png" />
     <Content Include="Content\Icons\Azadi-Ka-Amrit-Mahotsav-Logo.png" />
     <Content Include="Content\Icons\card.png" />
@@ -180,7 +189,7 @@
     <Content Include="Content\Images\hotel Image.jpg" />
     <Content Include="Content\Images\—Pngtree—vietnam flag transparent background in_6979301.png" />
     <Content Include="Content\index.css" />
-    <Content Include="Content\js\DatVe.js" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -251,6 +260,7 @@
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
     </None>
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts\chart.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -279,20 +289,25 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LayoutQuanTriVien.cshtml" />
     <Content Include="Views\Shared\_LayoutNguoiDung.cshtml" />
     <Content Include="Views\Ve\Index.cshtml" />
-    <Content Include="Views\QuanTri\Index.cshtml" />
     <Content Include="Views\Ve\TimVe.cshtml" />
-    <Content Include="Views\Shared\_DangNhap.cshtml" />
     <Content Include="Views\TaiKhoan\DangNhap.cshtml" />
     <Content Include="Views\TaiKhoan\DangKy.cshtml" />
-    <Content Include="Views\Ve\ChonVe.cshtml" />
-    <Content Include="Views\Ve\KetQuaChonVe.cshtml" />
     <Content Include="Views\TaiKhoan\QuenMatKhau.cshtml" />
-    <Content Include="Views\Ve\HienThiToa.cshtml" />
-    <Content Include="Views\Ve\HienThiKhoang.cshtml" />
+    <Content Include="Views\QuanTri\DangNhap.cshtml" />
+    <Content Include="Views\QuanTri\DashBoard.cshtml" />
+    <Content Include="Views\QuanTri\QuanLyKhachHang.cshtml" />
+    <Content Include="Views\QuanTri\ChiTietVe.cshtml" />
+    <Content Include="Views\QuanTri\QuanLyVe.cshtml" />
+    <Content Include="Views\QuanTri\XemLichSuGiaoDich.cshtml" />
+    <Content Include="Views\QuanTri\XemPhanHoi.cshtml" />
+    <Content Include="Views\QuanTri\QuanLyHoaDon.cshtml" />
+    <Content Include="Views\KhuyenMai\TaoKhuyenMai.cshtml" />
+    <Content Include="Views\KhuyenMai\DanhSachKhuyenMai.cshtml" />
+    <Content Include="Views\KhuyenMai\ChinhSuaKhuyenMai.cshtml" />
+    <Content Include="Views\KhuyenMai\XemHoaDon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

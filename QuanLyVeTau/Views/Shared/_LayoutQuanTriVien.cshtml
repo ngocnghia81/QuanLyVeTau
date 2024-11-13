@@ -8,24 +8,134 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css" />
     <link rel="shortcut icon" href="Images/IRCTC-Logo-PNG-768x768.webp" type="image/x-icon" />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="~/Content/admin.css" />
     <title>Quản trị Đường sắt</title>
+    <link href="~/Content/all.css" rel="stylesheet" />
+    <style>
+        .list-group-item.active {
+            background-color: #007bff; /* Màu nền khi item được chọn */
+            color: white; /* Màu chữ khi item được chọn */
+        }
+
+        .list-group-item.active {
+            background-color: #0D6EFD !important; /* Màu nền khi active */
+            color: white !important;
+        }
+
+        .list-group-item:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+            color: white;
+        }
+
+        .list-group-item {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            .list-group-item:hover {
+                background-color: #fff !important;
+                color: #343a40 !important;
+            }
+
+
+        #wrapper {
+            display: flex;
+            flex-direction: row;
+            transition: margin-left 0.3s ease;
+        }
+
+        #sidebar-wrapper {
+            width: 250px;
+            background-color: #343a40;
+            transition: all 0.3s ease;
+        }
+
+            #sidebar-wrapper.toggled {
+                margin-left: -250px;
+            }
+
+        #page-content-wrapper {
+            flex-grow: 1;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .navbar-toggler {
+            border-color: #fff;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Sidebar Start -->
     <div class="d-flex" id="wrapper">
+        <!-- Sidebar Start -->
         <nav class="bg-dark border-end" id="sidebar-wrapper">
             <div class="sidebar-heading text-center py-4 text-white fs-4 fw-bold">Quản trị Đường sắt</div>
             <div class="list-group list-group-flush">
-                <a href="#dashboard" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
-                <a href="#manageUsers" class="list-group-item list-group-item-action bg-dark text-white">Quản lý Người dùng</a>
-                <a href="#manageTickets" class="list-group-item list-group-item-action bg-dark text-white">Quản lý Vé</a>
-                <a href="#reports" class="list-group-item list-group-item-action bg-dark text-white">Báo cáo</a>
-                <a href="#settings" class="list-group-item list-group-item-action bg-dark text-white">Cài đặt</a>
-                <a href="#logout" class="list-group-item list-group-item-action bg-dark text-white">Đăng xuất</a>
+
+
+                <a href="dashboard" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="dashboardLink"
+                   @if (ViewBag.ActiveLink == "dashboardLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                </a>
+                <a href="QuanLyKhachHang" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageCustomersLink"
+                   @if (ViewBag.ActiveLink == "manageCustomersLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-person-fill me-2"></i>Quản lý Khách hàng
+                </a>
+                <a href="QuanLyVe" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageTicketsLink"
+                   @if (ViewBag.ActiveLink == "manageTicketsLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Vé
+                </a>
+
+                <a href="QuanLyHoaDon" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageInvoices"
+                   @if (ViewBag.ActiveLink == "manageInvoices") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Hóa đơn
+                </a>
+
+                <a href="@Url.Action("DanhSachKhuyenMai", "KhuyenMai")"
+                   class="list-group-item list-group-item-action bg-dark text-white @(ViewBag.ActiveLink == "managePromotions" ? "active" : "")"
+                   id="managePromotions">
+                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Khuyến mãi
+                </a>
+
+
+                <a href="#manageTrains" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageTrainsLink"><i class="bi bi-train-front-fill me-2"></i>Quản lý Tàu</a>
+
+                <a href="#manageSchedules" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageSchedulesLink"><i class="bi bi-calendar3 me-2"></i>Lịch trình</a>
+
+                <a href="#manageStaff" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageStaffLink"><i class="bi bi-people-fill me-2"></i>Quản lý Nhân viên</a>
+
+                <a href="#manageAssignments" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageAssignmentsLink"><i class="bi bi-card-checklist me-2"></i>Phân công</a>
+
+                <a href="#reports" class="list-group-item list-group-item-action bg-dark text-white" id="reportsLink">
+                    <i class="bi bi-graph-up me-2"></i>Báo cáo
+                </a>
+
+                <a href="#feedback" class="list-group-item list-group-item-action bg-dark text-white" id="feedbackLink">
+                    <i class="bi bi-chat-left-text-fill me-2"></i>Phản hồi
+                </a>
+
+                <a href="#settings" class="list-group-item list-group-item-action bg-dark text-white" id="settingsLink">
+                    <i class="bi bi-gear-fill me-2"></i>Cài đặt
+                </a>
+
+                <a href="#logout" class="list-group-item list-group-item-action bg-dark text-white" id="logoutLink">
+                    <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
+                </a>
             </div>
         </nav>
         <!-- Sidebar End -->
@@ -36,82 +146,80 @@
                 <div class="container-fluid">
                     <button class="btn btn-primary" id="menu-toggle"><i class="bi bi-list"></i></button>
                     <a class="navbar-brand ms-3" href="#">Quản trị Đường sắt</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#profile">Xin chào, Admin</a>
+                                <a class="nav-link" href="#profile">Xin chào, @TempData["Email"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#logout">Đăng xuất</a>
+                                <a class="nav-link" href="DangXuat">Đăng xuất</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
 
-            <!-- Main Content -->
-            <div class="container-fluid p-4">
-                <h1 class="fs-3 mb-4">Dashboard</h1>
-                <div class="row">
-                    <!-- Các thống kê -->
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-primary">
-                            <div class="card-body">
-                                <h5 class="card-title">Người dùng</h5>
-                                <p class="card-text">Tổng số người dùng: 150</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-success">
-                            <div class="card-body">
-                                <h5 class="card-title">Vé bán</h5>
-                                <p class="card-text">Tổng số vé đã bán: 450</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-warning">
-                            <div class="card-body">
-                                <h5 class="card-title">Doanh thu</h5>
-                                <p class="card-text">Doanh thu: 1.2 tỷ VND</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-danger">
-                            <div class="card-body">
-                                <h5 class="card-title">Phản hồi</h5>
-                                <p class="card-text">Số phản hồi mới: 20</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             @RenderBody()
-
-            <!-- Footer -->
-            <footer class="bg-dark text-white pt-4 pb-2">
-                <div class="container text-center">
-                    <p class="mb-0">© 2024 Đường sắt Việt Nam. Bản quyền thuộc về công ty.</p>
-                </div>
-            </footer>
         </div>
         <!-- Page Content End -->
     </div>
 
+    <footer class="bg-dark text-white pt-4 pb-2">
+        <div class="container text-center">
+            <p class="mb-0">© 2024 Đường sắt Việt Nam. Bản quyền thuộc về công ty.</p>
+        </div>
+    </footer>
+    @RenderSection("Scripts", required: false)
 
     <!-- Bootstrap và JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Toggle Sidebar
         document.getElementById("menu-toggle").addEventListener("click", function () {
-            document.getElementById("wrapper").classList.toggle("toggled");
+            document.getElementById("sidebar-wrapper").classList.toggle("toggled");
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const links = document.querySelectorAll('.list-group-item');
+
+            // Lấy trạng thái "active" đã lưu trong sessionStorage
+            const activeLinkId = sessionStorage.getItem('activeLinkId');
+
+            // Nếu có item đã lưu trong sessionStorage, thêm lớp active cho nó
+            if (activeLinkId) {
+                const activeLink = document.getElementById(activeLinkId);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+
+            // Xử lý sự kiện click
+            links.forEach(link => {
+                link.addEventListener('click', function () {
+                    // Xóa lớp "active" khỏi tất cả các item
+                    links.forEach(item => item.classList.remove('active'));
+
+                    // Thêm lớp "active" vào item đã click
+                    this.classList.add('active');
+
+                    // Lưu lại id của item active vào sessionStorage
+                    sessionStorage.setItem('activeLinkId', this.id);
+                });
+            });
+        });
+
+
+    </script>
+
 </body>
 
 </html>

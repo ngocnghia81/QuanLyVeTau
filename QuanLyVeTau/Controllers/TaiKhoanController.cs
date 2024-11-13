@@ -54,7 +54,7 @@ namespace QuanLyVeTau.Controllers
             }
         }
 
-
+        [Authorize]
         public ActionResult DangXuat()
         {
             FormsAuthentication.SignOut();

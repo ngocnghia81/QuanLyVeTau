@@ -105,11 +105,14 @@
                 <a href="@Url.Action("DanhSachKhuyenMai", "KhuyenMai")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="managePromotions"
                    @if (ViewBag.ActiveLink == "managePromotions") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
-                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Hóa đơn
+                    <i class="bi bi-ticket-fill me-2"></i>Quản lý khuyến mãi
                 </a>
 
-                <a href="#manageTrains" class="list-group-item list-group-item-action bg-dark text-white"
-                   id="manageTrainsLink"><i class="bi bi-train-front-fill me-2"></i>Quản lý Tàu</a>
+                <a href="@Url.Action("DanhSachTau", "Tau")" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageTrains"
+                   @if (ViewBag.ActiveLink == "manageTrains") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-ticket-fill me-2"></i>Quản lý khuyến mãi
+                </a>
 
                 <a href="#manageSchedules" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageSchedulesLink"><i class="bi bi-calendar3 me-2"></i>Lịch trình</a>

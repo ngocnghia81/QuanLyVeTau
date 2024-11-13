@@ -2,278 +2,278 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 17.5, 20.875" name="QuanLyVeTauDB">
   <DataContextMoniker Name="/QuanLyVeTauDBDataContext" />
   <nestedChildShapes>
-    <classShape Id="47f47efa-8942-450c-9c4c-96a72e3f5764" absoluteBounds="6.5, 17.75, 2, 2.1017480841279053">
+    <classShape Id="5d887e06-8e5d-4b77-be88-d73ed9c16260" absoluteBounds="6.5, 17.75, 2, 2.1017480841279053">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/ChiTietLichTrinh" />
       <nestedChildShapes>
-        <elementListCompartment Id="65c6c5d7-5869-4901-be5d-450709062eaa" absoluteBounds="6.515, 18.21, 1.9700000000000002, 1.541748084127903" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="3b7bae81-dc5f-429d-8e8a-4d3c5b415e6d" absoluteBounds="6.515, 18.21, 1.9700000000000002, 1.541748084127903" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="27a530d8-39a7-4f17-9a46-2e285db594ad" absoluteBounds="9.75, 11.625, 2, 1.4694238504767405">
+    <classShape Id="e80ed263-ff44-40b0-8b06-cba7fadb9a1e" absoluteBounds="9.75, 11.625, 2, 1.4694238504767405">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/ChucVu" />
       <nestedChildShapes>
-        <elementListCompartment Id="172c3d70-2ccf-4929-9f8f-ca6b5d5e2006" absoluteBounds="9.765, 12.085, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="fc2058db-a73f-4031-ad5d-bd8f8bfea1fc" absoluteBounds="9.765, 12.085, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="33eae640-a912-41b3-a405-21fc4ede167c" absoluteBounds="3.75, 17, 2, 1.4694238504767405">
+    <classShape Id="f0785bdc-63b4-4361-8692-abfaa952dd69" absoluteBounds="3.75, 17, 2, 1.4694238504767405">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/Ga" />
       <nestedChildShapes>
-        <elementListCompartment Id="015c2dea-4a5b-41e9-82da-bd00c3c4e67d" absoluteBounds="3.765, 17.46, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="9711a2fd-4572-44a7-acf3-7d58701a0d1d" absoluteBounds="3.765, 17.46, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="79f51e5e-b573-4b93-9ac8-2c665f28b8db" absoluteBounds="12, 5, 2, 1.4694238504767423">
+    <classShape Id="a4045895-74c7-4153-9f39-9934d46b0109" absoluteBounds="12, 5, 2, 1.4694238504767423">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/HanhLy" />
       <nestedChildShapes>
-        <elementListCompartment Id="c2f47838-22b0-419d-82c5-5c7f79c24716" absoluteBounds="12.015, 5.46, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="53b6f95c-040d-4f71-96eb-d5114212746c" absoluteBounds="12.015, 5.46, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="b79dbe7f-bc2f-43e3-b8d9-4a91cc41e304" absoluteBounds="6.5, 6.125, 2, 1.8909733395775152">
+    <classShape Id="d72e17ec-c028-460e-8be2-bc5aece25dbc" absoluteBounds="6.5, 6.125, 2, 1.8909733395775152">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/HoaDon" />
       <nestedChildShapes>
-        <elementListCompartment Id="2b7f2eae-ca26-4ae2-ab17-1281d801ec5e" absoluteBounds="6.515, 6.585, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="ca9233b0-768d-4beb-9a76-b4ffdd752e1d" absoluteBounds="6.515, 6.585, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="5b74a15d-33cc-4f11-98bf-b07d46b9489f" absoluteBounds="0.75, 5.875, 2, 2.31252282867829">
+    <classShape Id="dc3e91c4-5def-45e4-a1e0-13d4710ca7e5" absoluteBounds="0.75, 5.875, 2, 2.31252282867829">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/KhachHang" />
       <nestedChildShapes>
-        <elementListCompartment Id="8b9a7f88-4689-43b3-9e46-94521fe61aea" absoluteBounds="0.765, 6.335, 1.9700000000000002, 1.75252282867829" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="a32f8e81-c8b9-47fc-a919-11e6029af743" absoluteBounds="0.765, 6.335, 1.9700000000000002, 1.75252282867829" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="2dd64d6d-caaa-4b0d-8f99-4151b9465053" absoluteBounds="6.5, 11.625, 2, 1.890973339577517">
+    <classShape Id="97d2c659-d20e-4297-acde-404472706188" absoluteBounds="6.5, 11.625, 2, 1.890973339577517">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/Khoang" />
       <nestedChildShapes>
-        <elementListCompartment Id="1ebf91f5-3157-4ad3-96f7-35e656c2dc7a" absoluteBounds="6.515, 12.085, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="3467902c-463b-4c8d-ad27-be94b231ea84" absoluteBounds="6.515, 12.085, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="1f020f29-e52a-40fd-8c8d-098f262287cf" absoluteBounds="3.75, 0.75, 2, 2.5232975732286773">
+    <classShape Id="40932f15-4bc4-4efa-b979-b0f21a59c7ba" absoluteBounds="3.75, 0.75, 2, 2.5232975732286773">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/KhuyenMai" />
       <nestedChildShapes>
-        <elementListCompartment Id="fd7f1951-b274-4fa4-a1c2-ba528ae95e88" absoluteBounds="3.765, 1.21, 1.9700000000000002, 1.9632975732286773" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f6007ed8-c4d3-4b1d-9e3c-20dd11f82496" absoluteBounds="3.765, 1.21, 1.9700000000000002, 1.9632975732286773" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="aa3f0128-28d4-453a-b24d-e3b68b6d7c10" absoluteBounds="12, 7.125, 2, 1.8909733395775152">
+    <classShape Id="adf39488-33af-43f6-9963-b5440820c2c5" absoluteBounds="12, 7.125, 2, 1.8909733395775152">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/LichSuDoiTraVe" />
       <nestedChildShapes>
-        <elementListCompartment Id="4ecc13d6-fe1d-45bf-982e-672f7981ee93" absoluteBounds="12.015, 7.585, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="fd6c64b5-393c-4506-8f71-fb9755ac1f61" absoluteBounds="12.015, 7.585, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="e8ea6e15-0f18-495b-bb8c-37101e29b46f" absoluteBounds="3.75, 19.125, 2, 1.4694238504767441">
+    <classShape Id="f030edb5-ab2a-4597-9914-c70bf7f524f2" absoluteBounds="3.75, 19.125, 2, 1.4694238504767441">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/LichTrinhTau" />
       <nestedChildShapes>
-        <elementListCompartment Id="3ea935d2-9c91-4dde-9194-300260af10bc" absoluteBounds="3.765, 19.585, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="4cadcde2-6396-4589-836d-36ffc2311872" absoluteBounds="3.765, 19.585, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="cd08ecb6-9fa1-4d43-92af-589b9ba2a6b6" absoluteBounds="1, 12.875, 2, 1.6801985950271288">
+    <classShape Id="8cfce8a6-a314-418b-82d3-ef710ec73a1c" absoluteBounds="1, 12.875, 2, 1.6801985950271288">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/LoaiToa" />
       <nestedChildShapes>
-        <elementListCompartment Id="ad066b30-f180-4762-9af4-e6d72ac47f91" absoluteBounds="1.0150000000000001, 13.335, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="bd25986c-d777-40e3-aaf4-b0b86eec2165" absoluteBounds="1.0150000000000001, 13.335, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="5af6b99d-bd1b-4981-83ab-b6c3390c8943" absoluteBounds="12.5, 11.125, 2, 2.5232975732286782">
+    <classShape Id="84375f58-2116-49ba-9fc1-06c5758653ef" absoluteBounds="12.5, 11.125, 2, 2.5232975732286782">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/NhanVien" />
       <nestedChildShapes>
-        <elementListCompartment Id="ca81edf9-c8d0-4091-b9d1-eebe7f4a6079" absoluteBounds="12.515, 11.585, 1.9700000000000002, 1.9632975732286773" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="5cbedf95-6aaa-44f3-8ca9-f454c7548406" absoluteBounds="12.515, 11.585, 1.9700000000000002, 1.9632975732286773" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="b79c367a-67da-4f9b-870a-948e4e449ead" absoluteBounds="6.5, 14.25, 2, 1.8909733395775152">
+    <classShape Id="7a0ac50c-21e1-4fff-b94c-18dae7761863" absoluteBounds="6.5, 14.25, 2, 1.8909733395775152">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/NhatKyTau" />
       <nestedChildShapes>
-        <elementListCompartment Id="1d094668-51c4-43a6-a152-1ec1086c06f4" absoluteBounds="6.515, 14.71, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="cfa09d21-c5c8-4ac3-bf96-7d2bfad89fb6" absoluteBounds="6.515, 14.71, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="71a2565a-4e65-4326-b96b-44a727e5ad09" absoluteBounds="15.25, 10.875, 2, 1.4694238504767405">
+    <classShape Id="b9453a46-6f73-4225-9aae-f7522362aa74" absoluteBounds="15.25, 10.875, 2, 1.4694238504767405">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/PhanCong" />
       <nestedChildShapes>
-        <elementListCompartment Id="08a82947-f25e-4902-9076-a11e26df7825" absoluteBounds="15.265, 11.335, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="271ffb9b-8e0c-427f-9381-2cfa65fd7b6a" absoluteBounds="15.265, 11.335, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="e8edaa31-7c9e-400a-a27b-fe9e4c2353e0" absoluteBounds="3.5, 5, 2, 1.6801985950271288">
+    <classShape Id="01b9626f-e54e-4784-8415-dad5f2c30045" absoluteBounds="3.5, 5, 2, 1.6801985950271288">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/PhanHoi" />
       <nestedChildShapes>
-        <elementListCompartment Id="c1446c2b-4395-4066-80e1-bf05a1acf433" absoluteBounds="3.515, 5.46, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="799076ce-a37b-4e0c-904f-7219a6e3df8d" absoluteBounds="3.515, 5.46, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="880bd93c-d7fc-4553-8143-25270bb4112f" absoluteBounds="3.5, 7.375, 2, 1.6801985950271288">
+    <classShape Id="ff0ef79f-0a51-452c-bfa4-26ce5f40a2d4" absoluteBounds="3.5, 7.375, 2, 1.6801985950271288">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/TaiKhoan" />
       <nestedChildShapes>
-        <elementListCompartment Id="310da811-c81e-4277-9208-d6e86544eb2f" absoluteBounds="3.515, 7.835, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="1a5b6b3a-94b9-4de9-bbe9-c3073ed0472f" absoluteBounds="3.515, 7.835, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="1ed697ff-4be2-4719-afd0-5d7d7d855a19" absoluteBounds="15.25, 13.625, 2, 1.890973339577517">
+    <classShape Id="561f5526-ca73-4e84-87e6-1073a4421649" absoluteBounds="15.25, 13.625, 2, 1.890973339577517">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/TaiKhoanNhanVien" />
       <nestedChildShapes>
-        <elementListCompartment Id="d4e62652-dd62-4bad-b3cc-591de785667c" absoluteBounds="15.265, 14.085, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="bc64cd17-159f-4d34-9c05-7481216eabcf" absoluteBounds="15.265, 14.085, 1.9700000000000002, 1.3309733395775158" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="7aa6f79c-f9c1-49f8-b974-0e7eb49c1feb" absoluteBounds="1, 10.625, 2, 1.4694238504767405">
+    <classShape Id="3bb72b0e-9881-4ea2-8c1b-20f520f587e0" absoluteBounds="1, 10.625, 2, 1.4694238504767405">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/Tau" />
       <nestedChildShapes>
-        <elementListCompartment Id="73ebfd1e-1810-43fa-b181-c36d896155c5" absoluteBounds="1.0150000000000001, 11.085, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f6d0b728-0a7b-463a-9531-f4d1883846b9" absoluteBounds="1.0150000000000001, 11.085, 1.9700000000000002, 0.90942385047674179" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="800cbe5d-f865-4a55-b7f7-e156cc7fdb83" absoluteBounds="3.75, 11.75, 2, 1.6801985950271288">
+    <classShape Id="3419a768-7db7-4f84-8cba-72947e8e2556" absoluteBounds="3.75, 11.75, 2, 1.6801985950271288">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/Toa" />
       <nestedChildShapes>
-        <elementListCompartment Id="429d65dd-6c05-4c6c-9c91-837a97eae805" absoluteBounds="3.765, 12.21, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f32d8eed-60b4-4d5a-8997-caabe5d1ac90" absoluteBounds="3.765, 12.21, 1.9700000000000002, 1.1201985950271287" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" absoluteBounds="9.25, 5.625, 2, 2.7340723177790647">
+    <classShape Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" absoluteBounds="9.25, 5.625, 2, 2.7340723177790647">
       <DataClassMoniker Name="/QuanLyVeTauDBDataContext/Ve" />
       <nestedChildShapes>
-        <elementListCompartment Id="e61b0a16-4658-438b-b924-80b32c037173" absoluteBounds="9.265, 6.085, 1.9700000000000002, 2.1740723177790642" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="92b27ffb-d02a-4cdb-ab9e-4e4ad1b811d8" absoluteBounds="9.265, 6.085, 1.9700000000000002, 2.1740723177790642" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <associationConnector edgePoints="[(5.75 : 18.1097119252384); (6.04166666666667 : 18.1097119252384 : JumpStart); (6.20833333333333 : 18.1097119252384 : JumpEnd); (6.5 : 18.1097119252384)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/Ga/Ga_ChiTietLichTrinh" />
       <nodes>
-        <classShapeMoniker Id="33eae640-a912-41b3-a405-21fc4ede167c" />
-        <classShapeMoniker Id="47f47efa-8942-450c-9c4c-96a72e3f5764" />
+        <classShapeMoniker Id="f0785bdc-63b4-4361-8692-abfaa952dd69" />
+        <classShapeMoniker Id="5d887e06-8e5d-4b77-be88-d73ed9c16260" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(2.75 : 7.02759929751356); (6.5 : 7.02759929751356)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/KhachHang/KhachHang_HoaDon" />
       <nodes>
-        <classShapeMoniker Id="5b74a15d-33cc-4f11-98bf-b07d46b9489f" />
-        <classShapeMoniker Id="b79dbe7f-bc2f-43e3-b8d9-4a91cc41e304" />
+        <classShapeMoniker Id="dc3e91c4-5def-45e4-a1e0-13d4710ca7e5" />
+        <classShapeMoniker Id="d72e17ec-c028-460e-8be2-bc5aece25dbc" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(5.65625 : 3.27329757322868); (5.65625 : 6.85389644627035); (6.5 : 6.85389644627035)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/KhuyenMai/KhuyenMai_HoaDon" />
       <nodes>
-        <classShapeMoniker Id="1f020f29-e52a-40fd-8c8d-098f262287cf" />
-        <classShapeMoniker Id="b79dbe7f-bc2f-43e3-b8d9-4a91cc41e304" />
+        <classShapeMoniker Id="40932f15-4bc4-4efa-b979-b0f21a59c7ba" />
+        <classShapeMoniker Id="d72e17ec-c028-460e-8be2-bc5aece25dbc" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(5.75 : 19.488374042064); (6.5 : 19.488374042064)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/LichTrinhTau/LichTrinhTau_ChiTietLichTrinh" />
       <nodes>
-        <classShapeMoniker Id="e8ea6e15-0f18-495b-bb8c-37101e29b46f" />
-        <classShapeMoniker Id="47f47efa-8942-450c-9c4c-96a72e3f5764" />
+        <classShapeMoniker Id="f030edb5-ab2a-4597-9914-c70bf7f524f2" />
+        <classShapeMoniker Id="5d887e06-8e5d-4b77-be88-d73ed9c16260" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(11.75 : 12.3597119252384); (12.5 : 12.3597119252384)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/ChucVu/ChucVu_NhanVien" />
       <nodes>
-        <classShapeMoniker Id="27a530d8-39a7-4f17-9a46-2e285db594ad" />
-        <classShapeMoniker Id="5af6b99d-bd1b-4981-83ab-b6c3390c8943" />
+        <classShapeMoniker Id="e80ed263-ff44-40b0-8b06-cba7fadb9a1e" />
+        <classShapeMoniker Id="84375f58-2116-49ba-9fc1-06c5758653ef" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(5.75 : 19.1261293260388); (6.125 : 18.7511293260388); (6.125 : 15.1954866697888); (6.5 : 15.1954866697888)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/LichTrinhTau/LichTrinhTau_NhatKyTau" />
       <nodes>
-        <classShapeMoniker Id="e8ea6e15-0f18-495b-bb8c-37101e29b46f" />
-        <classShapeMoniker Id="b79c367a-67da-4f9b-870a-948e4e449ead" />
+        <classShapeMoniker Id="f030edb5-ab2a-4597-9914-c70bf7f524f2" />
+        <classShapeMoniker Id="7a0ac50c-21e1-4fff-b94c-18dae7761863" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(14.5 : 11.7347119252384); (15.25 : 11.7347119252384)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/NhanVien/NhanVien_PhanCong" />
       <nodes>
-        <classShapeMoniker Id="5af6b99d-bd1b-4981-83ab-b6c3390c8943" />
-        <classShapeMoniker Id="71a2565a-4e65-4326-b96b-44a727e5ad09" />
+        <classShapeMoniker Id="84375f58-2116-49ba-9fc1-06c5758653ef" />
+        <classShapeMoniker Id="b9453a46-6f73-4225-9aae-f7522362aa74" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.5 : 15.1954866697888); (9.24478916666667 : 15.1954866697888 : JumpStart); (9.55208333333333 : 15.1954866697888 : JumpEnd); (15 : 15.1954866697888); (15 : 13.375); (16.25 : 13.375); (16.25 : 12.3444238504767)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/NhatKyTau/NhatKyTau_PhanCong" />
       <nodes>
-        <classShapeMoniker Id="b79c367a-67da-4f9b-870a-948e4e449ead" />
-        <classShapeMoniker Id="71a2565a-4e65-4326-b96b-44a727e5ad09" />
+        <classShapeMoniker Id="7a0ac50c-21e1-4fff-b94c-18dae7761863" />
+        <classShapeMoniker Id="b9453a46-6f73-4225-9aae-f7522362aa74" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(2.75 : 6.27759929751356); (3.5 : 6.27759929751356)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/KhachHang/KhachHang_PhanHoi" />
       <nodes>
-        <classShapeMoniker Id="5b74a15d-33cc-4f11-98bf-b07d46b9489f" />
-        <classShapeMoniker Id="e8edaa31-7c9e-400a-a27b-fe9e4c2353e0" />
+        <classShapeMoniker Id="dc3e91c4-5def-45e4-a1e0-13d4710ca7e5" />
+        <classShapeMoniker Id="01b9626f-e54e-4784-8415-dad5f2c30045" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(2.75 : 7.78126141433914); (3.5 : 7.78126141433914)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/KhachHang/KhachHang_TaiKhoan" />
       <nodes>
-        <classShapeMoniker Id="5b74a15d-33cc-4f11-98bf-b07d46b9489f" />
-        <classShapeMoniker Id="880bd93c-d7fc-4553-8143-25270bb4112f" />
+        <classShapeMoniker Id="dc3e91c4-5def-45e4-a1e0-13d4710ca7e5" />
+        <classShapeMoniker Id="ff0ef79f-0a51-452c-bfa4-26ce5f40a2d4" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(13.5 : 13.6482975732287); (13.5 : 14.4218926215087); (14.9166666666667 : 14.4218926215087 : JumpStart); (15.0833333333333 : 14.4218926215087 : JumpEnd); (15.25 : 14.4218926215087)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/NhanVien/NhanVien_TaiKhoanNhanVien" />
       <nodes>
-        <classShapeMoniker Id="5af6b99d-bd1b-4981-83ab-b6c3390c8943" />
-        <classShapeMoniker Id="1ed697ff-4be2-4719-afd0-5d7d7d855a19" />
+        <classShapeMoniker Id="84375f58-2116-49ba-9fc1-06c5758653ef" />
+        <classShapeMoniker Id="561f5526-ca73-4e84-87e6-1073a4421649" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(3 : 12.0944238504767); (3.375 : 12.4694238504767); (3.375 : 14.6914913348944); (6.5 : 14.6914913348944)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/Tau/Tau_NhatKyTau" />
       <nodes>
-        <classShapeMoniker Id="7aa6f79c-f9c1-49f8-b974-0e7eb49c1feb" />
-        <classShapeMoniker Id="b79c367a-67da-4f9b-870a-948e4e449ead" />
+        <classShapeMoniker Id="3bb72b0e-9881-4ea2-8c1b-20f520f587e0" />
+        <classShapeMoniker Id="7a0ac50c-21e1-4fff-b94c-18dae7761863" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(5.75 : 12.5900992975136); (6.5 : 12.5900992975136)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/Toa/Toa_Khoang" />
       <nodes>
-        <classShapeMoniker Id="800cbe5d-f865-4a55-b7f7-e156cc7fdb83" />
-        <classShapeMoniker Id="2dd64d6d-caaa-4b0d-8f99-4151b9465053" />
+        <classShapeMoniker Id="3419a768-7db7-4f84-8cba-72947e8e2556" />
+        <classShapeMoniker Id="97d2c659-d20e-4297-acde-404472706188" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(3 : 13.1525992975136); (3.29166666666667 : 13.1525992975136 : JumpStart); (3.45833333333333 : 13.1525992975136 : JumpEnd); (3.75 : 13.1525992975136)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/LoaiToa/LoaiToa_Toa" />
       <nodes>
-        <classShapeMoniker Id="cd08ecb6-9fa1-4d43-92af-589b9ba2a6b6" />
-        <classShapeMoniker Id="800cbe5d-f865-4a55-b7f7-e156cc7fdb83" />
+        <classShapeMoniker Id="8cfce8a6-a314-418b-82d3-ef710ec73a1c" />
+        <classShapeMoniker Id="3419a768-7db7-4f84-8cba-72947e8e2556" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(3 : 11.8909594252384); (3.75 : 11.8909594252384)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/Tau/Tau_Toa" />
       <nodes>
-        <classShapeMoniker Id="7aa6f79c-f9c1-49f8-b974-0e7eb49c1feb" />
-        <classShapeMoniker Id="800cbe5d-f865-4a55-b7f7-e156cc7fdb83" />
+        <classShapeMoniker Id="3bb72b0e-9881-4ea2-8c1b-20f520f587e0" />
+        <classShapeMoniker Id="3419a768-7db7-4f84-8cba-72947e8e2556" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(11.25 : 6.04721192523837); (12 : 6.04721192523837)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/Ve/Ve_HanhLy" />
       <nodes>
-        <classShapeMoniker Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" />
-        <classShapeMoniker Id="79f51e5e-b573-4b93-9ac8-2c665f28b8db" />
+        <classShapeMoniker Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" />
+        <classShapeMoniker Id="a4045895-74c7-4153-9f39-9934d46b0109" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(11.25 : 7.74203615888953); (12 : 7.74203615888953)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/Ve/Ve_LichSuDoiTraVe" />
       <nodes>
-        <classShapeMoniker Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" />
-        <classShapeMoniker Id="aa3f0128-28d4-453a-b24d-e3b68b6d7c10" />
+        <classShapeMoniker Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" />
+        <classShapeMoniker Id="adf39488-33af-43f6-9963-b5440820c2c5" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.5 : 18.800874042064); (9.46875 : 18.800874042064); (9.46875 : 8.35907231777906)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/ChiTietLichTrinh/ChiTietLichTrinh_Ve" />
       <nodes>
-        <classShapeMoniker Id="47f47efa-8942-450c-9c4c-96a72e3f5764" />
-        <classShapeMoniker Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" />
+        <classShapeMoniker Id="5d887e06-8e5d-4b77-be88-d73ed9c16260" />
+        <classShapeMoniker Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.5 : 18.244184521032); (9.3281225 : 18.244184521032); (9.3281225 : 8.35907231777906)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/ChiTietLichTrinh/ChiTietLichTrinh_Ve1" />
       <nodes>
-        <classShapeMoniker Id="47f47efa-8942-450c-9c4c-96a72e3f5764" />
-        <classShapeMoniker Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" />
+        <classShapeMoniker Id="5d887e06-8e5d-4b77-be88-d73ed9c16260" />
+        <classShapeMoniker Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.5 : 7.07048666978876); (9.25 : 7.07048666978876)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/HoaDon/HoaDon_Ve" />
       <nodes>
-        <classShapeMoniker Id="b79dbe7f-bc2f-43e3-b8d9-4a91cc41e304" />
-        <classShapeMoniker Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" />
+        <classShapeMoniker Id="d72e17ec-c028-460e-8be2-bc5aece25dbc" />
+        <classShapeMoniker Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.5 : 13.3364485950271); (9.21353666666666 : 13.3364485950271 : JumpStart); (9.55208333333333 : 13.3364485950271 : JumpEnd); (9.6093775 : 13.3364485950271); (9.6093775 : 8.35907231777906)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/Khoang/Khoang_Ve" />
       <nodes>
-        <classShapeMoniker Id="2dd64d6d-caaa-4b0d-8f99-4151b9465053" />
-        <classShapeMoniker Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" />
+        <classShapeMoniker Id="97d2c659-d20e-4297-acde-404472706188" />
+        <classShapeMoniker Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.5 : 14.6914908348944); (9.29687 : 14.6914908348944); (9.29687 : 8.35907231777906)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/QuanLyVeTauDBDataContext/NhatKyTau/NhatKyTau_Ve" />
       <nodes>
-        <classShapeMoniker Id="b79c367a-67da-4f9b-870a-948e4e449ead" />
-        <classShapeMoniker Id="55a05a45-ff7e-42dd-b3d5-83d393431a89" />
+        <classShapeMoniker Id="7a0ac50c-21e1-4fff-b94c-18dae7761863" />
+        <classShapeMoniker Id="b9bcc32a-2c8c-47ab-8d0d-48e2072d3acc" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+@using PagedList.Mvc
+@model PagedList.IPagedList<QuanLyVeTau.Models.Ve>
+
+@{
+    ViewBag.Title = "Quản lý vé";
+}
+
+<h2 class="text-center mb-5 font-weight-bold text-primary">Danh sách vé</h2>
+
+<!-- Form lọc vé -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="get" action="@Url.Action("QuanLyVe")">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" name="maTau" class="form-control" placeholder="Mã tàu" value="@Request.QueryString["maTau"]" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="maKhach" class="form-control" placeholder="Mã khách" value="@Request.QueryString["maKhach"]" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="maVe" class="form-control" placeholder="Mã vé" value="@Request.QueryString["maVe"]" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="diemDi" class="form-control" placeholder="Điểm đi" value="@Request.QueryString["diemDi"]" />
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <input type="text" name="diemDen" class="form-control" placeholder="Điểm đến" value="@Request.QueryString["diemDen"]" />
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <select name="daThuHoi" class="form-control">
+                            <option value="">Trạng thái thu hồi</option>
+                            <option value="true" @(Request.QueryString["daThuHoi"] == "true" ? "selected" : "")>Đã thu hồi</option>
+                            <option value="false" @(Request.QueryString["daThuHoi"] == "false" ? "selected" : "")>Chưa thu hồi</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Table danh sách vé -->
+<div class="table-responsive mt-4">
+    <table class="table table-striped table-hover table-bordered table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>Mã vé</th>
+                <th>Khách hàng</th>
+                <th>Tàu</th>
+                <th>Điểm đi</th>
+                <th>Điểm đến</th>
+                <th>Giá vé</th>
+                <th>Trạng thái thu hồi</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ve in Model)
+            {
+                <tr>
+                    <td>@ve.MaVe</td>
+                    <td>@ve.HoaDon.KhachHang.TenKhach</td>
+                    <td>@ve.Khoang.Toa.Tau.MaTau</td>
+                    <td>@ve.ChiTietLichTrinh.MaGa</td>
+                    <td>@ve.ChiTietLichTrinh1.Ga.MaGa</td>
+                    <td>@String.Format("{0:N0} VND", ve.GiaVe)</td>
+                    <td>@(ve.DaThuHoi ? "Đã thu hồi" : "Chưa thu hồi")</td>
+                    <td>
+                        <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })" class="btn btn-info btn-sm">Chi tiết</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Phân trang với Bootstrap cải tiến -->
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm">
+        <!-- Nút Trang đầu -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyVe", new { page = 1 })" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;&laquo;</span>
+            </li>
+        }
+
+        <!-- Nút Previous -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyVe", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        }
+
+        <!-- Hiển thị các số trang -->
+        @for (var i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("QuanLyVe", new { page = i })">@i</a>
+            </li>
+        }
+
+        <!-- Nút Next -->
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyVe", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        }
+
+        <!-- Nút Trang cuối -->
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyVe", new { page = Model.PageCount })" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;&raquo;</span>
+            </li>
+        }
+    </ul>
+</div>

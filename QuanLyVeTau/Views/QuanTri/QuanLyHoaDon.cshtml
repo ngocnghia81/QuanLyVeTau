@@ -1,0 +1,244 @@
+﻿@{
+    ViewBag.Title = "Quản lý hoá đơn";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+@model PagedList.IPagedList<QuanLyVeTau.Models.HoaDonViewModel>
+
+<h3 class="text-center mt-2 mb-4 font-weight-bold text-primary"> Quản lý hoá đơn</h3>
+
+<!-- Form lọc hoá đơn -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="get" action="@Url.Action("QuanLyHoaDon")">
+                <div class="row">
+                    <!-- Mã Tàu -->
+                    <div class="col-md-3">
+                        <input type="text" name="maTau" class="form-control" placeholder="Mã tàu" value="@Request.QueryString["maTau"]" />
+                    </div>
+
+                    <!-- Mã Khách -->
+                    <div class="col-md-3">
+                        <input type="text" name="maKhach" class="form-control" placeholder="Mã khách" value="@Request.QueryString["maKhach"]" />
+                    </div>
+
+                    <!-- Trạng thái chạy -->
+                    <div class="col-md-3">
+                        <select name="daChay" class="form-control">
+                            <option value="">Trạng thái chạy</option>
+                            <option value="true" @(Request.QueryString["daChay"] == "true" ? "selected" : "")>Hoàn thành</option>
+                            <option value="false" @(Request.QueryString["daChay"] == "false" ? "selected" : "")>Chưa hoàn thành</option>
+                        </select>
+                    </div>
+
+                    <!-- Nút tìm kiếm -->
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<table class="mt-4 table table-bordered table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th style="width: 10%;">Mã Hóa Đơn</th>
+            <th style="width: 15%;">Thành Tiền (VND)</th>
+            <th style="width: 10%;">Thời Gian Lập</th>
+            <th style="width: 10%;">Trạng thái lịch trình</th>
+            <th style="width: 15%;">Mã Khuyến Mãi</th>
+            <th style="width: 10%;">Giá Trị Khuyến Mãi</th>
+            <th>Thông Tin Vé</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            DateTime tglhd = item.HoaDon.ThoiGianLapHoaDon.Value;
+            <tr>
+                <td>@item.HoaDon.MaHoaDon</td>
+                <td>@item.HoaDon.ThanhTien.ToString("N0")</td>
+                <td>@tglhd.ToString("HH:mm dd/MM/yyyy")</td>
+                @{
+                    var trangThai = "Trạng thái không xác định";
+                    if (item.Ve != null && item.Ve.ChiTietLichTrinh != null &&
+                        item.Ve.ChiTietLichTrinh.LichTrinhTau != null &&
+                        item.Ve.ChiTietLichTrinh.LichTrinhTau.NhatKyTaus != null)
+                    {
+                        var nhatKyTau = item.Ve.NhatKyTau;
+                        if (nhatKyTau != null)
+                        {
+                            trangThai = nhatKyTau.TrangThai;
+                        }
+                    }
+                }
+                <td>@trangThai</td>
+                <td>
+                    @if (item.KhuyenMai != null)
+                    {
+                        <div>
+                            <!-- Mã Khuyến Mãi -->
+                            <span class="text-success font-weight-bold">@item.KhuyenMai.MaKhuyenMai</span>
+                            -
+                            <!-- Tên Khuyến Mãi -->
+                            <span class="text-primary ml-2">@item.KhuyenMai.TenKhuyenMai</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có</span>
+                    }
+                </td>
+
+                <td>
+                    @if (item.KhuyenMai != null)
+                    {
+                        <span class="text-primary"><strong>@item.KhuyenMai.PhanTramGiam %</strong></span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có</span>
+                    }
+                </td>
+
+                <td>
+                    @if (item.HoaDon.Ves != null && item.HoaDon.Ves.Any())
+                    {
+                        <div class="p-2">
+                            @foreach (var ve in item.HoaDon.Ves)
+                            {
+                                <div class="border rounded p-2 mb-2">
+                                    <strong>Mã Vé:</strong>
+                                    <!-- Link to ChiTietVe with MaVe as parameter -->
+                                    <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })">
+                                        @ve.MaVe
+                                    </a>
+                                    <br />
+                                    <strong>Điểm Đi:</strong> @ve.DiemDi<br />
+                                    <strong>Điểm Đến:</strong> @ve.DiemDen<br />
+                                    <strong>Giá Vé:</strong> @ve.GiaVe.ToString("N0") VND
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có vé</span>
+                    }
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+<!-- Phân trang với Bootstrap cải tiến -->
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm">
+        <!-- Nút Trang đầu -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = 1 })" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;&laquo;</span>
+            </li>
+        }
+
+        <!-- Nút Previous -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        }
+
+        <!-- Hiển thị các số trang -->
+        @for (var i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = i })">@i</a>
+            </li>
+        }
+
+        <!-- Nút Next -->
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("QuanLyHoaDon", new { page = Model.PageCount })" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;&raquo;</span>
+            </li>
+        }
+    </ul>
+</div>
+
+
+<style>
+    /* CSS tùy chỉnh để cải thiện giao diện */
+    table th, table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .border {
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .rounded {
+        border-radius: 0.25rem !important;
+    }
+
+    .thead-light {
+        background-color: #f8f9fa;
+    }
+
+    .p-2 {
+        padding: 0.5rem;
+    }
+
+    .mb-2 {
+        margin-bottom: 0.5rem;
+    }
+</style>

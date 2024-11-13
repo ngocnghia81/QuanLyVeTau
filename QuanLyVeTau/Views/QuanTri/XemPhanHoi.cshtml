@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "XemPhanHoi";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+@model IEnumerable<QuanLyVeTau.Models.PhanHoi> 
+
+<h2 class="text-center mb-5 font-weight-bold text-primary"> Phản hồi của khách hàng </h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Mã phản hồi</th>
+            <th>Nội dung</th>
+            <th>Ngày phản hồi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var phanHoi in Model)
+            {
+                <tr>
+                    <td>@phanHoi.MaPhanHoi</td>
+                    <td>@phanHoi.NoiDung</td>
+                    <td>@phanHoi.NgayPhanHoi.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center">Không có phản hồi nào từ khách hàng.</td>
+            </tr>
+        }
+    </tbody>
+</table>

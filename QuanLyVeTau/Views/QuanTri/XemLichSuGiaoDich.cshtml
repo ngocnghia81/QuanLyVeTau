@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Xem lịch sử giao dịch";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+@model IEnumerable<QuanLyVeTau.Models.HoaDonViewModel>
+
+<h3 class="mb-4 text-center">Lịch Sử Giao Dịch - @ViewBag.KhachHangId - @ViewBag.TenKhachHang</h3>
+
+<table class="table table-bordered table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th style="width: 10%;">Mã Hóa Đơn</th>
+            <th style="width: 15%;">Thành Tiền (VND)</th>
+            <th style="width: 20%;">Thời Gian Lập</th>
+            <th style="width: 15%;">Mã Khuyến Mãi</th>
+            <th style="width: 15%;">Giá Trị Khuyến Mãi</th>
+            <th>Thông Tin Vé</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            DateTime tglhd = item.HoaDon.ThoiGianLapHoaDon.Value;
+            <tr>
+                <td>@item.HoaDon.MaHoaDon</td>
+                <td>@item.HoaDon.ThanhTien.ToString("N0")</td>
+                <td>@tglhd.ToString("HH:mm dd/MM/yyyy")</td>
+                <td>
+                    @if (item.KhuyenMai != null)
+                    {
+                        <div>
+                            <!-- Mã Khuyến Mãi -->
+                            <span class="text-success font-weight-bold">@item.KhuyenMai.MaKhuyenMai</span>
+                            -
+                            <!-- Tên Khuyến Mãi -->
+                            <span class="text-primary ml-2">@item.KhuyenMai.TenKhuyenMai</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có</span>
+                    }
+                </td>
+
+                <td>
+                    @if (item.KhuyenMai != null)
+                    {
+                        <span class="text-primary"><strong>@item.KhuyenMai.PhanTramGiam %</strong></span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có</span>
+                    }
+                </td>
+
+                <td>
+                    @if (item.HoaDon.Ves != null && item.HoaDon.Ves.Any())
+                    {
+                        <div class="p-2">
+                            @foreach (var ve in item.HoaDon.Ves)
+                            {
+                                <div class="border rounded p-2 mb-2">
+                                    <strong>Mã Vé:</strong>
+                                    <!-- Link to ChiTietVe with MaVe as parameter -->
+                                    <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })">
+                                        @ve.MaVe
+                                    </a>
+                                    <br />
+                                    <strong>Điểm Đi:</strong> @ve.DiemDi<br />
+                                    <strong>Điểm Đến:</strong> @ve.DiemDen<br />
+                                    <strong>Giá Vé:</strong> @ve.GiaVe.ToString("N0") VND
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có vé</span>
+                    }
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<style>
+    /* CSS tùy chỉnh để cải thiện giao diện */
+    table th, table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .border {
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .rounded {
+        border-radius: 0.25rem !important;
+    }
+
+    .thead-light {
+        background-color: #f8f9fa;
+    }
+
+    .p-2 {
+        padding: 0.5rem;
+    }
+
+    .mb-2 {
+        margin-bottom: 0.5rem;
+    }
+</style>

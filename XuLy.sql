@@ -36,8 +36,9 @@ BEGIN
         FROM TaiKhoan
         WHERE MaTaiKhoan LIKE @Prefix + @Thang + @Nam + '%';
     END
-	BEGIN
-        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaTaiKhoan, LEN(@Prefix + @Nam) + 1, LEN(MaTaiKhoan) - LEN(@Prefix + @Thang + @Nam)) AS INT))
+    ELSE IF @Prefix = 'NV'  -- For the last case, it should be `NV` instead of repeating the `TK` condition
+    BEGIN
+        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaTaiKhoan, LEN(@Prefix + @Nam) + 1, LEN(MaTaiKhoan) - LEN(@Prefix + @Nam)) AS INT))
         FROM TAIKHOANNHANVIEN
         WHERE MaTaiKhoan LIKE @Prefix + @Nam + '%';
     END
@@ -48,7 +49,10 @@ BEGIN
 
     RETURN @MaxSoThuTu;
 END;
-go
+GO
+
+select dbo.LaySoThuTuLonNhatTrongThang(GETDATE(),'KH')
+
 CREATE FUNCTION dbo.TaoMa
 (
     @Prefix CHAR(2) = NULL,
@@ -75,8 +79,7 @@ BEGIN
     RETURN @Ma;
 END;
 go
-
-select dbo.TaoMa('TKNV',GETDATE())
+select dbo.TaoMa('KH',GETDATE())
 
 CREATE PROCEDURE DangKy  
     @TenKhach NVARCHAR(100),
@@ -215,8 +218,11 @@ RETURNS @Result TABLE
 )
 AS
 BEGIN
-	DECLARE @MAGADI NVARCHAR(100), @MAGADEN NVARCHAR(100);
-	
+	DECLARE @MaGaDau Varchar(100), @MaGaCuoi Varchar(100), @MAGADI NVARCHAR(100), @MAGADEN NVARCHAR(100);
+	select @MaGaDau = CTLT.MaGa
+	from ChiTietLichTrinh CTLT join dbo.LayLichTrinhTheoDiemDiDiemDen(@DiemDi,@DiemDen) as MaLT on MaLT.MaLichTrinh = CTLT.MaLichTrinh
+	where CTLT.Stt_Ga = 1
+
 	SELECT @MAGADI = MaGa
 	FROM Ga
 	WHERE TenGa = @DiemDi;
@@ -229,7 +235,10 @@ BEGIN
     SELECT 
         NK.MATAU, 
         NK.MaNhatKy, 
-		NK.NgayGio,
+		Case
+			when @MaGaDau = @MAGADI then NK.NgayGio
+			else dbo.TinhTongThoiGianDiChuyen(NK.MaNhatKy,NK.NgayGio,@MaGaDau,@MAGADI)
+		end,
         dbo.TinhTongThoiGianDiChuyen(NK.MaNhatKy,NK.NgayGio,@MAGADI,@MAGADEN),
         dbo.SoLuongToiDaCuaTau(NK.MaTau) - COUNT(VE.MANHATKY) AS SLChoTrong
     FROM 
@@ -248,6 +257,90 @@ BEGIN
 END;
 GO
 
+CREATE FUNCTION LAYTOA
+(
+	@MaTau varchar(100)
+)
+Returns Table
+as
+return
+(
+	select * from toa where MaTau = @MaTau
+)
+go
 
-select dbo.TinhTongThoiGianDiChuyen('TA180811241', '2024-11-08 13:00:00.000','SG','HN')
-SELECT * FROM LayTau('2024-11-08', N'Hà Nội', N'Sài Gòn');
+CREATE FUNCTION GiaVe
+(
+	@MaLoaiToa varchar(100)
+)
+returns decimal(10,2)
+as
+begin
+	Declare @giave decimal(10,2);
+	select @giave = GiaMacDinh+(GiaMacDinh*CoDieuHoa*0.1)
+	from LoaiToa
+	where MaLoaiToa = @MaLoaiToa
+	return @giave;
+end
+go
+
+CREATE FUNCTION LayKhoang
+(
+	@MaToa varchar(100)
+)
+Returns @Result Table
+(
+	SoToa int,
+	MaKhoang varchar(100),
+	SoKhoang int,
+	LoaiToa nvarchar(100),
+	SLChoNgoi int,
+	GiaVe decimal(10,2)
+)
+AS
+BEGIN
+	
+	INSERT INTO @Result
+	select Toa.SoToa,K.MaKhoang,K.SoKhoang, Toa.MaLoaiToa,K.SoChoNgoiToiDa, dbo.GiaVe(Toa.MaLoaiToa)
+	from Khoang K join Toa on Toa.MaToa = K.MaToa
+	where K.MaToa = @MaToa
+
+
+	RETURN
+END
+go
+
+
+-- Tạo trigger INSTEAD OF để tự động sinh mã tàu khi thêm mới tàu
+CREATE TRIGGER trg_ThemTau
+ON Tau
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @MaxMaTau INT;
+    DECLARE @NewMaTau VARCHAR(10);
+    DECLARE @Prefix VARCHAR(2) = 'TA';
+    DECLARE @Suffix INT;
+
+    SELECT @MaxMaTau = MAX(CAST(SUBSTRING(MaTau, 3, LEN(MaTau)) AS INT))
+    FROM Tau
+    WHERE MaTau LIKE 'TA%' -- Chỉ lấy các mã tàu bắt đầu với 'TA'
+
+    IF @MaxMaTau IS NULL
+    BEGIN
+        SET @MaxMaTau = 0;
+    END
+
+    -- Tạo mã tàu mới
+    SET @Suffix = @MaxMaTau + 1;
+    SET @NewMaTau = @Prefix + RIGHT('00' + CAST(@Suffix AS VARCHAR(2)), 2);
+
+    INSERT INTO Tau (MaTau, TenTau, DaXoa)
+    SELECT @NewMaTau, TenTau, DaXoa
+    FROM inserted;
+END;
+
+INSERT INTO Tau (TenTau)
+VALUES ('test');
+
+SELECT * FROM Tau

@@ -1,0 +1,347 @@
+﻿@model QuanLyVeTau.Models.XemToaViewModel
+<div class="container mt-5">
+
+    <div class="mt-4 d-flex justify-content-between">
+        <div>
+            <h2>Tên tàu: @Model.TenTau</h2>
+            <p><strong>Mã tàu:</strong> @Model.MaTau</p>
+        </div>
+        <div>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createToaModal">
+                Thêm Toa Mới
+            </button>
+        </div>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+
+    @if (Model.Toas != null && Model.Toas.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm">
+                <thead class="thead-light text-center">
+                    <tr>
+                        <th>Loại Toa</th>
+                        <th>Số Toa</th>
+                        <th>Giá Mặc Định</th>
+                        <th>Có Điều Hòa</th>
+                        <th>Danh sách khoang</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var toa in Model.Toas)
+                    {
+                        <tr>
+                            <td class="text-center align-middle">@toa.LoaiToa</td>
+                            <td class="text-center align-middle">@toa.SoToa</td>
+                            <td class="text-center align-middle">@toa.GiaMacDinh.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                            <td class="text-center align-middle">@(toa.CoDieuHoa ? "Có" : "Không")</td>
+                            <td class="text-center align-middle">
+                                @if (toa.KhoangList != null && toa.KhoangList.Count > 0)
+                                {
+                                    <ul class="list-unstyled">
+                                        @foreach (var khoang in toa.KhoangList)
+                                        {
+                                            <li>
+                                                Khoang @khoang.SoKhoang -
+                                                Số chỗ ngồi tối đa: @khoang.SoChoNgoiToiDa
+
+                                                <!-- Nút chỉnh sửa số lượng chỗ ngồi -->
+                                                <button class="btn btn-link p-0 text-decoration-none text-warning" data-bs-toggle="modal" data-bs-target="#editSeatsModal"
+                                                        data-makhoang="@khoang.MaKhoang"
+                                                        data-sokhoang="@khoang.SoKhoang"
+                                                        data-sochongoitoida="@khoang.SoChoNgoiToiDa"
+                                                        title="Chỉnh sửa số lượng">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+
+                                                <form method="post" action="@Url.Action("XoaKhoang", "Tau", new { maKhoang = khoang.MaKhoang })" class="d-inline">
+                                                    <input type="hidden" name="maKhoang" value="@khoang.MaKhoang" />
+                                                    <button type="submit" class="btn btn-link p-0 text-decoration-none text-danger" onclick="return confirm('Bạn có chắc muốn xóa khoang này?')">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Không có khoang</span>
+                                }
+                            </td>
+                            <td class="text-center align-middle">
+                                <!-- Nút chỉnh sửa toa -->
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addKhoangModal"
+                                        data-matoa="@toa.MaToa">
+                                    <i class="bi bi-plus-circle"></i>
+                                </button>
+                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editToaModal"
+                                        data-matoa="@toa.MaToa" data-loaitoai="@toa.MaLoaiToa" data-sotoa="@toa.SoToa">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+
+                                <!-- Nút xóa toa -->
+                                <form method="post" action="@Url.Action("XoaToa", "Tau")" class="d-inline">
+                                    <input type="hidden" name="maToa" value="@toa.MaToa" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa toa này?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">Không có toa nào cho tàu này.</div>
+    }
+
+</div>
+
+
+<div class="modal fade" id="editSeatsModal" tabindex="-1" aria-labelledby="editSeatsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="@Url.Action("CapNhatKhoang", "Tau")">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSeatsModalLabel">Chỉnh sửa số chỗ ngồi tối đa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="MaKhoang" id="editSeatsMaKhoang" />
+                    <div class="mb-3">
+                        <label for="editSeatsSoKhoang" class="form-label">Số khoang</label>
+                        <input type="text" class="form-control" name="SoKhoang" id="editSeatsSoKhoang" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSeatsSoChoNgoiToiDa" class="form-label">Số chỗ ngồi tối đa</label>
+                        <input type="number" class="form-control" name="SoChoNgoiToiDa" id="editSeatsSoChoNgoiToiDa" name="SoChoNgoiToiDa" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chỉnh sửa Toa -->
+<div class="modal fade" id="editToaModal" tabindex="-1" aria-labelledby="editToaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="@Url.Action("CapNhatToa", "Tau")">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editToaModalLabel">Chỉnh sửa thông tin toa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="MaToa" id="editToaMaToa" />
+
+                    <div class="mb-3">
+                        <label for="LoaiToa" class="form-label">Loại Toa</label>
+                        <select class="form-select" id="LoaiToa" name="LoaiToa" required>
+                            <option value="" disabled>Chọn loại toa</option>
+                            @foreach (var loaiToa in ViewBag.loaiToas)
+                            {
+                                <option value="@loaiToa.MaLoaiToa">@loaiToa.TenLoaiToa - @(loaiToa.CoDieuHoa ? "Có điều hoà":"Không có điều hoà") - @loaiToa.GiaMacDinh VND</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Nhập số toa -->
+                    <div class="mb-3">
+                        <label for="editSoToa" class="form-label">Số toa</label>
+                        <input type="number" id="editSoToa" name="soToa" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Tạo Toa -->
+<div class="modal fade" id="createToaModal" tabindex="-1" aria-labelledby="createToaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createToaModalLabel">Tạo Toa Mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="@Url.Action("TaoToa", "Tau")">
+                    <input type="hidden" name="maTau" value="@Model.MaTau" />
+
+                    <div class="mb-3">
+                        <label for="LoaiToa" class="form-label">Loại Toa</label>
+                        <select class="form-select" id="LoaiToa" name="LoaiToa" required>
+                            <option value="" disabled selected>Chọn loại toa</option>
+                            @foreach (var loaiToa in ViewBag.loaiToas)
+                            {
+                                <option value="@loaiToa.MaLoaiToa">@loaiToa.TenLoaiToa - @(loaiToa.CoDieuHoa ? "Có điều hoà":"Không có điều hoa") - @loaiToa.GiaMacDinh VND</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="SoToa" class="form-label">Số Toa</label>
+                        <input type="number" class="form-control" id="SoToa" name="SoToa" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Tạo Toa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chỉnh sửa Loại Toa -->
+<div class="modal fade" id="editLoaiToaModal" tabindex="-1" aria-labelledby="editLoaiToaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLoaiToaModalLabel">Chỉnh sửa Loại Toa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="@Url.Action("ChinhSuaLoaiToa", "Tau")">
+                    <input type="hidden" name="MaLoaiToa" id="MaLoaiToa" />
+
+                    <div class="mb-3">
+                        <label for="TenLoaiToa" class="form-label">Tên Loại Toa</label>
+                        <input type="text" class="form-control" id="TenLoaiToa" name="TenLoaiToa" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="GiaMacDinh" class="form-label">Giá Mặc Định</label>
+                        <input type="number" class="form-control" id="GiaMacDinh" name="GiaMacDinh" required />
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="CoDieuHoa" name="CoDieuHoa" />
+                        <label class="form-check-label" for="CoDieuHoa">Có Điều Hòa</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">Cập nhật Loại Toa</button>
+                </form>
+
+                <form method="post" action="@Url.Action("XoaLoaiToa", "Tau")" class="mt-3">
+                    <input type="hidden" name="MaLoaiToa" id="LoaiToaToDelete" />
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa loại toa này?')">Xóa Loại Toa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Thêm Khoang -->
+<div class="modal fade" id="addKhoangModal" tabindex="-1" aria-labelledby="addKhoangModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="@Url.Action("ThemKhoang", "Tau")">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addKhoangModalLabel">Thêm Khoang vào Toa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Input ẩn để gửi MaToa -->
+                    <input type="hidden" name="MaToa" id="addKhoangMaToa" />
+
+                    <!-- Nhập số khoang -->
+                    <div class="mb-3">
+                        <label for="SoKhoang" class="form-label">Số khoang</label>
+                        <input type="number" id="SoKhoang" name="SoKhoang" class="form-control" required />
+                    </div>
+
+                    <!-- Nhập số chỗ ngồi tối đa -->
+                    <div class="mb-3">
+                        <label for="SoChoNgoiToiDa" class="form-label">Số chỗ ngồi tối đa</label>
+                        <input type="number" id="SoChoNgoiToiDa" name="SoChoNgoiToiDa" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Thêm Khoang</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        var editSeatsModal = document.getElementById('editSeatsModal');
+        editSeatsModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var maKhoang = button.getAttribute('data-makhoang');
+            var soKhoang = button.getAttribute('data-sokhoang');
+            var soChoNgoiToiDa = button.getAttribute('data-sochongoitoida');
+
+            var modalTitle = editSeatsModal.querySelector('.modal-title');
+            var editSeatsMaKhoang = editSeatsModal.querySelector('#editSeatsMaKhoang');
+            var editSeatsSoKhoang = editSeatsModal.querySelector('#editSeatsSoKhoang');
+            var editSeatsSoChoNgoiToiDa = editSeatsModal.querySelector('#editSeatsSoChoNgoiToiDa');
+
+            modalTitle.textContent = 'Chỉnh sửa số chỗ ngồi của khoang ' + soKhoang;
+            editSeatsMaKhoang.value = maKhoang;
+            editSeatsSoKhoang.value = soKhoang;
+            editSeatsSoChoNgoiToiDa.value = soChoNgoiToiDa;
+        });
+
+        document.getElementById('editToaModal').addEventListener('show.bs.modal', function (event) {
+            // Lấy nút mà người dùng nhấn
+            var button = event.relatedTarget;
+
+            // Lấy các giá trị từ data-* attributes của nút
+            var maToa = button.getAttribute('data-matoa');
+            var loaiToa = button.getAttribute('data-loaitoai');
+            var soToa = button.getAttribute('data-sotoa');
+
+            // Điền giá trị vào các trường trong modal
+            document.getElementById('editToaMaToa').value = maToa;
+            document.getElementById('LoaiToa').value = loaiToa;
+            document.getElementById('editSoToa').value = soToa;
+        });
+
+
+        document.getElementById('addKhoangModal').addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+
+            var maToa = button.getAttribute('data-matoa');
+
+            // Điền giá trị vào trường input ẩn
+            document.getElementById('addKhoangMaToa').value = maToa;
+
+            // Nếu cần thiết, bạn có thể tùy chỉnh thêm các giá trị khác vào modal
+            // Ví dụ, hiển thị mã toa trong phần tiêu đề hoặc điền các giá trị khác
+            // const modalTitle = document.getElementById('addKhoangModalLabel');
+            // modalTitle.textContent = 'Thêm Khoang vào Toa ' + maToa;
+        });
+    </script>
+}

@@ -157,6 +157,7 @@
     </Compile>
     <Compile Include="Models\VeChiTietViewModel.cs" />
     <Compile Include="Models\VeRepository.cs" />
+    <Compile Include="Models\XemToaViewModel.cs" />
     <Compile Include="Tools\EmailSender.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -311,6 +312,8 @@
     <Content Include="Views\KhachHang\DanhSachKhachHang.cshtml" />
     <Content Include="Views\Ve\DanhSachVe.cshtml" />
     <Content Include="Views\Tau\DanhSachTau.cshtml" />
+    <Content Include="Views\Tau\XemToa.cshtml" />
+    <Content Include="Views\Tau\ChinhSuaKhoang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

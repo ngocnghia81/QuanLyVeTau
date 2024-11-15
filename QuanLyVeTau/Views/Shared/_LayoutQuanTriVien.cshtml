@@ -93,25 +93,25 @@
                 <a href="@Url.Action("DanhSachVe", "Ve")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageTicketsLink"
                    @if (ViewBag.ActiveLink == "manageTicketsLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
-                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Vé
+                    <i class="fas fa-ticket-alt me-2"></i>Quản lý Vé
                 </a>
 
                 <a href="@Url.Action("DanhSachHoaDon", "HoaDon")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageInvoices"
                    @if (ViewBag.ActiveLink == "manageInvoices") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
-                    <i class="bi bi-ticket-fill me-2"></i>Quản lý Hóa đơn
+                    <i class="fas fa-file-invoice me-2"></i>Quản lý Hóa đơn
                 </a>
 
                 <a href="@Url.Action("DanhSachKhuyenMai", "KhuyenMai")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="managePromotions"
                    @if (ViewBag.ActiveLink == "managePromotions") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
-                    <i class="bi bi-ticket-fill me-2"></i>Quản lý khuyến mãi
+                    <i class="fas fa-gift me-2"></i>Quản lý Khuyến mãi
                 </a>
 
                 <a href="@Url.Action("DanhSachTau", "Tau")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageTrains"
                    @if (ViewBag.ActiveLink == "manageTrains") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
-                    <i class="bi bi-ticket-fill me-2"></i>Quản lý tàu
+                    <i class="fas fa-train me-2"></i>Quản lý Tàu
                 </a>
 
                 <a href="#manageSchedules" class="list-group-item list-group-item-action bg-dark text-white"

@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "ChinhSuaKhoang";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+@model QuanLyVeTau.Models.Khoang
+
+<div class="container">
+    <h2>Chỉnh sửa Khoang</h2>
+    <form method="post" action="@Url.Action("ChinhSuaKhoang", "Tau")">
+        <div class="form-group">
+            <label for="SoKhoang">Số Khoang</label>
+            <input type="number" id="SoKhoang" name="SoKhoang" value="@Model.SoKhoang" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="SoChoNgoiToiDa">Số Chỗ Ngồi Tối Đa</label>
+            <input type="number" id="SoChoNgoiToiDa" name="SoChoNgoiToiDa" value="@Model.SoChoNgoiToiDa" class="form-control" required />
+        </div>
+        <input type="hidden" name="MaKhoang" value="@Model.MaKhoang" />
+        <input type="hidden" name="MaToa" value="@Model.MaToa" />
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a href="@Url.Action("XemToa", "Tau", new { maTau = Model.MaToa })" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+

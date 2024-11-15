@@ -7,6 +7,13 @@
 
 <h2 class="text-center mb-5 font-weight-bold text-primary">Quản Lý Danh Sách Tàu</h2>
 <div class="container">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
     <!-- Thanh công cụ quản lý tàu -->
     <div class="row mb-4">
         <!-- Nút Thêm Tàu Mới nằm bên trái -->
@@ -111,10 +118,22 @@
                             <i class="fas fa-edit"></i>
                         </button>
 
-                        <button type="button" class="btn btn-danger btn-sm" onclick="if(confirm('Bạn có chắc chắn muốn xoá tàu này?')) { window.location.href='@Url.Action("XoaTau", "Tau", new { maTau = tau.MaTau })' }">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        @if (tau.DaXoa.Value)
+                        {
+                            <!-- Nếu tàu đã xóa, hiển thị nút khôi phục -->
+                            <button type="button" class="btn btn-success btn-sm" onclick="if(confirm('Bạn có chắc chắn muốn khôi phục tàu này?')) { window.location.href='@Url.Action("KhoiPhucTau", "Tau", new { maTau = tau.MaTau })' }">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <!-- Nếu tàu chưa xóa, hiển thị nút xóa -->
+                            <button type="button" class="btn btn-danger btn-sm" onclick="if(confirm('Bạn có chắc chắn muốn xóa tàu này?')) { window.location.href='@Url.Action("XoaTau", "Tau", new { maTau = tau.MaTau })' }">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        }
                     </td>
+
                 </tr>
             }
         </tbody>

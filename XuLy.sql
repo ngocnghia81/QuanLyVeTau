@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION dbo.LaySoThuTuLonNhatTrongThang
+﻿﻿CREATE FUNCTION dbo.LaySoThuTuLonNhatTrongThang
 (
     @Ngay DATE,
     @Prefix VARCHAR(10) = NULL
@@ -340,7 +340,3 @@ BEGIN
     FROM inserted;
 END;
 
-INSERT INTO Tau (TenTau)
-VALUES ('test');
-
-SELECT * FROM Tau

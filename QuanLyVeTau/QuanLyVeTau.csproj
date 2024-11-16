@@ -46,6 +46,9 @@
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
     </Reference>
@@ -80,9 +83,6 @@
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
@@ -150,6 +150,7 @@
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
+    <Compile Include="Models\LichTrinhViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -314,6 +315,8 @@
     <Content Include="Views\Tau\DanhSachTau.cshtml" />
     <Content Include="Views\Tau\XemToa.cshtml" />
     <Content Include="Views\Tau\ChinhSuaKhoang.cshtml" />
+    <Content Include="Views\LichTrinh\DanhSachLichTrinh.cshtml" />
+    <Content Include="Views\Shared\_ChiTietLichTrinhModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

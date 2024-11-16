@@ -1,4 +1,6 @@
-﻿DROP TRIGGER trg_ThemTau
+﻿
+-------------Tau------------------------
+DROP TRIGGER trg_ThemTau
 
 -- Tạo trigger INSTEAD OF để tự động sinh mã tàu khi thêm mới tàu
 CREATE TRIGGER trg_ThemTau
@@ -245,3 +247,41 @@ BEGIN
     DELETE FROM Khoang
     WHERE MaKhoang = @MaKhoang;
 END;
+-------------end Tau------------------------
+------------ LichTrinh------------------------
+CREATE FUNCTION SinhMaLichTrinh (@TienTo CHAR(2))
+RETURNS VARCHAR(10)
+AS
+BEGIN
+    DECLARE @MaxSo INT = 0;
+    DECLARE @MaMoi VARCHAR(10);
+
+    -- Lấy số thứ tự lớn nhất của tiền tố truyền vào
+    SELECT @MaxSo = ISNULL(MAX(CAST(SUBSTRING(MaLichTrinh, 3, LEN(MaLichTrinh) - 2) AS INT)), 0)
+    FROM LichTrinhTau
+    WHERE LEFT(MaLichTrinh, 2) = @TienTo;
+
+    -- Tăng số thứ tự lên 1 và tạo mã mới
+    SET @MaMoi = @TienTo + RIGHT('00' + CAST(@MaxSo + 1 AS VARCHAR), 2);
+
+    RETURN @MaMoi;
+END;
+
+SELECT dbo.SinhMaLichTrinh('SE')
+
+
+CREATE PROCEDURE ThemLichTrinh
+    @TienTo CHAR(2),
+    @TenLichTrinh NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @MaLichTrinh VARCHAR(10);
+
+    -- Gọi function để sinh mã mới
+    SET @MaLichTrinh = dbo.SinhMaLichTrinh(@TienTo);
+
+    -- Thực hiện chèn dữ liệu
+    INSERT INTO LichTrinhTau (MaLichTrinh, TenLichTrinh)
+    VALUES (@MaLichTrinh, @TenLichTrinh);
+END;
+------------end LichTrinh------------------------

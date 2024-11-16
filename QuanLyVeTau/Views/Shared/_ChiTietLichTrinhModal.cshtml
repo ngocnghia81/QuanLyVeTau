@@ -1,0 +1,25 @@
+﻿@model IEnumerable<dynamic>
+
+<table class="table table-striped table-bordered table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th style="text-align: center;">STT</th>
+            <th style="text-align: center;">Tên Ga</th>
+            <th style="text-align: center;">Địa Chỉ</th>
+            <th style="text-align: center;">Thời Gian Di Chuyển</th>
+            <th style="text-align: center;">Khoảng Cách (km)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align: center;">@item.Stt_Ga</td>
+                <td style="text-align: center;">@item.GaTen</td>
+                <td style="text-align: center;">@item.GaDiaChi</td>
+                <td style="text-align: center;">@item.ThoiGianDiChuyenTuTramTruoc</td>
+                <td style="text-align: center;">@item.KhoangCachTuTramTruoc</td>
+            </tr>
+        }
+    </tbody>
+</table>

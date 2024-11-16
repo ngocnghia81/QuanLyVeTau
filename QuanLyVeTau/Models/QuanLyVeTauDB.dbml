@@ -13,6 +13,26 @@
       <Association Name="LichTrinhTau_ChiTietLichTrinh" Member="LichTrinhTau" ThisKey="MaLichTrinh" OtherKey="MaLichTrinh" Type="LichTrinhTau" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Ve" Member="Ves">
+    <Type Name="Ve">
+      <Column Name="MaVe" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
+      <Column Name="MaHoaDon" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="GiaVe" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MaKhoang" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Stt_Ghe" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DiemDi" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="DiemDen" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="DaThuHoi" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Ve_HanhLy" Member="HanhLies" ThisKey="MaVe" OtherKey="MaVe" Type="HanhLy" />
+      <Association Name="Ve_LichSuDoiTraVe" Member="LichSuDoiTraVes" ThisKey="MaVe" OtherKey="MaVe" Type="LichSuDoiTraVe" />
+      <Association Name="ChiTietLichTrinh_Ve" Member="ChiTietLichTrinh" ThisKey="DiemDen" OtherKey="MaChiTiet" Type="ChiTietLichTrinh" IsForeignKey="true" />
+      <Association Name="ChiTietLichTrinh_Ve1" Member="ChiTietLichTrinh1" ThisKey="DiemDi" OtherKey="MaChiTiet" Type="ChiTietLichTrinh" IsForeignKey="true" />
+      <Association Name="HoaDon_Ve" Member="HoaDon" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="HoaDon" IsForeignKey="true" />
+      <Association Name="Khoang_Ve" Member="Khoang" ThisKey="MaKhoang" OtherKey="MaKhoang" Type="Khoang" IsForeignKey="true" />
+      <Association Name="NhatKyTau_Ve" Member="NhatKyTau" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="NhatKyTau" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.ChucVu" Member="ChucVus">
     <Type Name="ChucVu">
       <Column Name="MaChucVu" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -137,8 +157,8 @@
       <Column Name="MaLichTrinh" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="NgayGio" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Column Name="TrangThai" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="NhatKyTau_PhanCong" Member="PhanCongs" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="PhanCong" />
       <Association Name="NhatKyTau_Ve" Member="Ves" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="Ve" />
+      <Association Name="NhatKyTau_PhanCong" Member="PhanCongs" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="PhanCong" />
       <Association Name="LichTrinhTau_NhatKyTau" Member="LichTrinhTau" ThisKey="MaLichTrinh" OtherKey="MaLichTrinh" Type="LichTrinhTau" IsForeignKey="true" />
       <Association Name="Tau_NhatKyTau" Member="Tau" ThisKey="MaTau" OtherKey="MaTau" Type="Tau" IsForeignKey="true" />
     </Type>
@@ -198,26 +218,6 @@
       <Association Name="Toa_Khoang" Member="Khoangs" ThisKey="MaToa" OtherKey="MaToa" Type="Khoang" />
       <Association Name="LoaiToa_Toa" Member="LoaiToa" ThisKey="MaLoaiToa" OtherKey="MaLoaiToa" Type="LoaiToa" IsForeignKey="true" />
       <Association Name="Tau_Toa" Member="Tau" ThisKey="MaTau" OtherKey="MaTau" Type="Tau" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Ve" Member="Ves">
-    <Type Name="Ve">
-      <Column Name="MaVe" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
-      <Column Name="MaHoaDon" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="GiaVe" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="MaKhoang" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="Stt_Ghe" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="DiemDi" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="DiemDen" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="DaThuHoi" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Ve_HanhLy" Member="HanhLies" ThisKey="MaVe" OtherKey="MaVe" Type="HanhLy" />
-      <Association Name="Ve_LichSuDoiTraVe" Member="LichSuDoiTraVes" ThisKey="MaVe" OtherKey="MaVe" Type="LichSuDoiTraVe" />
-      <Association Name="ChiTietLichTrinh_Ve" Member="ChiTietLichTrinh" ThisKey="DiemDen" OtherKey="MaChiTiet" Type="ChiTietLichTrinh" IsForeignKey="true" />
-      <Association Name="ChiTietLichTrinh_Ve1" Member="ChiTietLichTrinh1" ThisKey="DiemDi" OtherKey="MaChiTiet" Type="ChiTietLichTrinh" IsForeignKey="true" />
-      <Association Name="HoaDon_Ve" Member="HoaDon" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="HoaDon" IsForeignKey="true" />
-      <Association Name="Khoang_Ve" Member="Khoang" ThisKey="MaKhoang" OtherKey="MaKhoang" Type="Khoang" IsForeignKey="true" />
-      <Association Name="NhatKyTau_Ve" Member="NhatKyTau" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="NhatKyTau" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

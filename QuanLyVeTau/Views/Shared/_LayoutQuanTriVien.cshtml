@@ -114,8 +114,11 @@
                     <i class="fas fa-train me-2"></i>Quản lý Tàu
                 </a>
 
-                <a href="#manageSchedules" class="list-group-item list-group-item-action bg-dark text-white"
-                   id="manageSchedulesLink"><i class="bi bi-calendar3 me-2"></i>Lịch trình</a>
+                <a href="@Url.Action("DanhSachLichTrinh", "LichTrinh")" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageSchedulesLink"
+                   @if (ViewBag.ActiveLink == "manageSchedulesLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-calendar3 me-2"></i>Lịch trình
+                </a>
 
                 <a href="#manageStaff" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageStaffLink"><i class="bi bi-people-fill me-2"></i>Quản lý Nhân viên</a>

@@ -1,0 +1,369 @@
+﻿@{
+    ViewBag.Title = "Danh Sách Lịch Trình";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<style>
+    body.modal-open {
+        overflow: visible !important;
+    }
+</style>
+
+<h2 class="text-center mb-5 font-weight-bold text-primary">Danh sách Lịch Trình</h2>
+<div class="container">
+    <div class="card shadow p-3 mb-5 border-0">
+        <!-- Dòng chứa các thành phần -->
+        <form method="GET" action="@Url.Action("DanhSachLichTrinh")">
+            <div class="row g-3 align-items-center">
+                <!-- Nút thêm lịch trình -->
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#themLichTrinhModal">
+                        <i class="fa fa-plus me-2"></i> Thêm Lịch Trình
+                    </button>
+                </div>
+
+                <!-- Tìm kiếm -->
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input type="text" id="search" name="search" class="form-control" value="@Request["search"]" placeholder="Nhập tên hoặc mã lịch trình">
+                        <label for="search">Tìm kiếm</label>
+                    </div>
+                </div>
+
+                <!-- Trạng thái -->
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <select id="trangThai" name="trangThai" class="form-select">
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="Đang hoạt động" @(Request["trangThai"] == "Đang hoạt động" ? "selected" : "")>Đang hoạt động</option>
+                            <option value="Tạm ngưng" @(Request["trangThai"] == "Tạm ngưng" ? "selected" : "")>Tạm ngưng</option>
+                            <option value="Ngưng" @(Request["trangThai"] == "Ngưng" ? "selected" : "")>Ngưng</option>
+                        </select>
+                        <label for="trangThai">Trạng thái</label>
+                    </div>
+                </div>
+
+                <!-- Ngày giờ -->
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input type="date" id="ngayGio" name="ngayGio" class="form-control" value="@Request["ngayGio"]">
+                        <label for="ngayGio">Ngày giờ</label>
+                    </div>
+                </div>
+
+                <!-- Nút lọc -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fa fa-filter me-2"></i> Lọc
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<!-- Bảng danh sách -->
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center align-middle">Mã Lịch Trình</th>
+            <th class="text-center align-middle">Tên Lịch Trình</th>
+            <th class="text-center align-middle">Trạng Thái</th>
+            <th class="text-center align-middle">Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-center align-middle">@item.MaLichTrinh</td>
+                <td class="text-center align-middle">@item.TenLichTrinh</td>
+                <td class="text-center align-middle">@item.TrangThai</td>
+                <td class="text-center align-middle">
+                    <button class="btn btn-sm" style="background-color: #28a745"
+                            data-toggle="modal" data-target="#chiTietLichTrinhModal"
+                            onclick="loadChiTietLichTrinh('@item.MaLichTrinh')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+
+
+                    <button class="btn btn-warning btn-sm"
+                            onclick="window.location.href='@Url.Action("ChinhSuaLichTrinh", "LichTrinh", new { id = item.MaLichTrinh })'">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm">
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachLichTrinh", new { page = 1, search = Request["search"], trangThai = Request["trangThai"], ngayGio = Request["ngayGio"] })" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;&laquo;</span>
+            </li>
+        }
+
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachLichTrinh", new { page = Model.PageNumber - 1, search = Request["search"], trangThai = Request["trangThai"], ngayGio = Request["ngayGio"] })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        }
+
+        @for (var i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("DanhSachLichTrinh", new { page = i, search = Request["search"], trangThai = Request["trangThai"], ngayGio = Request["ngayGio"] })">@i</a>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachLichTrinh", new { page = Model.PageNumber + 1, search = Request["search"], trangThai = Request["trangThai"], ngayGio = Request["ngayGio"] })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachLichTrinh", new { page = Model.PageCount, search = Request["search"], trangThai = Request["trangThai"], ngayGio = Request["ngayGio"] })" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;&raquo;</span>
+            </li>
+        }
+    </ul>
+</div>
+<!-- Modal Thêm Lịch Trình -->
+<div class="modal fade" id="themLichTrinhModal" tabindex="-1" aria-labelledby="themLichTrinhModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="themLichTrinhModalLabel">Thêm Lịch Trình</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Thêm Lịch Trình -->
+                <form id="formThemLichTrinh" method="POST" action="@Url.Action("ThemLichTrinh")">
+                    <div class="mb-3">
+                        <label for="tenLichTrinh" class="form-label">Tên Lịch Trình</label>
+                        <input type="text" class="form-control" id="tenLichTrinh" name="tenLichTrinh" placeholder="Nhập tên lịch trình" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tuyen" class="form-label">Tuyến Đường</label>
+                        <select id="tuyen" name="tuyen" class="form-select" required>
+                            <option value="">Chọn tuyến</option>
+                            <option value="SE">SE</option>
+                            <option value="BC">BC</option>
+                            <option value="NN">NA</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-primary" form="formThemLichTrinh">Lưu Lịch Trình</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal để hiển thị chi tiết lịch trình -->
+<!-- Modal chi tiết lịch trình -->
+<div class="modal fade" id="chiTietLichTrinhModal" tabindex="-1" role="dialog" aria-labelledby="chiTietLichTrinhModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="chiTietLichTrinhModalLabel">Chi Tiết Lịch Trình</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <!-- Thông tin chi tiết lịch trình sẽ hiển thị ở đây -->
+                <form id="lichTrinhForm">
+                    <!-- Các trường dữ liệu cho lịch trình -->
+                    <div class="form-group">
+                        <label for="tenLichTrinh">Tên Lịch Trình</label>
+                        <input type="text" class="form-control" id="tenLichTrinh" placeholder="Nhập tên lịch trình">
+                    </div>
+                    <div class="form-group">
+                        <label for="moTaLichTrinh">Mô Tả</label>
+                        <textarea class="form-control" id="moTaLichTrinh" rows="3" placeholder="Nhập mô tả"></textarea>
+                    </div>
+                    <!-- Thêm các trường khác nếu cần -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <!-- Nút Thêm Lịch Trình -->
+                <button type="button" class="btn btn-primary" id="btnThemLichTrinh">Thêm Lịch Trình</button>
+
+                <!-- Nút Sửa Lịch Trình -->
+                <button type="button" class="btn btn-warning" id="btnSuaLichTrinh">Sửa Lịch Trình</button>
+
+                <!-- Nút Đóng Modal -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Thêm Bootstrap CSS -->
+<!-- Thêm jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Thêm Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    function loadChiTietLichTrinh(maLichTrinh) {
+        $.ajax({
+            url: '@Url.Action("ChiTietLichTrinhModal", "LichTrinh")',
+            data: { maLichTrinh: maLichTrinh },
+            success: function (result) {
+                debugger
+                // Đảm bảo dữ liệu được chèn vào modal trước khi mở
+                $('#chiTietLichTrinhModal .modal-body').html(result);
+
+                // Mở modal sau khi đã chèn dữ liệu
+                $('#chiTietLichTrinhModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error('Có lỗi xảy ra khi tải chi tiết lịch trình', error);
+            }
+        });
+    }
+
+
+
+    $('#chiTietLichTrinhModal').on('hidden.bs.modal', function () {
+        $('.modal-backdrop').remove();
+
+        $('body').removeClass('modal-open');
+
+        $('body').css('padding-right', '');
+        $('html').css('overflow', 'auto');
+        $('body').css('overflow', 'auto');
+    });
+
+    $('#chiTietLichTrinhModal').on('shown.bs.modal', function () {
+        $('body').addClass('modal-open');
+        $('html').css('overflow', 'hidden');
+        $('body').css('overflow', 'hidden');
+    });
+
+    $(document).ready(function () {
+        // Khi nhấn nút "Thêm Lịch Trình"
+        $('#btnThemLichTrinh').click(function () {
+            var tenLichTrinh = $('#tenLichTrinh').val();
+            var moTaLichTrinh = $('#moTaLichTrinh').val();
+
+            // Kiểm tra các giá trị đầu vào
+            if (tenLichTrinh && moTaLichTrinh) {
+                // Gửi yêu cầu thêm lịch trình mới (ví dụ qua AJAX)
+                $.ajax({
+                    url: '/your-endpoint-to-add-schedule', // Cập nhật URL endpoint của bạn
+                    method: 'POST',
+                    data: {
+                        TenLichTrinh: tenLichTrinh,
+                        MoTaLichTrinh: moTaLichTrinh
+                    },
+                    success: function (response) {
+                        // Xử lý thành công (cập nhật giao diện, thông báo...)
+                        alert('Lịch trình đã được thêm!');
+                        $('#chiTietLichTrinhModal').modal('hide'); // Đóng modal
+                    },
+                    error: function (error) {
+                        // Xử lý lỗi
+                        alert('Có lỗi xảy ra!');
+                    }
+                });
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin!');
+            }
+        });
+
+        // Khi nhấn nút "Sửa Lịch Trình"
+        $('#btnSuaLichTrinh').click(function () {
+            var tenLichTrinh = $('#tenLichTrinh').val();
+            var moTaLichTrinh = $('#moTaLichTrinh').val();
+
+            // Kiểm tra các giá trị đầu vào
+            if (tenLichTrinh && moTaLichTrinh) {
+                // Gửi yêu cầu sửa lịch trình hiện tại (ví dụ qua AJAX)
+                $.ajax({
+                    url: '/your-endpoint-to-edit-schedule', // Cập nhật URL endpoint của bạn
+                    method: 'POST',
+                    data: {
+                        TenLichTrinh: tenLichTrinh,
+                        MoTaLichTrinh: moTaLichTrinh
+                    },
+                    success: function (response) {
+                        // Xử lý thành công (cập nhật giao diện, thông báo...)
+                        alert('Lịch trình đã được sửa!');
+                        $('#chiTietLichTrinhModal').modal('hide'); // Đóng modal
+                    },
+                    error: function (error) {
+                        // Xử lý lỗi
+                        alert('Có lỗi xảy ra!');
+                    }
+                });
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin!');
+            }
+        });
+    });
+
+</script>
+

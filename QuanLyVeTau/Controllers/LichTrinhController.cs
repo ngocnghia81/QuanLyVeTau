@@ -53,6 +53,7 @@ namespace QuanLyVeTau.Controllers
                                        NhatKyTaus = new HashSet<NhatKyTau>(db.NhatKyTaus.Where(nk => nk.MaLichTrinh == lt.MaLichTrinh))
                                    }).ToPagedList(page, pageSize);
 
+            
             return View(result);
         }
 
@@ -122,7 +123,65 @@ namespace QuanLyVeTau.Controllers
             return PartialView("_ChiTietLichTrinhModal", chiTietLichTrinh);
         }
 
+        [HttpPost]
+        public ActionResult CapNhatTrangThai(string id, string trangThai)
+        {
+            try
+            {
+                var lichTrinh = db.LichTrinhTaus.FirstOrDefault(lt => lt.MaLichTrinh == id);
 
+                if (lichTrinh == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy lịch trình!" });
+                }
+
+                var validStatuses = new[] { "Đang hoạt động", "Tạm ngưng", "Ngưng" };
+                if (!validStatuses.Contains(trangThai))
+                {
+                    return Json(new { success = false, message = "Trạng thái không hợp lệ!" });
+                }
+
+                lichTrinh.TrangThai = trangThai;
+                db.SubmitChanges();
+
+                return Json(new { success = true, message = "Cập nhật trạng thái thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
+        [HttpPost]
+        public ActionResult DoiTenLichTrinh(FormCollection collection)
+        {
+            string lichTrinhId = collection["lichTrinhId"]; 
+            string tenLichTrinhMoi = collection["tenLichTrinhMoi"];
+
+            try
+            {
+                var lichTrinh = db.LichTrinhTaus.FirstOrDefault(lt => lt.MaLichTrinh == lichTrinhId);
+
+                if (lichTrinh == null)
+                {
+                    TempData["ErrorMessage"] = "Không tìm thấy lịch trình!";
+                    return RedirectToAction("DanhSachLichTrinh");
+                }
+
+                lichTrinh.TenLichTrinh = tenLichTrinhMoi;
+                db.SubmitChanges();
+
+                TempData["SuccessMessage"] = "Cập nhật tên lịch trình thành công!";
+                return RedirectToAction("DanhSachLichTrinh");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("DanhSachLichTrinh");
+            }
+        }
 
     }
 }

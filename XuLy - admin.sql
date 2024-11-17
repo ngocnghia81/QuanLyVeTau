@@ -284,4 +284,40 @@ BEGIN
     INSERT INTO LichTrinhTau (MaLichTrinh, TenLichTrinh)
     VALUES (@MaLichTrinh, @TenLichTrinh);
 END;
+
+
+DROP TRIGGER trg_CapNhatTrangThaiLichTrinh
+CREATE TRIGGER trg_CapNhatTrangThaiLichTrinh
+ON LichTrinhTau
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Kiểm tra nếu trạng thái được cập nhật là 'Đang hoạt động'
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        JOIN deleted d ON i.MaLichTrinh = d.MaLichTrinh
+        WHERE d.TrangThai = N'Đang hoạt động' AND i.TrangThai <> d.TrangThai
+    )
+    BEGIN
+        -- Kiểm tra nhật ký tàu của lịch trình
+        IF EXISTS (
+            SELECT 1
+            FROM inserted i
+            JOIN NhatKyTau nk ON i.MaLichTrinh = nk.MaLichTrinh
+            WHERE nk.TrangThai = N'Chưa hoàn thành'
+              AND nk.NgayGio > GETDATE()
+        )
+        BEGIN
+            -- Gây lỗi và ngăn chặn thay đổi
+            RAISERROR (N'Không thể cập nhật trạng thái "Đang hoạt động" khi có nhật ký trong tương lai đang hoạt động.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+    END
+END;
+
+
 ------------end LichTrinh------------------------

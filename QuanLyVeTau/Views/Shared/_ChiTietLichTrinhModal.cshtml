@@ -8,6 +8,7 @@
             <th style="text-align: center;">Địa Chỉ</th>
             <th style="text-align: center;">Thời Gian Di Chuyển</th>
             <th style="text-align: center;">Khoảng Cách (km)</th>
+            <th style="text-align: center;">Hành động</th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,16 @@
                 <td style="text-align: center;">@item.GaDiaChi</td>
                 <td style="text-align: center;">@item.ThoiGianDiChuyenTuTramTruoc</td>
                 <td style="text-align: center;">@item.KhoangCachTuTramTruoc</td>
+                <td style="text-align: center;" class="d-flex">
+                    <button class="bg-warning" style="margin-right: 5px; background-color: #4CAF50; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                        <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button style="background-color: #f44336; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+
             </tr>
         }
     </tbody>

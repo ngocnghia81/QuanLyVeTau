@@ -7,11 +7,36 @@
     body.modal-open {
         overflow: visible !important;
     }
+
+
+    #loadingSpinner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Nền mờ đen để làm nổi bật spinner */
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        z-index: 9999; /* Đảm bảo spinner hiển thị ở trên cùng */
+    }
+
+        #loadingSpinner img {
+            max-width: 100px; /* Đặt kích thước của spinner */
+            max-height: 100px;
+            background-color: transparent; /* Đảm bảo nền của ảnh spinner là trong suốt */
+            display: block; /* Đảm bảo spinner không có khoảng cách bên dưới */
+        }
 </style>
 
+<div id="loadingSpinner" style="display:none;">
+    <img src="~/Content/Images/loading.gif" />
+</div>
 <h2 class="text-center mb-5 font-weight-bold text-primary">Danh sách Lịch Trình</h2>
 <div class="container">
     <div class="card shadow p-3 mb-5 border-0">
+
         <!-- Dòng chứa các thành phần -->
         <form method="GET" action="@Url.Action("DanhSachLichTrinh")">
             <div class="row g-3 align-items-center">
@@ -93,7 +118,16 @@
             <tr>
                 <td class="text-center align-middle">@item.MaLichTrinh</td>
                 <td class="text-center align-middle">@item.TenLichTrinh</td>
-                <td class="text-center align-middle">@item.TrangThai</td>
+                <td class="text-center align-middle">
+                    <select class="form-control text-center trangThaiDropdown"
+                            style="width: 150px; margin: auto;"
+                            data-id="@item.MaLichTrinh">
+                        <option value="Đang hoạt động" @if (item.TrangThai == "Đang hoạt động") { <text> selected</text> }>Đang hoạt động</option>
+                        <option value="Tạm ngưng" @if (item.TrangThai == "Tạm ngưng") { <text> selected</text> }>Tạm ngưng</option>
+                        <option value="Ngưng" @if (item.TrangThai == "Ngưng") { <text> selected</text> }>Ngưng</option>
+                    </select>
+                </td>
+
                 <td class="text-center align-middle">
                     <button class="btn btn-sm" style="background-color: #28a745"
                             data-toggle="modal" data-target="#chiTietLichTrinhModal"
@@ -102,8 +136,7 @@
                     </button>
 
 
-                    <button class="btn btn-warning btn-sm"
-                            onclick="window.location.href='@Url.Action("ChinhSuaLichTrinh", "LichTrinh", new { id = item.MaLichTrinh })'">
+                    <button type="button" class="btn btn-warning btn-sm btnDoiTenLichTrinh" data-id="@item.MaLichTrinh" data-ten="@item.TenLichTrinh">
                         <i class="fas fa-edit"></i>
                     </button>
                 </td>
@@ -217,7 +250,34 @@
     </div>
 </div>
 
-<!-- Modal để hiển thị chi tiết lịch trình -->
+<!-- Modal Đổi Tên Lịch Trình -->
+<div class="modal fade" id="doiTenLichTrinhModal" tabindex="-1" aria-labelledby="doiTenLichTrinhModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="doiTenLichTrinhModalLabel">Chỉnh sửa Lịch Trình</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Đổi Tên Lịch Trình -->
+                <form id="formDoiTenLichTrinh" method="POST" action="@Url.Action("DoiTenLichTrinh", "LichTrinh")">
+                    <input type="hidden" id="lichTrinhId" name="lichTrinhId"> <!-- Lưu ID của lịch trình cần đổi tên -->
+
+                    <div class="mb-3">
+                        <label for="tenLichTrinhMoi" class="form-label">Tên Lịch Trình Mới</label>
+                        <input type="text" class="form-control" id="tenLichTrinhMoi" name="tenLichTrinhMoi" placeholder="Nhập tên lịch trình mới" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-primary" form="formDoiTenLichTrinh">Lưu Thay Đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Modal chi tiết lịch trình -->
 <div class="modal fade" id="chiTietLichTrinhModal" tabindex="-1" role="dialog" aria-labelledby="chiTietLichTrinhModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -245,13 +305,9 @@
             </div>
             <div class="modal-footer">
                 <!-- Nút Thêm Lịch Trình -->
-                <button type="button" class="btn btn-primary" id="btnThemLichTrinh">Thêm Lịch Trình</button>
-
-                <!-- Nút Sửa Lịch Trình -->
-                <button type="button" class="btn btn-warning" id="btnSuaLichTrinh">Sửa Lịch Trình</button>
-
-                <!-- Nút Đóng Modal -->
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnThemLichTrinh">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -260,7 +316,6 @@
 
 
 
-<!-- Thêm Bootstrap CSS -->
 <!-- Thêm jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -313,7 +368,7 @@
             if (tenLichTrinh && moTaLichTrinh) {
                 // Gửi yêu cầu thêm lịch trình mới (ví dụ qua AJAX)
                 $.ajax({
-                    url: '/your-endpoint-to-add-schedule', // Cập nhật URL endpoint của bạn
+                    url: '/LichTrinh/ThemTram', // Cập nhật URL endpoint của bạn
                     method: 'POST',
                     data: {
                         TenLichTrinh: tenLichTrinh,
@@ -334,36 +389,105 @@
             }
         });
 
-        // Khi nhấn nút "Sửa Lịch Trình"
-        $('#btnSuaLichTrinh').click(function () {
-            var tenLichTrinh = $('#tenLichTrinh').val();
-            var moTaLichTrinh = $('#moTaLichTrinh').val();
+        
+    });
 
-            // Kiểm tra các giá trị đầu vào
-            if (tenLichTrinh && moTaLichTrinh) {
-                // Gửi yêu cầu sửa lịch trình hiện tại (ví dụ qua AJAX)
-                $.ajax({
-                    url: '/your-endpoint-to-edit-schedule', // Cập nhật URL endpoint của bạn
-                    method: 'POST',
-                    data: {
-                        TenLichTrinh: tenLichTrinh,
-                        MoTaLichTrinh: moTaLichTrinh
-                    },
-                    success: function (response) {
-                        // Xử lý thành công (cập nhật giao diện, thông báo...)
-                        alert('Lịch trình đã được sửa!');
-                        $('#chiTietLichTrinhModal').modal('hide'); // Đóng modal
-                    },
-                    error: function (error) {
-                        // Xử lý lỗi
-                        alert('Có lỗi xảy ra!');
+    // Khi nhấn nút "Sửa Lịch Trình"
+    $('#btnSuaLichTrinh').click(function () {
+        var tenLichTrinh = $('#tenLichTrinh').val();
+        var moTaLichTrinh = $('#moTaLichTrinh').val();
+
+        // Kiểm tra các giá trị đầu vào
+        if (tenLichTrinh && moTaLichTrinh) {
+            // Gửi yêu cầu sửa lịch trình hiện tại (ví dụ qua AJAX)
+            $.ajax({
+                url: '/LichTrinh/SuaLichTrinh', // Cập nhật URL endpoint của bạn
+                method: 'POST',
+                data: {
+                    TenLichTrinh: tenLichTrinh,
+                    MoTaLichTrinh: moTaLichTrinh
+                },
+                success: function (response) {
+                    alert('Lịch trình đã được sửa!');
+                    $('#chiTietLichTrinhModal').modal('hide'); // Đóng modal
+                },
+                error: function (error) {
+                    alert('Có lỗi xảy ra!');
+                }
+            });
+        } else {
+            alert('Vui lòng điền đầy đủ thông tin!');
+        }
+    });
+
+    $(document).ready(function () {
+    var previousValue; // Lưu trạng thái ban đầu của combobox
+
+    // Khi người dùng bắt đầu thay đổi trạng thái
+    $(document).on('focus', '.trangThaiDropdown', function () {
+        previousValue = $(this).val(); // Lưu giá trị hiện tại
+    });
+
+    // Khi trạng thái thay đổi
+    $(document).on('change', '.trangThaiDropdown', function () {
+            var $this = $(this); // Lưu tham chiếu đến combobox
+            var trangThaiMoi = $this.val(); // Lấy trạng thái mới được chọn
+            var idLichTrinh = $this.data('id'); // Lấy ID của lịch trình từ thuộc tính data-id
+
+            // Hiển thị trạng thái loading
+            $('#loadingSpinner').show(); // Hiển thị spinner loading
+            $this.prop('disabled', true); // Vô hiệu hóa combobox trong khi yêu cầu AJAX
+
+            // Gửi yêu cầu AJAX để cập nhật trạng thái
+            $.ajax({
+                url: '/LichTrinh/CapNhatTrangThai', // Thay bằng URL endpoint của bạn
+                method: 'POST',
+                data: {
+                    Id: idLichTrinh,
+                    TrangThai: trangThaiMoi
+                },
+                success: function (response) {
+                    debugger
+                    if (response.success) {
+                        // Xử lý khi cập nhật thành công
+                        alert('Trạng thái đã được cập nhật!');
+                    } else {
+                        alert( response.message);
+                        // Khôi phục trạng thái ban đầu nếu có lỗi
+                        $this.val(previousValue);
                     }
-                });
-            } else {
-                alert('Vui lòng điền đầy đủ thông tin!');
-            }
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý lỗi không mong muốn
+                    alert('Có lỗi xảy ra khi gửi yêu cầu: ' + error);
+                    // Khôi phục trạng thái ban đầu nếu có lỗi
+                    $this.val(previousValue);
+                },
+                complete: function () {
+                    // Ẩn trạng thái loading và bật lại combobox
+                    $('#loadingSpinner').hide(); // Ẩn spinner loading
+                    $this.prop('disabled', false); // Bật lại combobox
+                }
+            });
         });
     });
+
+    $(document).ready(function () {
+        $(document).on('click', '.btnDoiTenLichTrinh', function () {
+            var lichTrinhId = $(this).data('id');
+            var tenLichTrinh = $(this).data('ten'); 
+
+            // Điền giá trị vào modal
+            $('#lichTrinhId').val(lichTrinhId);
+            $('#tenLichTrinhMoi').val(tenLichTrinh); 
+
+            // Mở modal
+            $('#doiTenLichTrinhModal').modal('show');
+        });
+    });
+
+
+
 
 </script>
 

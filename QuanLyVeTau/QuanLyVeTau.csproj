@@ -149,6 +149,7 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
+    <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\LichTrinhViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">

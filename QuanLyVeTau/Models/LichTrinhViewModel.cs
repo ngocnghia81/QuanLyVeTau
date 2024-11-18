@@ -11,5 +11,6 @@ namespace QuanLyVeTau.Models
         public string TenLichTrinh {  set; get; }
         public string TrangThai { set; get; }
         public HashSet<NhatKyTau> NhatKyTaus { set; get; }
+
     }
 }

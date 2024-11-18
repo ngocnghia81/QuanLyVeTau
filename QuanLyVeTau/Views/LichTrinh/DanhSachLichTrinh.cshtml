@@ -305,7 +305,7 @@
             </div>
             <div class="modal-footer">
                 <!-- Nút Thêm Lịch Trình -->
-                <button type="button" class="btn btn-primary" id="btnThemLichTrinh">
+                <button type="button" class="btn btn-primary" id="btnThemTram">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -313,8 +313,68 @@
     </div>
 </div>
 
+<!-- Modal Chi Tiết Lịch Trình -->
+<div class="modal fade" id="ThemTramModal" tabindex="-1" role="dialog" aria-labelledby="ThemTramModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ThemTramModal">Thêm Chi Tiết Lịch Trình</h5>
+                <button type="button" id="ThemTramBtnX" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <!-- Hiển thị thông báo nếu có -->
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
 
+                <!-- Form Chi Tiết Lịch Trình -->
+            <form id="chiTietLichTrinhForm">
+                <div class="form-group">
+                    <label for="maLichTrinh">Mã Lịch Trình</label>
+                    <input type="text" class="form-control" id="maLichTrinh" name="MaLichTrinh" disabled readonly required>
+                </div>
+                <div class="form-group">
+                    <label for="maGa">Chọn ga</label>
+                    <select class="form-control" id="maGa" name="MaGa" required>
+                        <option value="" disabled selected>Chọn mã ga</option>
+                        @foreach (var ga in ViewBag.Gas)
+                        {
+                            <option value="@ga.MaGa">@ga.TenGa - @ga.MaGa</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sttGa">Số thứ tự Ga</label>
+                    <input type="number" class="form-control" id="sttGa" name="SttGa" placeholder="Nhập số thứ tự ga" required>
+                </div>
+                <div class="form-group">
+                    <label for="thoiGianDiChuyen">Thời Gian Di Chuyển Từ Trạm Trước</label>
+                    <input type="number" class="form-control" id="thoiGianDiChuyen" name="ThoiGianDiChuyen">
+                </div>
 
+                <div class="form-group">
+                    <label for="khoangCach">Khoảng Cách Từ Trạm Trước (km)</label>
+                    <input type="number" class="form-control" id="khoangCach" name="KhoangCach" placeholder="Nhập khoảng cách">
+                </div>
+            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnLuuChiTietLichTrinh">Lưu Chi Tiết</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Thêm jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -330,6 +390,8 @@
                 debugger
                 // Đảm bảo dữ liệu được chèn vào modal trước khi mở
                 $('#chiTietLichTrinhModal .modal-body').html(result);
+
+                $('#chiTietLichTrinhModal').data('maLichTrinh', maLichTrinh);
 
                 // Mở modal sau khi đã chèn dữ liệu
                 $('#chiTietLichTrinhModal').modal('show');
@@ -356,41 +418,12 @@
         $('body').addClass('modal-open');
         $('html').css('overflow', 'hidden');
         $('body').css('overflow', 'hidden');
+
+        debugger
+        $('#maLichTrinh').val(maLichTrinh);
+
     });
 
-    $(document).ready(function () {
-        // Khi nhấn nút "Thêm Lịch Trình"
-        $('#btnThemLichTrinh').click(function () {
-            var tenLichTrinh = $('#tenLichTrinh').val();
-            var moTaLichTrinh = $('#moTaLichTrinh').val();
-
-            // Kiểm tra các giá trị đầu vào
-            if (tenLichTrinh && moTaLichTrinh) {
-                // Gửi yêu cầu thêm lịch trình mới (ví dụ qua AJAX)
-                $.ajax({
-                    url: '/LichTrinh/ThemTram', // Cập nhật URL endpoint của bạn
-                    method: 'POST',
-                    data: {
-                        TenLichTrinh: tenLichTrinh,
-                        MoTaLichTrinh: moTaLichTrinh
-                    },
-                    success: function (response) {
-                        // Xử lý thành công (cập nhật giao diện, thông báo...)
-                        alert('Lịch trình đã được thêm!');
-                        $('#chiTietLichTrinhModal').modal('hide'); // Đóng modal
-                    },
-                    error: function (error) {
-                        // Xử lý lỗi
-                        alert('Có lỗi xảy ra!');
-                    }
-                });
-            } else {
-                alert('Vui lòng điền đầy đủ thông tin!');
-            }
-        });
-
-        
-    });
 
     // Khi nhấn nút "Sửa Lịch Trình"
     $('#btnSuaLichTrinh').click(function () {
@@ -475,17 +508,89 @@
     $(document).ready(function () {
         $(document).on('click', '.btnDoiTenLichTrinh', function () {
             var lichTrinhId = $(this).data('id');
-            var tenLichTrinh = $(this).data('ten'); 
+            var tenLichTrinh = $(this).data('ten');
 
             // Điền giá trị vào modal
             $('#lichTrinhId').val(lichTrinhId);
-            $('#tenLichTrinhMoi').val(tenLichTrinh); 
+            $('#tenLichTrinhMoi').val(tenLichTrinh);
 
             // Mở modal
             $('#doiTenLichTrinhModal').modal('show');
         });
     });
 
+
+    $(document).ready(function () {
+        // Khi click vào nút "Thêm Chi Tiết Lịch Trình"
+        $('#btnThemTram').click(function () {
+            // Lấy mã lịch trình từ dòng đang chọn
+            var maLichTrinh = $('#chiTietLichTrinhModal').data('maLichTrinh');
+            // Gán mã lịch trình vào modal
+            $("#maLichTrinh").val(maLichTrinh);
+
+            // Đóng modal chi tiết lịch trình
+            $('#chiTietLichTrinhModal').modal('hide');
+
+            // Mở modal Thêm Chi Tiết Lịch Trình
+            $('#ThemTramModal').modal('show');
+        });
+
+        // Khi click vào nút "Lưu Chi Tiết"
+        $('#btnLuuChiTietLichTrinh').click(function () {
+
+            // Lấy giá trị từ các trường input trong modal
+            var maLichTrinh = $('#chiTietLichTrinhModal').data('maLichTrinh');
+            var maGa = $('#maGa').val();
+            var sttGa = $('#sttGa').val();
+            debugger;
+            var thoiGianDiChuyen = $('#thoiGianDiChuyen').val();
+            var khoangCach = $('#khoangCach').val();
+
+            // Kiểm tra các giá trị đầu vào
+            if (maLichTrinh && maGa && sttGa) {
+                // Gửi dữ liệu qua AJAX để thêm chi tiết lịch trình
+                $.ajax({
+                    url: '/LichTrinh/ThemChiTietLichTrinh',
+                    method: 'POST',
+                    data: {
+                        MaLichTrinh: maLichTrinh,
+                        MaGa: maGa,
+                        SttGa: sttGa,
+                        ThoiGianDiChuyen: thoiGianDiChuyen,
+                        KhoangCach: khoangCach
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            debugger
+                            alert(response.message);
+                            loadChiTietLichTrinh(maLichTrinh);
+                            // Đóng modal thêm trạm sau khi lưu thành công
+                            $('#ThemTramModal').modal('hide');
+                            // Mở lại modal chi tiết lịch trình nếu cần
+                            $('#chiTietLichTrinhModal').modal('show');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra khi thêm chi tiết lịch trình.');
+                    }
+                });
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin!');
+            }
+        });
+
+        // Đảm bảo khi đóng modal ThemTramModal thì mở modal chiTietLichTrinhModal
+        $('#ThemTramModal').on('hidden.bs.modal', function () {
+            $('#chiTietLichTrinhModal').modal('show');
+        });
+
+        // Nếu muốn ngược lại (tắt ThemTramModal khi chiTietLichTrinhModal mở)
+        $('#chiTietLichTrinhModal').on('show.bs.modal', function () {
+            $('#ThemTramModal').modal('hide');
+        });
+    });
 
 
 

@@ -149,6 +149,7 @@ begin
 end
 go
 
+DROP FUNCTION TinhTongThoiGianDiChuyen 
 CREATE FUNCTION TinhTongThoiGianDiChuyen (
     @MaNhatKy VARCHAR(100),
     @ThoiGianDi DATETIME,

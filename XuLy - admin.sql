@@ -1,4 +1,6 @@
-﻿DROP TRIGGER trg_ThemTau
+﻿
+-------------Tau------------------------
+DROP TRIGGER trg_ThemTau
 
 -- Tạo trigger INSTEAD OF để tự động sinh mã tàu khi thêm mới tàu
 CREATE TRIGGER trg_ThemTau
@@ -245,3 +247,220 @@ BEGIN
     DELETE FROM Khoang
     WHERE MaKhoang = @MaKhoang;
 END;
+-------------end Tau------------------------
+------------ LichTrinh------------------------
+CREATE FUNCTION SinhMaLichTrinh (@TienTo CHAR(2))
+RETURNS VARCHAR(10)
+AS
+BEGIN
+    DECLARE @MaxSo INT = 0;
+    DECLARE @MaMoi VARCHAR(10);
+
+    -- Lấy số thứ tự lớn nhất của tiền tố truyền vào
+    SELECT @MaxSo = ISNULL(MAX(CAST(SUBSTRING(MaLichTrinh, 3, LEN(MaLichTrinh) - 2) AS INT)), 0)
+    FROM LichTrinhTau
+    WHERE LEFT(MaLichTrinh, 2) = @TienTo;
+
+    -- Tăng số thứ tự lên 1 và tạo mã mới
+    SET @MaMoi = @TienTo + RIGHT('00' + CAST(@MaxSo + 1 AS VARCHAR), 2);
+
+    RETURN @MaMoi;
+END;
+
+SELECT dbo.SinhMaLichTrinh('SE')
+
+
+CREATE PROCEDURE ThemLichTrinh
+    @TienTo CHAR(2),
+    @TenLichTrinh NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @MaLichTrinh VARCHAR(10);
+
+    -- Gọi function để sinh mã mới
+    SET @MaLichTrinh = dbo.SinhMaLichTrinh(@TienTo);
+
+    -- Thực hiện chèn dữ liệu
+    INSERT INTO LichTrinhTau (MaLichTrinh, TenLichTrinh)
+    VALUES (@MaLichTrinh, @TenLichTrinh);
+END;
+
+
+DROP TRIGGER trg_CapNhatTrangThaiLichTrinh
+CREATE TRIGGER trg_CapNhatTrangThaiLichTrinh
+ON LichTrinhTau
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Kiểm tra nếu trạng thái được cập nhật là 'Đang hoạt động'
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        JOIN deleted d ON i.MaLichTrinh = d.MaLichTrinh
+        WHERE d.TrangThai = N'Đang hoạt động' AND i.TrangThai <> d.TrangThai
+    )
+    BEGIN
+        -- Kiểm tra nhật ký tàu của lịch trình
+        IF EXISTS (
+            SELECT 1
+            FROM inserted i
+            JOIN NhatKyTau nk ON i.MaLichTrinh = nk.MaLichTrinh
+            WHERE nk.TrangThai = N'Chưa hoàn thành'
+              AND nk.NgayGio > GETDATE()
+        )
+        BEGIN
+            -- Gây lỗi và ngăn chặn thay đổi
+            RAISERROR (N'Không thể cập nhật trạng thái "Đang hoạt động" khi có nhật ký trong tương lai đang hoạt động.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+    END
+END;
+
+
+CREATE FUNCTION dbo.KiemTraThoiGianDenCuaGa (
+    @MaLichTrinh NVARCHAR(10),
+    @ThoiGianKhoiHanh DATETIME,
+    @MaGa VARCHAR(10),
+    @ThoiGianDen DATETIME
+)
+RETURNS BIT
+AS
+BEGIN
+    DECLARE @Result BIT = 0;
+    
+    -- Kiểm tra xem có tàu đến cùng ga trong khoảng thời gian nhỏ hơn 20 phút không
+    IF EXISTS (
+        SELECT 1
+        FROM ChiTietLichTrinh ctlt 
+        JOIN NhatKyTau nk ON nk.MaLichTrinh = ctlt.MaLichTrinh 
+        WHERE CAST(nk.NgayGio AS DATE) = CAST(@ThoiGianKhoiHanh AS DATE) 
+        AND nk.TrangThai = N'Chưa hoàn thành' 
+        AND nk.MaNhatKy <> @MaLichTrinh
+        AND ctlt.MaGa = @MaGa
+        AND ctlt.MaLichTrinh <> @MaLichTrinh
+        AND ABS(DATEDIFF(MINUTE, 
+            dbo.TinhTongThoiGianDiChuyen(nk.MaNhatKy, nk.NgayGio, 
+            (SELECT TOP 1 MaGa FROM ChiTietLichTrinh WHERE MaLichTrinh = ctlt.MaLichTrinh AND ctlt.Stt_Ga = 1), ctlt.MaGa),
+            @ThoiGianDen
+        )) < 20
+    )
+    BEGIN
+        SET @Result = 1;  -- Trả về 1 nếu có tàu đến cùng ga trong khoảng thời gian < 20 phút
+    END
+
+    RETURN @Result;
+END;
+
+DROP TRIGGER trg_ThemSuaChiTietLichTrinh
+CREATE TRIGGER trg_ThemChiTietLichTrinh
+ON ChiTietLichTrinh
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @MaChiTiet VARCHAR(10);
+    DECLARE @MaxStt INT;
+    DECLARE @MaLichTrinh VARCHAR(10);
+    DECLARE @MaGa VARCHAR(10);
+    DECLARE @Stt_Ga INT;
+    DECLARE @ThoiGian TIME;
+    DECLARE @MaNhatKy VARCHAR(11);
+    DECLARE @ThoiGianKhoiHanh DATETIME;
+    DECLARE @ThoiGianDen DATETIME;
+    DECLARE @MaGaDauTien VARCHAR(10);
+    DECLARE @Stt_Ga_Truoc INT;
+    DECLARE @MaGaTruoc VARCHAR(10);
+
+    DECLARE @ThoiGianDenCuaTramDaTonTai DATETIME;
+
+    -- Lấy thông tin từ bảng inserted
+    SELECT
+        @MaLichTrinh = i.MaLichTrinh,
+        @Stt_Ga = i.Stt_Ga,
+        @ThoiGian = i.ThoiGianDiChuyenTuTramTruoc,
+        @MaNhatKy = nk.MaNhatKy,
+        @MaGa = i.MaGa,
+        @ThoiGianKhoiHanh = nk.NgayGio
+    FROM inserted i 
+    JOIN NhatKyTau nk ON i.MaLichTrinh = nk.MaLichTrinh
+    WHERE nk.TrangThai = N'Chưa hoàn thành';
+
+    -- Kiểm tra nếu có số thứ tự ga đã tồn tại cho mã lịch trình
+    IF EXISTS (SELECT 1 FROM ChiTietLichTrinh WHERE MaLichTrinh = @MaLichTrinh AND Stt_Ga = @Stt_Ga)
+    BEGIN
+        -- Nếu có, trả lỗi
+        RAISERROR('Số thứ tự Ga đã tồn tại cho mã lịch trình này!', 16, 1);
+        RETURN;
+    END
+
+    -- Lấy thông tin ga trước đó nếu có
+    SELECT @Stt_Ga_Truoc = ctlt.Stt_Ga, @MaGaTruoc = ctlt.MaGa
+    FROM ChiTietLichTrinh ctlt 
+    JOIN NhatKyTau nk ON ctlt.MaLichTrinh = nk.MaLichTrinh
+    WHERE nk.MaNhatKy = @MaNhatKy AND ctlt.Stt_Ga = @Stt_Ga - 1;
+
+    -- Lấy ga đầu tiên trong chuyến đi
+    SELECT @MaGaDauTien = ctlt.MaGa 
+    FROM NhatKyTau nk 
+    JOIN ChiTietLichTrinh ctlt ON nk.MaLichTrinh = ctlt.MaLichTrinh
+    WHERE nk.TrangThai = N'Chưa hoàn thành' AND ctlt.Stt_Ga = 1 AND MaNhatKy = @MaNhatKy;
+
+    -- Tính thời gian đến của ga
+    SELECT @ThoiGianDen = dbo.TinhTongThoiGianDiChuyen(@MaNhatKy, @ThoiGianKhoiHanh, @MaGaDauTien, @MaGaTruoc);
+
+    IF @ThoiGianDen IS NULL
+    BEGIN
+        SET @ThoiGianDen = @ThoiGianKhoiHanh;
+    END;
+
+    -- Cập nhật thời gian đến
+    SET @ThoiGianDen = DATEADD(MINUTE, DATEDIFF(MINUTE, '00:00:00', @ThoiGian), @ThoiGianDen)
+
+    -- Kiểm tra thời gian đến cùng ga có nhỏ hơn 20 phút hay không bằng hàm
+    IF dbo.KiemTraThoiGianDenCuaGa(@MaLichTrinh, @ThoiGianKhoiHanh, @MaGa, @ThoiGianDen) = 1
+    BEGIN        
+        RAISERROR('Lỗi: Tàu đến cùng ga trong khoảng thời gian nhỏ hơn 20 phút!', 16, 1);
+        RETURN;
+    END
+
+    -- Xử lý tạo mã chi tiết lịch trình cho INSERT
+    IF EXISTS (SELECT * FROM inserted)
+    BEGIN
+        -- Tạo mã chi tiết lịch trình mới khi INSERT
+        SELECT @MaxStt = MAX(CAST(SUBSTRING(MaChiTiet, CHARINDEX('-', MaChiTiet) + 1, LEN(MaChiTiet)) AS INT))
+        FROM ChiTietLichTrinh
+        WHERE MaLichTrinh = (SELECT MaLichTrinh FROM inserted);
+
+        IF @MaxStt IS NULL
+        BEGIN
+            SET @MaChiTiet = (SELECT MaLichTrinh FROM inserted) + '-1';
+        END
+        ELSE
+        BEGIN
+            SET @MaChiTiet = (SELECT MaLichTrinh FROM inserted) + '-' + CAST(@MaxStt + 1 AS VARCHAR);
+        END
+
+        -- Chèn dữ liệu vào bảng ChiTietLichTrinh
+        INSERT INTO ChiTietLichTrinh (MaChiTiet, MaLichTrinh, MaGa, Stt_Ga, ThoiGianDiChuyenTuTramTruoc, KhoangCachTuTramTruoc)
+        SELECT @MaChiTiet, MaLichTrinh, MaGa, Stt_Ga, ThoiGianDiChuyenTuTramTruoc, KhoangCachTuTramTruoc
+        FROM inserted;
+    END
+    ELSE
+    BEGIN
+        -- Cập nhật dữ liệu nếu là thao tác UPDATE
+        UPDATE ctlt
+        SET 
+            ctlt.MaGa = i.MaGa,
+            ctlt.ThoiGianDiChuyenTuTramTruoc = i.ThoiGianDiChuyenTuTramTruoc,
+            ctlt.KhoangCachTuTramTruoc = i.KhoangCachTuTramTruoc
+        FROM ChiTietLichTrinh ctlt
+        JOIN inserted i ON ctlt.MaChiTiet = i.MaChiTiet;
+    END
+END;
+
+------------end LichTrinh------------------------
+SELECT * FROM ChiTietLichTrinh WHERE MaLichTrinh = 'BC4'

@@ -1,0 +1,276 @@
+﻿@model IEnumerable<dynamic>
+<style>
+    .table.blur {
+        filter: blur(5px);
+        pointer-events: none;
+    }
+
+</style>
+
+<table class="table table-striped table-bordered table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th style="text-align: center;">STT</th>
+            <th style="text-align: center;">Tên Ga</th>
+            <th style="text-align: center;">Địa Chỉ</th>
+            <th style="text-align: center;">Thời Gian Di Chuyển</th>
+            <th style="text-align: center;">Khoảng Cách (km)</th>
+            <th style="text-align: center;">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="gaRow-@item.MaChiTiet">
+                <td style="text-align: center;">@item.Stt_Ga</td>
+                <td style="text-align: center;">@item.GaTen</td>
+                <td style="text-align: center;">@item.GaDiaChi</td>
+                <td style="text-align: center;">@item.ThoiGianDiChuyenTuTramTruoc</td>
+                <td style="text-align: center;">@item.KhoangCachTuTramTruoc</td>
+                <td style="text-align: center;" class="d-flex">
+                    <button class="btn btn-warning btn-edit" style="margin-right: 5px;" data-id="@item.MaChiTiet">
+                        <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button class="btn btn-danger btn-delete" data-id="@item.MaChiTiet">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal Chỉnh Sửa Chi Tiết Lịch Trình -->
+<div class="modal fade" id="editCTLTModal" tabindex="-1" role="dialog" aria-labelledby="editCTLTModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-right" role="document">
+        <!-- Sửa thành modal-dialog-right -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCTLTModalLabel">Chỉnh sửa Chi Tiết Lịch Trình</h5>
+            </div>
+            <div class="modal-body">
+                <form id="editCTLTForm">
+                    <div class="form-group">
+                        <label for="editSttGa">STT</label>
+                        <input type="number" class="form-control" id="editSttGa" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editMaGa">Mã Ga</label>
+                        <select class="form-control" id="editMaGa" required>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editThoiGianDiChuyen">Thời Gian Di Chuyển</label>
+                        <input type="text" class="form-control" id="editThoiGianDiChuyen" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editKhoangCach">Khoảng Cách (km)</label>
+                        <input type="number" class="form-control" id="editKhoangCach" required>
+                    </div>
+
+                    <input type="hidden" id="editMaChiTiet"> <!-- Để lưu ID Chi Tiết cần chỉnh sửa -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveCTLT">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xác Nhận Xóa -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Xác Nhận Xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa ga này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmDelete">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadChiTietLichTrinh(maLichTrinh) {
+        $.ajax({
+            url: '@Url.Action("ChiTietLichTrinhModal", "LichTrinh")',
+            data: { maLichTrinh: maLichTrinh },
+            success: function (result) {
+                // Chèn dữ liệu mới vào modal
+                $('#chiTietLichTrinhModal .modal-body').html(result);
+
+                // Gán mã lịch trình vào modal để sử dụng khi cần
+                $('#chiTietLichTrinhModal').data('maLichTrinh', maLichTrinh);
+            },
+            error: function (xhr, status, error) {
+                console.error('Có lỗi xảy ra khi tải chi tiết lịch trình', error);
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        $('.btn-edit').click(function () {
+            var ctltId = $(this).data('id');
+            $.ajax({
+                url: '/LichTrinh/LayCTLTTheoMa',
+                method: 'GET',
+                data: { MaChiTiet: ctltId },
+                success: function (response) {
+                    if (response.success) {
+                        // Điền các thông tin vào form
+                        $('#editMaChiTiet').val(response.id);
+                        $('#editSttGa').val(response.sttGa);
+                        $('#editKhoangCach').val(response.khoangCach);
+                        debugger
+                        $('#editThoiGianDiChuyen').val(response.thoiGianDiChuyen);
+
+                        // Điền Mã Ga vào ComboBox
+                        var maGaSelect = $('#editMaGa');
+                        maGaSelect.empty(); // Xóa các option cũ
+                        $.each(response.danhSachMaGa, function (index, item) {
+                            maGaSelect.append($('<option>', {
+                                value: item.MaGa,
+                                text: item.MaGa + ' - ' + item.TenGa,
+                                selected: item.MaGa === response.maGa
+                            }));
+                        });
+                        // Mở modal chỉnh sửa
+                        $('#editCTLTModal').modal('show');
+                        $('.table').addClass('blur');
+                    } else {
+                        alert('Lỗi: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Không thể kết nối đến server. Vui lòng thử lại sau.');
+                }
+            });
+        });
+
+
+        // Lưu chỉnh sửa Chi Tiết Lịch Trình
+        $('#btnSaveCTLT').click(function () {
+            debugger
+            var ctltId = $('#editMaChiTiet').val();
+            var sttGa = $('#editSttGa').val();
+            var maGa = $('#editMaGa').val();
+            var thoiGianDiChuyen = $('#editThoiGianDiChuyen').val();
+            var khoangCach = $('#editKhoangCach').val();
+
+            // Kiểm tra dữ liệu đầu vào
+            if (!sttGa || !maGa || !thoiGianDiChuyen || !khoangCach) {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                return;
+            }
+
+            $.ajax({
+                url: '/LichTrinh/CapNhatCTLT', // URL cập nhật thông tin chi tiết lịch trình
+                method: 'POST',
+                data: {
+                    MaChiTiet: ctltId,
+                    SttGa: sttGa,
+                    MaGa: maGa,
+                    ThoiGianDiChuyen: thoiGianDiChuyen,
+                    KhoangCach: khoangCach
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Cập nhật thành công.');
+                        $('#editCTLTModal').modal('hide');
+                        // Cập nhật lại bảng mà không cần reload trang
+                        var updatedRow = $('#gaRow-' + ctltId);
+                        updatedRow.find('.stt-ga').text(sttGa);
+                        updatedRow.find('.ga-ten').text(maGa);
+                        updatedRow.find('.thoi-gian').text(thoiGianDiChuyen);
+                        updatedRow.find('.khoang-cach').text(khoangCach);
+
+                        // Mở lại modal để hiển thị giá trị đã cập nhật
+                        $('#editSttGa').val(sttGa);
+                        $('#editMaGa').val(maGa);
+                        $('#editThoiGianDiChuyen').val(thoiGianDiChuyen);
+                        $('#editKhoangCach').val(khoangCach);
+
+                        // Lấy mã lịch trình từ modal
+                        var maLichTrinh = $('#chiTietLichTrinhModal').data('maLichTrinh');
+
+                        // Gọi lại hàm loadChiTietLichTrinh để làm mới nội dung bảng
+                        loadChiTietLichTrinh(maLichTrinh);
+                        // Hiển thị lại modal
+                        $('#editCTLTModal').modal('show');
+                        // Bỏ lớp mờ sau khi cập nhật
+                        $('.table').removeClass('blur');
+
+                    } else {
+                        alert('Lỗi: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Lỗi kết nối. Vui lòng thử lại.');
+                }
+            });
+        });
+
+        // Xóa Chi Tiết Lịch Trình
+        $('.btn-delete').click(function () {
+            var ctltId = $(this).data('id');
+            $('#confirmDeleteModal').data('id', ctltId); // Lưu ID Chi Tiết để xóa
+
+            // Nếu modal chỉnh sửa đang mở thì ẩn nó đi
+            $('#editCTLTModal').modal('hide');
+
+            // Hiện modal xác nhận xóa
+            $('#confirmDeleteModal').modal('show');
+            // Áp dụng lớp mờ cho bảng khi mở modal xác nhận xóa
+            $('.table').addClass('blur');
+        });
+
+        // Xác nhận xóa Chi Tiết Lịch Trình
+        $('#btnConfirmDelete').click(function () {
+            var ctltId = $('#confirmDeleteModal').data('id');
+            $.ajax({
+                url: '/LichTrinh/XoaCTLT', // URL xóa chi tiết lịch trình
+                method: 'POST',
+                data: { MaChiTiet: ctltId },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Xóa thành công.');
+                        $('#confirmDeleteModal').modal('hide');
+                        $('#gaRow-' + ctltId).remove(); // Xóa dòng trong bảng
+                        // Bỏ lớp mờ sau khi xóa
+                        $('.table').removeClass('blur');
+                    } else {
+                        alert('Lỗi: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Lỗi kết nối. Vui lòng thử lại.');
+                }
+            });
+        });
+
+        // Khi đóng modal chỉnh sửa, bỏ lớp mờ
+        $('#editCTLTModal').on('hidden.bs.modal', function () {
+            $('.table').removeClass('blur');
+        });
+
+        // Khi đóng modal xác nhận xóa, bỏ lớp mờ
+        $('#confirmDeleteModal').on('hidden.bs.modal', function () {
+            $('.table').removeClass('blur');
+        });
+    });
+</script>
+

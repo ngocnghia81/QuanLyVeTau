@@ -337,7 +337,22 @@ namespace QuanLyVeTau.Controllers
         }
 
 
+        public ActionResult XoaCTLT(string MaChiTiet)
+        {
+            try
+            {
+                ChiTietLichTrinh chiTietLichTrinh = db.ChiTietLichTrinhs.FirstOrDefault(ctlt => ctlt.MaChiTiet == MaChiTiet);
 
+                db.ChiTietLichTrinhs.DeleteOnSubmit(chiTietLichTrinh);
+                return Json(new { success = true, message = "Xoá chi tiết lịch trình thành công." });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
+
+        }
 
 
     }

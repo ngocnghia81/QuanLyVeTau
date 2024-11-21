@@ -289,7 +289,5 @@ namespace QuanLyVeTau.Controllers
     </body>
     </html>", userName, tempPassword);
         }
-
-
     }
 }

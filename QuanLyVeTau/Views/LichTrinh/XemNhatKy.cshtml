@@ -1,0 +1,281 @@
+﻿@{
+    ViewBag.Title = "XemNhatKy";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+@model PagedList.IPagedList<QuanLyVeTau.Models.NhatKyViewModel>
+@using PagedList.Mvc
+
+<style>
+    body.modal-open {
+        overflow: visible !important;
+    }
+
+
+    #loadingSpinner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Nền mờ đen để làm nổi bật spinner */
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        z-index: 9999; /* Đảm bảo spinner hiển thị ở trên cùng */
+    }
+
+        #loadingSpinner img {
+            max-width: 100px; /* Đặt kích thước của spinner */
+            max-height: 100px;
+            background-color: transparent; /* Đảm bảo nền của ảnh spinner là trong suốt */
+            display: block; /* Đảm bảo spinner không có khoảng cách bên dưới */
+        }
+
+    {
+        margin-top: 20px;
+    }
+
+    .table thead {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    .table td, .table th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    select.form-control {
+        max-width: 150px;
+        margin: auto;
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+        .pagination .page-link {
+            color: #007bff;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+    h2 {
+        font-weight: bold;
+        color: #343a40;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>
+<h2>Danh sách nhật ký</h2>
+<div id="loadingSpinner" style="display: none;">
+    <img src="~/Content/Images/loading.gif" />
+</div>
+
+<div class="mt-4 d-flex justify-content-center align-items-center">
+    <form method="get" action="@Url.Action("XemNhatKy")" class="p-3 shadow-sm rounded d-flex gap-3 align-items-end" style="background-color: #f8f9fa; width: auto;">
+        <div class="form-group">
+            <label for="MaLichTrinh" class="form-label">Mã Lịch Trình</label>
+            <input type="text" name="MaLichTrinh" id="MaLichTrinh" class="form-control" value="@Request["MaLichTrinh"]" />
+        </div>
+        <div class="form-group">
+            <label for="tau" class="form-label">Mã Tàu</label>
+            <input type="text" name="tau" id="tau" class="form-control" value="@Request["tau"]" />
+        </div>
+        <div class="form-group">
+            <label for="TrangThai" class="form-label">Trạng Thái</label>
+            <select name="TrangThai" id="TrangThai" class="form-select">
+                <option value="">--Chọn trạng thái--</option>
+                <option value="Chưa hoàn thành" @(Request["TrangThai"] == "Chưa hoàn thành" ? "selected" : "")>Chưa hoàn thành</option>
+                <option value="Hoàn thành" @(Request["TrangThai"] == "Hoàn thành" ? "selected" : "")>Hoàn thành</option>
+                <option value="Hủy" @(Request["TrangThai"] == "Hủy" ? "selected" : "")>Hủy</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </div>
+    </form>
+</div>
+
+
+<div class="container">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Mã Nhật Ký</th>
+                <th>Mã Tàu</th>
+                <th>Mã Lịch Trình</th>
+                <th>Ngày Giờ</th>
+                <th>Thời Gian Đến Dự Kiến</th>
+                <th>Trạng Thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaNhatKy</td>
+                    <td>@item.MaTau</td>
+                    <td>@item.MaLichTrinh</td>
+                    <td>@item.NgayGio.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@(item.ThoiGianHoanThanhDuKien.HasValue ? item.ThoiGianHoanThanhDuKien.Value.ToString("dd/MM/yyyy HH:mm") : "")</td>
+                    <td>
+                        <select class="form-control"
+                                data-manhatky="@item.MaNhatKy"
+                                data-trangthai-cu="@item.TrangThai">
+                            <option value="Chưa hoàn thành" @(item.TrangThai == "Chưa hoàn thành" ? "selected" : "")>Chưa hoàn thành</option>
+                            <option value="Hoàn thành" @(item.TrangThai == "Hoàn thành" ? "selected" : "")>Hoàn thành</option>
+                            <option value="Hủy" @(item.TrangThai == "Hủy" ? "selected" : "")>Hủy</option>
+                        </select>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<!-- Phân trang với Bootstrap cải tiến -->
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm">
+        <!-- Nút Trang đầu -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("XemNhatKy", new { page = 1 })" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;&laquo;</span>
+            </li>
+        }
+
+        <!-- Nút Previous -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("XemNhatKy", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        }
+
+        <!-- Hiển thị các số trang -->
+        @for (var i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("XemNhatKy", new { page = i })">@i</a>
+            </li>
+        }
+
+        <!-- Nút Next -->
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("XemNhatKy", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        }
+
+        <!-- Nút Trang cuối -->
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("XemNhatKy", new { page = Model.PageCount })" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;&raquo;</span>
+            </li>
+        }
+    </ul>
+</div>
+
+
+
+<!-- Thêm jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Thêm Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).on('change', 'select.form-control', function () {
+        const maNhatKy = $(this).data('manhatky'); // Lấy mã nhật ký từ thuộc tính data-manhatky
+        const trangThaiMoi = $(this).val(); // Lấy giá trị trạng thái mới
+        const selectElement = $(this); // Lưu lại phần tử select để xử lý nếu cập nhật thất bại
+        const trangThaiCu = $(this).data('trangthai-cu'); // Lấy trạng thái cũ từ data-trangthai-cu
+
+        if (confirm("Bạn có chắc muốn cập nhật trạng thái này?")) {
+            // Hiển thị spinner
+            $('#loadingSpinner').show();
+
+            $.ajax({
+                url: '/LichTrinh/CapNhatTrangThaiNhatKy',
+                type: 'POST',
+                data: {
+                    MaNhatKy: maNhatKy,
+                    TrangThai: trangThaiMoi
+                },
+                success: function (response) {
+                    $('#loadingSpinner').hide(); // Ẩn spinner
+
+                    if (response.success) {
+                        alert("Cập nhật trạng thái thành công!");
+                        // Cập nhật trạng thái cũ thành trạng thái mới
+                        selectElement.data('trangthai-cu', trangThaiMoi);
+                    } else {
+                        alert("Cập nhật thất bại: " + response.message);
+                        // Khôi phục trạng thái cũ
+                        selectElement.val(trangThaiCu);
+                    }
+                },
+                error: function () {
+                    $('#loadingSpinner').hide(); // Ẩn spinner
+
+                    alert("Đã xảy ra lỗi khi cập nhật trạng thái.");
+                    // Khôi phục trạng thái cũ
+                    selectElement.val(trangThaiCu);
+                }
+            });
+        } else {
+            // Nếu người dùng hủy, khôi phục trạng thái cũ
+            selectElement.val(trangThaiCu);
+        }
+    });
+
+
+
+</script>

@@ -83,7 +83,7 @@ BEGIN
     DECLARE @MaxToa INT;
     DECLARE @NewMaToa VARCHAR(10);
     DECLARE @Suffix INT;
-    DECLARE @Prefix VARCHAR(2) = 'TO'; -- Tiền tố mã toa là 'TO'
+    DECLARE @Prefix VARCHAR(2) = 'TO';
 
     -- Lấy mã tàu từ bảng inserted
     SELECT @MaTau = MaTau FROM inserted;
@@ -462,5 +462,138 @@ BEGIN
     END
 END;
 
+DROP TRIGGER trg_KiemTraThoiGianKhiThemNhatKy
+
+CREATE TRIGGER trg_CheckTimeAndFutureDate
+ON NhatKyTau
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Kiểm tra nếu có bất kỳ bản ghi nào vi phạm thời gian cách nhau dưới 20 phút
+    IF EXISTS (
+        SELECT 1
+        FROM NhatKyTau nk1
+        INNER JOIN inserted i
+        ON nk1.MaLichTrinh = i.MaLichTrinh
+        WHERE nk1.MaNhatKy <> i.MaNhatKy -- Loại trừ bản ghi vừa được thêm
+        AND ABS(DATEDIFF(MINUTE, nk1.NgayGio, i.NgayGio)) < 20
+    )
+    BEGIN
+        -- Hủy thao tác chèn và đưa ra thông báo lỗi
+        ROLLBACK TRANSACTION;
+        RAISERROR ('Thời gian giữa các nhật ký của cùng một lịch trình phải cách nhau ít nhất 20 phút.', 16, 1);
+        RETURN;
+    END
+
+    -- Kiểm tra nếu có bất kỳ bản ghi nào không lớn hơn ngày hiện tại ít nhất 1 ngày
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        WHERE i.NgayGio < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)) -- Thời gian phải lớn hơn ngày hiện tại + 1
+    )
+    BEGIN
+        -- Hủy thao tác chèn và đưa ra thông báo lỗi
+        ROLLBACK TRANSACTION;
+        RAISERROR ('Thời gian của nhật ký phải lớn hơn ngày hiện tại ít nhất 1 ngày.', 16, 1);
+        RETURN;
+    END
+END;
+
+DROP TRIGGER trg_KiemTraCapNhatNhatKy;
+CREATE TRIGGER trg_KiemTraCapNhatNhatKy
+ON NhatKyTau
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @MaNhatKy VARCHAR(11), @TrangThaiOld NVARCHAR(50), @TrangThaiNew NVARCHAR(50), @MaLichTrinh VARCHAR(15), @NgayGio DATETIME;
+	DECLARE @MaGaDau VARCHAR(10), @MaGaCuoi VARCHAR(10);
+
+    -- Lấy thông tin từ bảng inserted và deleted
+    SELECT @MaNhatKy = inserted.MaNhatKy, 
+           @TrangThaiOld = deleted.TrangThai,
+           @TrangThaiNew = inserted.TrangThai,
+           @MaLichTrinh = inserted.MaLichTrinh,
+           @NgayGio = inserted.NgayGio
+    FROM inserted
+    JOIN deleted ON inserted.MaNhatKy = deleted.MaNhatKy;
+	IF(@TrangThaiOld = N'Huỷ' OR @TrangThaiOld = N'Hủy')
+	BEGIN
+		PRINT @TrangThaiOld;
+		RAISERROR(N'Không thể thay đổi trạng thái vì đã huỷ nhật ký.', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+	END;
+
+	SELECT 
+		@MaGaDau = (SELECT TOP 1 MaGa 
+					FROM ChiTietLichTrinh 
+					WHERE MaLichTrinh = nk.MaLichTrinh 
+					ORDER BY Stt_Ga ASC),
+		@MaGaCuoi = (SELECT TOP 1 MaGa 
+						FROM ChiTietLichTrinh 
+						WHERE MaLichTrinh = nk.MaLichTrinh 
+						ORDER BY Stt_Ga DESC) 
+	FROM 
+		NhatKyTau nk
+	WHERE 
+		nk.MaNhatKy = @MaNhatKy;
+
+    -- Chỉ cho phép cập nhật thành "Hoàn thành" nếu thời gian hiện tại >= thời gian kết thúc của nhật ký
+    IF (@TrangThaiNew = N'Hoàn thành')
+    BEGIN
+        DECLARE @ThoiGianKetThuc DATETIME;
+
+        SELECT @ThoiGianKetThuc = dbo.TinhTongThoiGianDiChuyen(@MaNhatKy,@NgayGio, @MaGaDau, @MaGaCuoi);
+
+        IF GETDATE() < @ThoiGianKetThuc
+        BEGIN
+            RAISERROR(N'Không thể cập nhật thành "Hoàn thành" vì chưa đến thời gian kết thúc nhật ký.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+    END
+
+    -- Chỉ cho phép cập nhật thành "Hủy" nếu không có vé của lịch trình được bán
+    IF (@TrangThaiNew = N'Hủy')
+    BEGIN
+        IF EXISTS (
+            SELECT 1
+            FROM Ve v JOIN NhatKyTau nk ON v.MaNhatKy = nk.MaNhatKy
+            WHERE v.MaNhatKy = @MaNhatKy 
+					AND v.DaThuHoi = 0	
+					AND nk.NgayGio >= DATEADD(DAY, 1, GETDATE()) 
+        )
+        BEGIN
+            RAISERROR(N'Không thể cập nhật thành "Hủy" vì đã có vé được bán cho lịch trình này.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+    END
+
+    -- Không cho phép thay đổi trạng thái nếu có tàu chạy vào ngày mai
+    IF EXISTS (
+        SELECT 1
+        FROM NhatKyTau nk
+        WHERE nk.MaLichTrinh = @MaLichTrinh
+          AND CAST(nk.NgayGio AS DATE) = CAST(DATEADD(DAY, 1, GETDATE()) AS DATE)
+    )
+    BEGIN
+        RAISERROR(N'Không thể thay đổi trạng thái vì có tàu đang chạy vào ngày mai.', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+END;
+
+
+UPDATE NhatKyTau SET TrangThai = N'Hoàn thành' WHERE MaNhatKy = 'TA111111241'
+
+UPDATE NhatKyTau SET TrangThai = N'Chưa hoàn thành' WHERE MaNhatKy = 'TA41911241'
+
 ------------end LichTrinh------------------------
 SELECT * FROM ChiTietLichTrinh WHERE MaLichTrinh = 'BC4'
+
+SELECT * FROM NhatKyTau WHERE TrangThai = N'Hủy'
+
+SELECT * FROM NhatKyTau WHERE MaNhatKy = 'TA111111241'

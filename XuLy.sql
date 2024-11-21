@@ -1,4 +1,22 @@
-﻿﻿CREATE FUNCTION dbo.LaySoThuTuLonNhatTrongThang
+﻿
+CREATE FUNCtION LayTenGa
+(
+	@MaChiTiet varchar(100)
+)
+returns nvarchar(100)
+as
+begin
+	Declare @TenGa nvarchar(100);
+
+	select @TenGa = ga.TenGa
+	from ChiTietLichTrinh ctlt 
+		join ga on ga.MaGa = ctlt.MaGa
+	where ctlt.MaChiTiet = @MaChiTiet
+	return @TenGa
+end
+go
+
+CREATE FUNCTION dbo.LaySoThuTuLonNhatTrongThang
 (
     @Ngay DATE,
     @Prefix VARCHAR(10) = NULL
@@ -7,16 +25,17 @@ RETURNS INT
 AS
 BEGIN
     DECLARE @MaxSoThuTu INT = 0;
+	DECLARE @Day varchar(2) = RIGHT('0' + CAST(Day(@Ngay) AS NVARCHAR), 2)
     DECLARE @Thang NVARCHAR(2) = RIGHT('0' + CAST(MONTH(@Ngay) AS NVARCHAR), 2);  -- Month as two digits
     DECLARE @Nam NVARCHAR(2) = RIGHT(CAST(YEAR(@Ngay) AS NVARCHAR), 2);            -- Year as last two digits
 
     -- Check for each prefix case and compute the max sequence number
     IF @Prefix = 'VE'
     BEGIN
-        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaVe, 9, LEN(MaVe) - 8) AS INT))
+        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(Ve.MaVe, 9, LEN(Ve.MaVe) - 8) AS INT))
         FROM Ve
         JOIN NhatKyTau NK ON Ve.MaNhatKy = NK.MaNhatKy -- Adjust this join condition as necessary
-        WHERE CONVERT(DATE, NK.NgayGio) = @Ngay;
+        WHERE CAST(SUBSTRING(Ve.MaVe, 3, 6) AS INT) = @Day +@Thang +@Nam
     END
     ELSE IF @Prefix = 'HD'
     BEGIN
@@ -24,23 +43,23 @@ BEGIN
         FROM HoaDon
         WHERE CONVERT(DATE, ThoiGianLapHoaDon) = @Ngay;
     END
-    ELSE IF @Prefix = 'KH'
+	ELSE IF @Prefix Like 'TA%'
     BEGIN
-        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaKhach, LEN(@Prefix + @Thang + @Nam) + 1, LEN(MaKhach) - LEN(@Prefix + @Thang + @Nam)) AS INT))
+        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaNhatKy, LEN(@Prefix+@Day+@Thang+@Nam)+1, LEN(@Prefix+@Day+@Thang+@Nam)) AS INT))
+        FROM NhatKyTau
+        WHERE CONVERT(DATE, NgayGio) = @Ngay;
+    END
+    ELSE IF (@Prefix = 'KH' or @Prefix = 'TK')
+    BEGIN
+        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaKhach, LEN('KH' + @Thang + @Nam) + 1, LEN(MaKhach) - LEN('KH' + @Thang + @Nam)) AS INT))
         FROM KhachHang
-        WHERE MaKhach LIKE @Prefix + @Thang + @Nam + '%';
+        WHERE MaKhach LIKE 'KH' + @Thang + @Nam + '%';
     END
-    ELSE IF @Prefix = 'TK'
+    ELSE IF (@Prefix = 'TKNV' or @Prefix = 'NV') -- For the last case, it should be `NV` instead of repeating the `TK` condition
     BEGIN
-        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaTaiKhoan, LEN(@Prefix + @Thang + @Nam) + 1, LEN(MaTaiKhoan) - LEN(@Prefix + @Thang + @Nam)) AS INT))
-        FROM TaiKhoan
-        WHERE MaTaiKhoan LIKE @Prefix + @Thang + @Nam + '%';
-    END
-    ELSE IF @Prefix = 'NV'  -- For the last case, it should be `NV` instead of repeating the `TK` condition
-    BEGIN
-        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaTaiKhoan, LEN(@Prefix + @Nam) + 1, LEN(MaTaiKhoan) - LEN(@Prefix + @Nam)) AS INT))
+        SELECT @MaxSoThuTu = MAX(CAST(SUBSTRING(MaTaiKhoan, LEN('TKNV' + @Nam) + 1, LEN(MaTaiKhoan) - LEN('TKNV' + @Nam)) AS INT))
         FROM TAIKHOANNHANVIEN
-        WHERE MaTaiKhoan LIKE @Prefix + @Nam + '%';
+        WHERE MaTaiKhoan LIKE 'TKNV' + @Nam + '%';
     END
 
     -- Set @MaxSoThuTu to 0 if no records were found
@@ -51,11 +70,10 @@ BEGIN
 END;
 GO
 
-select dbo.LaySoThuTuLonNhatTrongThang(GETDATE(),'KH')
 
 CREATE FUNCTION dbo.TaoMa
 (
-    @Prefix CHAR(2) = NULL,
+    @Prefix VARCHAR(10) = NULL,
     @Ngay DATE
 )
 RETURNS NVARCHAR(19)
@@ -64,7 +82,7 @@ BEGIN
     DECLARE @Ma NVARCHAR(19);
     
     -- Chuyển ngày và tháng thành chuỗi có 2 ký tự
-   
+    DECLARE @NgayStr NVARCHAR(2) = RIGHT('0' + CAST(Day(@Ngay) AS NVARCHAR), 2);
     DECLARE @ThangStr NVARCHAR(2) = RIGHT('0' + CAST(MONTH(@Ngay) AS NVARCHAR), 2);
     
     -- Lấy 2 chữ số cuối của năm
@@ -72,14 +90,17 @@ BEGIN
     
     -- Lấy số thứ tự lớn nhất hiện có trong ngày
     DECLARE @SoThuTu INT = dbo.LaySoThuTuLonNhatTrongThang(@Ngay, @Prefix);
-    
+    if (@Prefix = 'HD' or @Prefix = 'Ve' or @Prefix like 'TA%')
+		SET @Ma = @Prefix+ @NgayStr + @ThangStr + @NamStr + CAST(@SoThuTu + 1 AS NVARCHAR);  -- Không cần RIGHT() ở đây
+	else if(@Prefix = 'NV' or @Prefix ='TKNV')
+		set @Ma= @Prefix + @NamStr + CAST(@SoThuTu +1 as nvarchar);
     -- Tạo mã
-        SET @Ma = @Prefix + @ThangStr + @NamStr + CAST(@SoThuTu + 1 AS NVARCHAR);  -- Không cần RIGHT() ở đây
+     else  SET @Ma = @Prefix + @ThangStr + @NamStr + CAST(@SoThuTu + 1 AS NVARCHAR);  -- Không cần RIGHT() ở đây
 
     RETURN @Ma;
 END;
 go
-select dbo.TaoMa('KH',GETDATE())
+select dbo.TaoMa('TA2',GETDATE())
 
 CREATE PROCEDURE DangKy  
     @TenKhach NVARCHAR(100),
@@ -97,7 +118,7 @@ BEGIN
     -- Chèn dữ liệu vào bảng KhachHang
     INSERT INTO KhachHang (MaKhach, TenKhach, NamSinh, Email, SDT, CCCD, DiaChi)
     VALUES (@MaKhach, @TenKhach, @NamSinh, @Email, @SDT, @CCCD, @DiaChi);
-	set @MaTaiKhoan =  dbo.taoma('TK',getdate())
+	SET @MaTaiKhoan = 'TK' + SUBSTRING(@MaKhach, 3, LEN(@MaKhach) - 2);
     -- Chèn dữ liệu vào bảng TaiKhoan
     INSERT INTO TaiKhoan (MaTaiKhoan, Email, MatKhau, DaXoa)
     VALUES (@MaTaiKhoan, @Email, @MatKhau, 0);
@@ -149,7 +170,6 @@ begin
 end
 go
 
-DROP FUNCTION TinhTongThoiGianDiChuyen 
 CREATE FUNCTION TinhTongThoiGianDiChuyen (
     @MaNhatKy VARCHAR(100),
     @ThoiGianDi DATETIME,
@@ -161,7 +181,6 @@ AS
 BEGIN
     DECLARE @TongThoiGian DATETIME = @ThoiGianDi;  -- Khởi tạo thời gian ban đầu là thời gian đi
     DECLARE @SoGaDung INT = 0;  -- Số ga dừng
-    DECLARE @ThoiGianDiChuyen TIME;  -- Thời gian di chuyển giữa các ga
 
     -- Xác định các ga dừng trong lộ trình giữa ga đi và ga đến
     WITH GaTram AS (
@@ -184,7 +203,7 @@ BEGIN
             JOIN NhatKyTau nk ON ctlt.MaLichTrinh = nk.MaLichTrinh
         WHERE 
             nk.MaNhatKy = @MaNhatKy
-            AND ctlt.Stt_Ga BETWEEN (SELECT MIN(Stt_Ga) FROM GaTram) AND (SELECT MAX(Stt_Ga) FROM GaTram)
+            AND ctlt.Stt_Ga BETWEEN (SELECT MIN(Stt_Ga) FROM GaTram)+1 AND (SELECT MAX(Stt_Ga) FROM GaTram)
     )
 
     -- Tính tổng thời gian di chuyển giữa các ga
@@ -202,12 +221,13 @@ BEGIN
 END;
 GO
 
+select dbo.TinhTongThoiGianDiChuyen('TA180811241','2024-11-08 13:00:00.000','sg','lk')
 
 CREATE FUNCTION LayTau
 (
     @Ngay DATE,
     @DiemDi NVARCHAR(100),
-    @DiemDen NVARCHAR(100)
+    @DiemDen NVARCHAR(100) 
 )
 RETURNS @Result TABLE
 (
@@ -240,7 +260,7 @@ BEGIN
 			when @MaGaDau = @MAGADI then NK.NgayGio
 			else dbo.TinhTongThoiGianDiChuyen(NK.MaNhatKy,NK.NgayGio,@MaGaDau,@MAGADI)
 		end,
-        dbo.TinhTongThoiGianDiChuyen(NK.MaNhatKy,NK.NgayGio,@MAGADI,@MAGADEN),
+        DATEADD(MINUTE, -15, dbo.TinhTongThoiGianDiChuyen(NK.MaNhatKy, NK.NgayGio, @MaGaDau, @MAGADEN)),
         dbo.SoLuongToiDaCuaTau(NK.MaTau) - COUNT(VE.MANHATKY) AS SLChoTrong
     FROM 
         NhatKyTau NK
@@ -311,33 +331,152 @@ BEGIN
 END
 go
 
+CREATE FUNCTION LayKhuyenMai()
+returns table
+as
+return
+(
+select * 
+from KhuyenMai
+where SoLuongConLai > 0 and GETDATE() < NgayKetThuc and GETDATE() > NgayBatDau
+)
+go
 
--- Tạo trigger INSTEAD OF để tự động sinh mã tàu khi thêm mới tàu
-CREATE TRIGGER trg_ThemTau
-ON Tau
-INSTEAD OF INSERT
+
+select * from LayKhuyenMai()
+
+CREATE PROCEDURE TAOHOADON
+(
+    @Email varchar(100),
+    @MaKhuyenMai varchar(100),
+    @ThanhTien decimal(19,2),
+    @ThoiGian datetime
+)
 AS
 BEGIN
-    DECLARE @MaxMaTau INT;
-    DECLARE @NewMaTau VARCHAR(10);
-    DECLARE @Prefix VARCHAR(2) = 'TA';
-    DECLARE @Suffix INT;
+    DECLARE @MaKhach varchar(100), @MaHoaDon varchar(100);
 
-    SELECT @MaxMaTau = MAX(CAST(SUBSTRING(MaTau, 3, LEN(MaTau)) AS INT))
-    FROM Tau
-    WHERE MaTau LIKE 'TA%' -- Chỉ lấy các mã tàu bắt đầu với 'TA'
-
-    IF @MaxMaTau IS NULL
+    -- Nếu không có thời gian, gán giá trị mặc định
+    IF @ThoiGian IS NULL
     BEGIN
-        SET @MaxMaTau = 0;
+        SET @ThoiGian = GETDATE();  -- Nếu không có thời gian, gán giá trị mặc định là thời gian hiện tại
     END
 
-    -- Tạo mã tàu mới
-    SET @Suffix = @MaxMaTau + 1;
-    SET @NewMaTau = @Prefix + RIGHT('00' + CAST(@Suffix AS VARCHAR(2)), 2);
+    -- Tạo mã hóa đơn
+    SET @MaHoaDon = dbo.TaoMa('HD', @ThoiGian);  -- Gọi hàm để tạo mã hóa đơn
 
-    INSERT INTO Tau (MaTau, TenTau, DaXoa)
-    SELECT @NewMaTau, TenTau, DaXoa
-    FROM inserted;
+    -- Lấy mã khách từ bảng KhachHang dựa trên email
+    SELECT @MaKhach = MaKhach
+    FROM KhachHang
+    WHERE Email = @Email;
+
+    -- Thực hiện thao tác INSERT vào bảng HoaDon
+    INSERT INTO HoaDon (MaHoaDon, MaKhach, MaKhuyenMai, ThanhTien, ThoiGianLapHoaDon)
+    VALUES (@MaHoaDon, @MaKhach, @MaKhuyenMai, @ThanhTien, @ThoiGian);
+
+    -- Trả về mã hóa đơn (có thể dùng để lấy về sau này nếu cần)
+    SELECT @MaHoaDon AS MaHoaDon;
 END;
+GO
 
+exec dbo.TAOHOADON @email = 'khanhsoai6@gmail.com', @MaKhuyenMai = null, @ThanhTien = '35200', @ThoiGian = null
+exec dbo.TAOHOADON @email = 'khanhsoai6@gmail.com', @MaKhuyenMai = null, @ThanhTien = '70400', @ThoiGian = null
+
+
+CREATE PROCEDURE TAOVE
+(
+	@MaNhatKy varchar(100),
+	@MaHoaDon varchar(100),
+	@GiaVe int,
+	@MaKhoang varchar(100),
+	@stt int,
+	@DiemDi nvarchar(100),
+	@DiemDen nvarchar(100)
+)
+as 
+begin
+	Declare @MaVe varchar(100) = dbo.TaoMa('Ve',Getdate());
+	Declare @MaGaDi varchar(100), @MaGaDen varchar(100);
+	select @MaGaDi = CTLT.MaChiTiet 
+		from ChiTietLichTrinh CTLT 
+			join ga on CTLT.MaGa = ga.MaGa 
+			join NhatKyTau NK on NK.MaLichTrinh = CTLT.MaLichTrinh
+		where ga.TenGa = @DiemDi and NK.MaNhatKy = @MaNhatKy;
+	select @MaGaDen = CTLT.MaChiTiet 
+		from ChiTietLichTrinh CTLT 
+			join ga on CTLT.MaGa = ga.MaGa 
+			join NhatKyTau NK on NK.MaLichTrinh = CTLT.MaLichTrinh
+		where ga.TenGa = @DiemDen and NK.MaNhatKy = @MaNhatKy;
+
+	Insert into Ve
+	values (@MaVe,@MaNhatKy,@MaHoaDon,@GiaVe,@MaKhoang,@stt,@MaGaDi,@MaGaDen,0)
+end
+go												
+
+EXEC dbo.TAOVE @MaNhatKy = 'TA180811241', @MaHoaDon = 'HD16112416', @GiaVe = 104400, @MaKhoang = 'K449', @stt = 2, @DiemDi = N'Sài Gòn', @DiemDen = 'Hà Nội'	 
+
+select * from HoaDon where MaHoaDon= 'HD1611241'
+
+CREATE FUNCTION dbo.LaySttGaFromMaChiTiet (@MaChiTiet VARCHAR(100))
+RETURNS INT
+AS
+BEGIN
+    DECLARE @SttGa INT;
+
+    -- Lấy giá trị Stt_Ga từ bảng ChiTietLichTrinh
+    SELECT @SttGa = ctlt.Stt_Ga
+    FROM ChiTietLichTrinh ctlt
+    WHERE ctlt.MaChiTiet = @MaChiTiet;
+
+    -- Trả về kết quả
+    RETURN @SttGa;
+END;
+GO
+
+CREATE FUNCTION dbo.LayVeTheoGaDiDen (
+	@MaKhoang varchar(100),
+	@MaNK varchar(100),
+    @DiemDi nvarchar(100), -- Tham số SttGaDi
+    @DiemDen nvarchar(100) -- Tham số SttGaDen
+	
+)
+RETURNS TABLE
+AS
+RETURN
+    WITH STTDi as
+	(
+		select ctlt.Stt_Ga
+		from ChiTietLichTrinh ctlt
+		join NhatKyTau NK on NK.MaLichTrinh = ctlt.MaLichTrinh
+		join Ga on ga.MaGa = ctlt.MaGa
+		where NK.MaNhatKy = @MaNK and ga.TenGa = @DiemDi
+	),
+	STTDen as
+	(
+		select ctlt.Stt_Ga
+		from ChiTietLichTrinh ctlt
+		join NhatKyTau NK on NK.MaLichTrinh = ctlt.MaLichTrinh
+		join Ga on ga.MaGa = ctlt.MaGa
+		where NK.MaNhatKy = @MaNK and ga.TenGa = @DiemDen
+	),
+	BangVeDaBan AS (
+        SELECT DISTINCT
+            VE.MaVe,
+			Ve.STT_Ghe,
+            dbo.GetSttGaFromMaChiTiet(ve.DiemDi) AS SttGaDi,
+            dbo.GetSttGaFromMaChiTiet(ve.DiemDen) AS SttGaDen,
+            dbo.LayTenGa(Ve.DiemDi) AS TenGaDi,
+            dbo.LayTenGa(Ve.DiemDen) AS TenGaDen
+        FROM VE
+        JOIN NhatKyTau nk ON ve.MaNhatKy = nk.MaNhatKy
+        JOIN ChiTietLichTrinh ctlt ON nk.MaLichTrinh = ctlt.MaLichTrinh
+        WHERE ve.MaKhoang = @MaKhoang and ve.MaNhatKy = @MaNK and ve.DaThuHoi = 0
+    )
+    SELECT BangVeDaBan.*
+    FROM BangVeDaBan,STTDi,STTDen
+    WHERE (
+        STTDi.Stt_Ga BETWEEN SttGaDi AND SttGaDen - 1
+        OR STTDen.Stt_Ga BETWEEN SttGaDi + 1 AND SttGaDen
+    );
+
+--select * from dbo.LayVeTheoGaDiDen('K449','TA180811241',N'Bình Thuận',N'Hà Nội')

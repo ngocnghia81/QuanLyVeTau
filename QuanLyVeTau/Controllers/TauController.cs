@@ -276,7 +276,6 @@ namespace QuanLyVeTau.Controllers
                                     MaKhoang = k.MaKhoang,
                                     SoKhoang = k.SoKhoang,
                                     SoChoNgoiToiDa = k.SoChoNgoiToiDa ?? 0,
-                                    SoChoNgoiConLai = k.SoChoNgoiConLai ?? 0
                                 })
                                 .ToList()
             }).OrderBy(t => t.SoToa).ToList();

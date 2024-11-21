@@ -355,5 +355,196 @@ namespace QuanLyVeTau.Controllers
         }
 
 
+        [HttpPost]
+        public JsonResult ThemNhatKy(string maTau, string maLichTrinh, string ngayGioKhoiHanh)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(maTau) || string.IsNullOrEmpty(maLichTrinh) || string.IsNullOrEmpty(ngayGioKhoiHanh))
+                {
+                    return Json(new { success = false, message = "Thông tin không hợp lệ" });
+                }
+
+                var lichTrinh = db.LichTrinhTaus.FirstOrDefault(lt => lt.MaLichTrinh == maLichTrinh);
+                if (lichTrinh == null)
+                {
+                    return Json(new { success = false, message = "Mã lịch trình không tồn tại" });
+                }
+
+                if (!DateTime.TryParse(ngayGioKhoiHanh, out DateTime parsedNgayGioKhoiHanh))
+                {
+                    return Json(new { success = false, message = "Định dạng ngày giờ không hợp lệ" });
+                }
+
+                string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString5"].ConnectionString;
+                string sql2 = string.Format("SELECT dbo.TaoMa('{0}', GETDATE())", maTau);
+                DataTable dtReturned = new DataTable();
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var adapter = new SqlDataAdapter(sql2, connection))
+                    {
+                        adapter.Fill(dtReturned);
+                    }
+                }
+
+                var nhatKy = new NhatKyTau
+                {
+                    MaNhatKy = dtReturned.Rows[0][0].ToString(),
+                    MaTau = maTau,
+                    MaLichTrinh = maLichTrinh,
+                    NgayGio = parsedNgayGioKhoiHanh,
+                    TrangThai = "Chưa hoàn thành"
+                };
+                db.NhatKyTaus.InsertOnSubmit(nhatKy);
+                db.SubmitChanges();
+
+                // Trả về phản hồi thành công dưới dạng JSON
+                return Json(new { success = true, message = "Thêm nhật ký thành công" });
+            }
+            catch (Exception ex)
+            {
+                // Trả về phản hồi thất bại với thông báo lỗi dưới dạng JSON
+                return Json(new { success = false, message = $"Lỗi hệ thống: {ex.Message}" });
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult DanhSachTau(string search = "")
+        {
+            var taus = db.Taus
+                         .Where(t => t.DaXoa == false) // Filter only active trains
+                         .Select(t => new
+                         {
+                             MaTau = t.MaTau,
+                             TenTau = t.TenTau
+                         });
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToLower();
+                taus = taus.Where(t => t.TenTau.ToLower().Contains(search) || t.MaTau.ToLower().Contains(search));
+            }
+
+            return Json(taus.ToList(), JsonRequestBehavior.AllowGet); // Return as JSON
+        }
+
+
+        public ActionResult XemNhatKy(string MaLichTrinh = "", string tau = "", string TrangThai = "", int page = 1)
+        {
+            // Truy vấn cơ sở dữ liệu
+            var nhatKyQuery = db.NhatKyTaus.AsQueryable();
+
+            // Lọc dữ liệu
+            if (!string.IsNullOrEmpty(MaLichTrinh))
+            {
+                nhatKyQuery = nhatKyQuery.Where(nk => nk.MaLichTrinh == MaLichTrinh);
+            }
+            if (!string.IsNullOrEmpty(tau))
+            {
+                nhatKyQuery = nhatKyQuery.Where(nk =>
+                    nk.MaTau.ToLower().Contains(tau.ToLower()) ||
+                    nk.Tau.TenTau.ToLower().Contains(tau.ToLower())
+                );
+            }
+            if (!string.IsNullOrEmpty(TrangThai))
+            {
+                nhatKyQuery = nhatKyQuery.Where(nk => nk.TrangThai.ToLower() == (TrangThai.ToLower()));
+            }
+
+            nhatKyQuery = nhatKyQuery.OrderByDescending(nk => nk.NgayGio);
+
+            int pageSize = 10;
+            var model = nhatKyQuery
+               .ToPagedList(page, pageSize) 
+               .Select(nk => new NhatKyViewModel
+               {
+                   MaNhatKy = nk.MaNhatKy,
+                   MaTau = nk.MaTau,
+                   MaLichTrinh = nk.MaLichTrinh,
+                   NgayGio = nk.NgayGio,
+                   TrangThai = nk.TrangThai,
+                   ThoiGianHoanThanhDuKien = TinhTongThoiGianDiChuyen(nk.MaNhatKy, nk.NgayGio),
+               });
+
+            return View(model.ToPagedList(page, pageSize));
+        }
+
+
+
+        [HttpPost]
+        public JsonResult CapNhatTrangThaiNhatKy(string MaNhatKy, string TrangThai)
+        {
+            try
+            {
+                var nhatKy = db.NhatKyTaus.SingleOrDefault(nk => nk.MaNhatKy == MaNhatKy);
+                if (nhatKy == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy nhật ký." });
+                }
+
+                var validTrangThai = new List<string> { "Chưa hoàn thành", "Hoàn thành", "Hủy" };
+                if (!validTrangThai.Contains(TrangThai))
+                {
+                    return Json(new { success = false, message = "Trạng thái không hợp lệ." });
+                }
+
+                nhatKy.TrangThai = TrangThai;
+                db.SubmitChanges();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+        private DateTime? TinhTongThoiGianDiChuyen(string MaNhatKy, DateTime ThoiGianDi)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
+
+            NhatKyTau nk = db.NhatKyTaus.FirstOrDefault(n => n.MaNhatKy == MaNhatKy);
+
+            LichTrinhTau lt = db.LichTrinhTaus.FirstOrDefault(ltt => ltt.MaLichTrinh == nk.MaLichTrinh );
+
+            string GaDi = db.ChiTietLichTrinhs
+                 .Where(ctlt => ctlt.MaLichTrinh == lt.MaLichTrinh)
+                 .OrderBy(ctlt => ctlt.Stt_Ga)  // Sắp xếp theo Stt_Ga tăng dần
+                 .Select(ctlt => ctlt.MaGa)  // Chọn MaGa
+                 .FirstOrDefault();  // Lấy giá trị đầu tiên (ga đi)
+
+            string GaDen = db.ChiTietLichTrinhs
+                             .Where(ctlt => ctlt.MaLichTrinh == lt.MaLichTrinh)
+                             .OrderByDescending(ctlt => ctlt.Stt_Ga)  // Sắp xếp theo Stt_Ga giảm dần
+                             .Select(ctlt => ctlt.MaGa)  // Chọn MaGa
+                             .FirstOrDefault();  // Lấy giá trị đầu tiên (ga đến)
+
+            string query = "SELECT dbo.TinhTongThoiGianDiChuyen('" + MaNhatKy + "', '" + ThoiGianDi.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + GaDi + "', '" + GaDen + "')";
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    object result = command.ExecuteScalar();
+
+                    if (result != DBNull.Value && result != null)
+                    {
+                        DateTime thoiGianHoanThanhDuKien;
+                        if (DateTime.TryParse(result.ToString(), out thoiGianHoanThanhDuKien))
+                        {
+                            return thoiGianHoanThanhDuKien;
+                        }
+                    }
+                }
+            }
+            return null; 
+        }
+
     }
 }

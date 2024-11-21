@@ -33,50 +33,44 @@
 <div id="loadingSpinner" style="display:none;">
     <img src="~/Content/Images/loading.gif" />
 </div>
-<h2 class="text-center mb-5 font-weight-bold text-primary">Danh sách Lịch Trình</h2>
+<h2 class="text-center mb-2 font-weight-bold text-primary">Danh sách Lịch Trình</h2>
 <div class="container">
-    <div class="card shadow p-3 mb-5 border-0">
+    <div class="card shadow p-3 mb-2 border-0">
 
-        <!-- Dòng chứa các thành phần -->
-        <form method="GET" action="@Url.Action("DanhSachLichTrinh")">
+        <!-- Form Lọc -->
+        <form method="GET" action="@Url.Action("XemNhatKy")">
             <div class="row g-3 align-items-center">
-                <!-- Nút thêm lịch trình -->
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#themLichTrinhModal">
-                        <i class="fa fa-plus me-2"></i> Thêm Lịch Trình
-                    </button>
-                </div>
 
-                <!-- Tìm kiếm -->
+                <!-- Mã Lịch Trình -->
                 <div class="col-md-3">
                     <div class="form-floating">
-                        <input type="text" id="search" name="search" class="form-control" value="@Request["search"]" placeholder="Nhập tên hoặc mã lịch trình">
-                        <label for="search">Tìm kiếm</label>
+                        <input type="text" id="MaLichTrinh" name="MaLichTrinh" class="form-control" value="@Request["MaLichTrinh"]" placeholder="Nhập mã lịch trình">
+                        <label for="MaLichTrinh">Mã Lịch Trình</label>
                     </div>
                 </div>
 
-                <!-- Trạng thái -->
-                <div class="col-md-2">
+                <!-- Mã Tàu -->
+                <div class="col-md-3">
                     <div class="form-floating">
-                        <select id="trangThai" name="trangThai" class="form-select">
-                            <option value="">-- Chọn trạng thái --</option>
-                            <option value="Đang hoạt động" @(Request["trangThai"] == "Đang hoạt động" ? "selected" : "")>Đang hoạt động</option>
-                            <option value="Tạm ngưng" @(Request["trangThai"] == "Tạm ngưng" ? "selected" : "")>Tạm ngưng</option>
-                            <option value="Ngưng" @(Request["trangThai"] == "Ngưng" ? "selected" : "")>Ngưng</option>
+                        <input type="text" id="tau" name="tau" class="form-control" value="@Request["tau"]" placeholder="Nhập mã tàu">
+                        <label for="tau">Mã Tàu</label>
+                    </div>
+                </div>
+
+                <!-- Trạng Thái -->
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <select id="TrangThai" name="TrangThai" class="form-select">
+                            <option value="">--Chọn trạng thái--</option>
+                            <option value="Chưa hoàn thành" @(Request["TrangThai"] == "Chưa hoàn thành" ? "selected" : "")>Chưa hoàn thành</option>
+                            <option value="Hoàn thành" @(Request["TrangThai"] == "Hoàn thành" ? "selected" : "")>Hoàn thành</option>
+                            <option value="Hủy" @(Request["TrangThai"] == "Hủy" ? "selected" : "")>Hủy</option>
                         </select>
-                        <label for="trangThai">Trạng thái</label>
+                        <label for="TrangThai">Trạng Thái</label>
                     </div>
                 </div>
 
-                <!-- Ngày giờ -->
-                <div class="col-md-3">
-                    <div class="form-floating">
-                        <input type="date" id="ngayGio" name="ngayGio" class="form-control" value="@Request["ngayGio"]">
-                        <label for="ngayGio">Ngày giờ</label>
-                    </div>
-                </div>
-
-                <!-- Nút lọc -->
+                <!-- Nút Lọc -->
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="fa fa-filter me-2"></i> Lọc
@@ -84,6 +78,19 @@
                 </div>
             </div>
         </form>
+    </div>
+    <div class="d-flex justify-content-between">
+        <!-- Nút Thêm -->
+        <div class="col-md-2 mb-2">
+            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#themLichTrinhModal">
+                <i class="fa fa-plus me-2"></i> Thêm Lịch Trình
+            </button>
+        </div>
+        <div class="col-md-2">
+            <a href="@Url.Action("XemNhatKy", new { MaLichTrinh = Request["MaLichTrinh"], tau = Request["tau"], TrangThai = Request["TrangThai"] })" class="btn btn-secondary w-100">
+                <i class="fa fa-book me-2"></i> Xem Nhật Ký
+            </a>
+        </div>
     </div>
 </div>
 
@@ -138,6 +145,14 @@
 
                     <button type="button" class="btn btn-warning btn-sm btnDoiTenLichTrinh" data-id="@item.MaLichTrinh" data-ten="@item.TenLichTrinh">
                         <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-id="@item.MaLichTrinh" data-target="#themNhatKyModal" onclick="openThemNhatKyModal(this)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                    <button class="btn btn-info btn-sm" data-id="@item.MaLichTrinh" onclick="xemNhatKyLichTrinh('@item.MaLichTrinh')">
+                        <i class="fas fa-book"></i>
                     </button>
                 </td>
             </tr>
@@ -226,7 +241,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form Thêm Lịch Trình -->
-                <form id="formThemLichTrinh" method="POST" action="@Url.Action("ThemLichTrinh")">
+                <form id="formThemLichTrinh">
                     <div class="mb-3">
                         <label for="tenLichTrinh" class="form-label">Tên Lịch Trình</label>
                         <input type="text" class="form-control" id="tenLichTrinh" name="tenLichTrinh" placeholder="Nhập tên lịch trình" required>
@@ -339,35 +354,35 @@
                 }
 
                 <!-- Form Chi Tiết Lịch Trình -->
-            <form id="chiTietLichTrinhForm">
-                <div class="form-group">
-                    <label for="maLichTrinh">Mã Lịch Trình</label>
-                    <input type="text" class="form-control" id="maLichTrinh" name="MaLichTrinh" disabled readonly required>
-                </div>
-                <div class="form-group">
-                    <label for="maGa">Chọn ga</label>
-                    <select class="form-control" id="maGa" name="MaGa" required>
-                        <option value="" disabled selected>Chọn mã ga</option>
-                        @foreach (var ga in ViewBag.Gas)
-                        {
-                            <option value="@ga.MaGa">@ga.TenGa - @ga.MaGa</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="sttGa">Số thứ tự Ga</label>
-                    <input type="number" class="form-control" id="sttGa" name="SttGa" placeholder="Nhập số thứ tự ga" required>
-                </div>
-                <div class="form-group">
-                    <label for="thoiGianDiChuyen">Thời Gian Di Chuyển Từ Trạm Trước</label>
-                    <input type="number" class="form-control" id="thoiGianDiChuyen" name="ThoiGianDiChuyen">
-                </div>
+                <form id="chiTietLichTrinhForm">
+                    <div class="form-group">
+                        <label for="maLichTrinh">Mã Lịch Trình</label>
+                        <input type="text" class="form-control" id="maLichTrinh" name="MaLichTrinh" disabled readonly required>
+                    </div>
+                    <div class="form-group">
+                        <label for="maGa">Chọn ga</label>
+                        <select class="form-control" id="maGa" name="MaGa" required>
+                            <option value="" disabled selected>Chọn mã ga</option>
+                            @foreach (var ga in ViewBag.Gas)
+                            {
+                                <option value="@ga.MaGa">@ga.TenGa - @ga.MaGa</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sttGa">Số thứ tự Ga</label>
+                        <input type="number" class="form-control" id="sttGa" name="SttGa" placeholder="Nhập số thứ tự ga" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="thoiGianDiChuyen">Thời Gian Di Chuyển Từ Trạm Trước</label>
+                        <input type="number" class="form-control" id="thoiGianDiChuyen" name="ThoiGianDiChuyen">
+                    </div>
 
-                <div class="form-group">
-                    <label for="khoangCach">Khoảng Cách Từ Trạm Trước (km)</label>
-                    <input type="number" class="form-control" id="khoangCach" name="KhoangCach" placeholder="Nhập khoảng cách">
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="khoangCach">Khoảng Cách Từ Trạm Trước (km)</label>
+                        <input type="number" class="form-control" id="khoangCach" name="KhoangCach" placeholder="Nhập khoảng cách">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnLuuChiTietLichTrinh">Lưu Chi Tiết</button>
@@ -375,6 +390,42 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="themNhatKyModal" tabindex="-1" aria-labelledby="themNhatKyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="themNhatKyModalLabel">Thêm Nhật Ký Tàu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Thay đổi action="POST" thành JavaScript xử lý -->
+                <form id="themNhatKyForm" method="post" onsubmit="themNhatKy(event)">
+                    <div class="form-group">
+                        <label for="MaTau">Tàu</label>
+                        <select name="MaTau" id="MaTau" class="form-control" required>
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="MaLichTrinh">Mã Lịch Trình</label>
+                        <input type="text" name="MaLichTrinh" id="MaLichTrinh" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="NgayGioKhoiHanh">Ngày Giờ Khởi Hành</label>
+                        <input type="datetime-local" name="NgayGioKhoiHanh" id="NgayGioKhoiHanh" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Thêm Nhật Ký</button>
+                </form>
+                <div id="errorMessages" style="display: none; color: red;"></div> <!-- Display error messages -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <!-- Thêm jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -594,5 +645,99 @@
 
 
 
+    document.addEventListener('DOMContentLoaded', () => {
+        debugger;
+
+        const tauSelect = document.getElementById('MaTau');
+        if (tauSelect) tauSelect.innerHTML = '<option>Loading...</option>';
+
+        // Fetch danh sách tàu
+        fetch('/LichTrinh/DanhSachTau')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network error: ${response.status} - ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                debugger;
+
+                // Clear the loading message
+                if (!tauSelect) return;
+                tauSelect.innerHTML = '<option value="">Select a Train</option>';
+
+                // Populate dropdown with MaTau and TenTau
+                data.forEach(tau => {
+                    tauSelect.innerHTML += `<option value="${tau.MaTau}">${tau.MaTau} - ${tau.TenTau}</option>`;
+                });
+            })
+            .catch(error => {
+                debugger;
+                console.error('Failed to fetch danh sách tàu:', error);
+                if (tauSelect) {
+                    tauSelect.innerHTML = '<option>Error loading data</option>';
+                } else {
+                    alert('Không thể tải danh sách tàu. Vui lòng thử lại sau.');
+                }
+            });
+    });
+
+    // Function to open the modal and set the MaLichTrinh
+    function openThemNhatKyModal(button) {
+        debugger;
+        const maLichTrinh = button.getAttribute('data-id');
+        const maLichTrinhInput = document.getElementById('MaLichTrinh');
+        maLichTrinhInput.value = maLichTrinh;
+        maLichTrinhInput.setAttribute('readonly', true); // Lock the input field
+        $('#themNhatKyModal').modal('show');
+    }
+
+    function themNhatKy(event) {
+        event.preventDefault(); // Ngừng việc form mặc định gửi dữ liệu và reload trang
+
+        const maTau = document.getElementById('MaTau').value;
+        const maLichTrinh = document.getElementById('MaLichTrinh').value;
+        const ngayGioKhoiHanh = document.getElementById('NgayGioKhoiHanh').value;
+
+        // Kiểm tra dữ liệu hợp lệ
+        if (!maTau || !maLichTrinh || !ngayGioKhoiHanh) {
+            displayError('Vui lòng nhập đầy đủ thông tin!');
+            return;
+        }
+
+        // Gửi dữ liệu qua fetch
+        fetch('/LichTrinh/ThemNhatKy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ maTau, maLichTrinh, ngayGioKhoiHanh })
+        })
+            .then(response => response.json())  // Chuyển phản hồi từ server thành JSON
+            .then(data => {
+                if (data.success) {
+                    alert('Thêm nhật ký tàu thành công!');
+                    $('#themNhatKyModal').modal('hide'); // Đóng modal khi thành công
+                    location.reload(); // Reload trang sau khi thành công
+                } else {
+                    displayError(data.message);  // Hiển thị thông báo lỗi nếu thất bại
+                }
+            })
+            .catch(error => displayError('Lỗi hệ thống: ' + error.message));  // Hiển thị lỗi hệ thống nếu có lỗi
+    }
+
+    // Hàm hiển thị lỗi người dùng
+    function displayError(message) {
+        const errorDiv = document.getElementById('errorMessages');
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        } else {
+            alert(message); // Fallback error message
+        }
+    }
+
+    function xemNhatKyLichTrinh(maLichTrinh) {
+        let url = `/LichTrinh/XemNhatKy?MaLichTrinh=${maLichTrinh}`;
+        window.location.href = url;
+    }
 </script>
 

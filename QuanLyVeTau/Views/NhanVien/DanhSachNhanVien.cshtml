@@ -1,0 +1,374 @@
+﻿@{
+    ViewBag.Title = "Danh Sách Nhân Viên";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+@model PagedList.IPagedList<QuanLyVeTau.Models.NhanVienViewModel>
+
+
+<h2 class="text-center mb-2 font-weight-bold text-primary">Quản Lý Khách Hàng</h2>
+<form method="get" action="@Url.Action("DanhSachNhanVien", "NhanVien")" class="search-form mb-4 mx-auto" style="max-width: 800px;">
+    <div class="row justify-content-center align-items-center">
+        <!-- Tìm kiếm nhân viên -->
+        <div class="col-md-3 mb-2">
+            <input type="text" name="Search" class="form-control" placeholder="Tìm kiếm nhân viên..." value="@ViewBag.Search" />
+        </div>
+
+        <!-- Dropdown Vai Trò -->
+        <div class="col-md-3 mb-2">
+            <select name="VaiTro" class="form-control">
+                <option value="">Chọn vai trò</option>
+                <option value="Giám đốc" @(ViewBag.VaiTro == "Giám đốc" ? "selected" : "")>Giám đốc</option>
+                <option value="Nhân viên" @(ViewBag.VaiTro == "Nhân viên" ? "selected" : "")>Nhân viên</option>
+                <option value="Trưởng phòng" @(ViewBag.VaiTro == "Trưởng phòng" ? "selected" : "")>Trưởng phòng</option>
+                <!-- Thêm các lựa chọn vai trò khác nếu cần -->
+            </select>
+        </div>
+
+        <!-- Dropdown Chức Vụ -->
+        <div class="col-md-3 mb-2">
+            <select name="ChucVu" class="form-control">
+                <option value="">Chọn chức vụ</option>
+                @foreach (var chucVu in ViewBag.ChucVus)
+                {
+                    <option value="@chucVu.TenChucVu" @(ViewBag.ChucVu == chucVu.TenChucVu ? "selected" : "")>@chucVu.TenChucVu</option>
+                }
+            </select>
+        </div>
+
+        <!-- Nút Tìm Kiếm -->
+        <div class="col-md-3 mb-2">
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-search"></i> Tìm kiếm
+            </button>
+        </div>
+    </div>
+</form>
+<!-- Nút Thêm Nhân Viên -->
+<div class="px-4 mb-4">
+    <button class="btn btn-success" data-toggle="modal" data-target="#addModal">
+        <i class="fas fa-plus"></i> Thêm nhân viên
+    </button>
+</div>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+
+
+<!-- Bảng Danh sách nhân viên -->
+<div class="container my-4">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th>Tên nhân viên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>CCCD</th>
+                    <th>Năm sinh</th>
+                    <th>Vai trò</th>
+                    <th>Chức vụ</th>
+                    <th>Hệ số lương</th>
+                    <th>Mô tả</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var nv in Model)
+                {
+                    <tr>
+                        <td>@nv.TenNhanVien</td>
+                        <td>@nv.Email</td>
+                        <td>@nv.SDT</td>
+                        <td>@nv.CCCD</td>
+                        <td>@nv.NamSinh</td>
+                        <td>@nv.VaiTro</td>
+                        <td>@nv.ChucVu</td>
+                        <td>@nv.HeSoLuong</td>
+                        <td>@nv.MoTa</td>
+                        <td class="d-flex">
+                            <button class="btn btn-warning btn-sm edit-btn" data-id="@nv.MaNhanVien">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            @if (nv.DaXoa == true)
+                            {
+                                <a href="@Url.Action("KhoiPhucNhanVien", new { id = nv.MaNhanVien })" class="btn btn-success btn-sm">
+                                    <i class="fas fa-undo"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("XoaNhanVien", new { id = nv.MaNhanVien })" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination và các nút -->
+
+
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm">
+        <!-- Nút Trang đầu -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachNhanVien", new { page = 1 })" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;&laquo;</span>
+            </li>
+        }
+
+        <!-- Nút Previous -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachNhanVien", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        }
+
+        <!-- Hiển thị các số trang -->
+        @for (var i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("DanhSachNhanVien", new { page = i })">@i</a>
+            </li>
+        }
+
+        <!-- Nút Next -->
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachNhanVien", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DanhSachNhanVien", new { page = Model.PageCount })" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;&raquo;</span>
+            </li>
+        }
+    </ul>
+</div>
+
+<!-- Thêm Modal để chỉnh sửa -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="editModalLabel">Chỉnh sửa nhân viên</h5>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="TenNhanVien">Tên nhân viên</label>
+                        <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="SDT">Số điện thoại</label>
+                        <input type="text" class="form-control" id="SDT" name="SDT" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="CCCD">CCCD</label>
+                        <input type="text" class="form-control" id="CCCD" name="CCCD" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="NamSinh">Năm sinh</label>
+                        <input type="text" class="form-control" id="NamSinh" name="NamSinh" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="VaiTro">Vai trò</label>
+                        <select class="form-control" id="VaiTro" name="VaiTro" required>
+                            <option value="Giám đốc">Giám đốc</option>
+                            <option value="Nhân viên">Nhân viên</option>
+                            <option value="Trưởng phòng">Trưởng phòng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ChucVu">Chức vụ</label>
+                        <select class="form-control" id="ChucVu" name="ChucVu" required>
+                            @foreach (var chucVu in ViewBag.ChucVus)
+                            {
+                                <option value="@chucVu.TenChucVu">@chucVu.TenChucVu</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Luong">Hệ số lương</label>
+                        <input type="number" class="form-control" id="Luong" name="Luong" required>
+                    </div>
+                    <input type="hidden" id="MaNhanVien" name="MaNhanVien">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Thêm Modal để thêm nhân viên -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="addModalLabel">Thêm nhân viên</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addForm" method="post" action="@Url.Action("ThemNhanVien")">
+                    <div class="form-group">
+                        <label for="TenNhanVien">Tên nhân viên</label>
+                        <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="email" class="form-control" id="Email" name="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="SDT">Số điện thoại</label>
+                        <input type="text" class="form-control" id="SDT" name="SDT" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="CCCD">CCCD</label>
+                        <input type="text" class="form-control" id="CCCD" name="CCCD" required>
+                    </div> 
+                    <div class="form-group">
+                        <label for="VaiTro">Vai trò</label>
+                        <select class="form-control" id="VaiTro" name="VaiTro" required>
+                            <option value="Giám đốc">Giám đốc</option>
+                            <option value="Nhân viên">Nhân viên</option>
+                            <option value="Trưởng phòng">Trưởng phòng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="NamSinh">Năm sinh</label>
+                        <input type="text" class="form-control" id="NamSinh" name="NamSinh" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ChucVu">Chức vụ</label>
+                        <select class="form-control" id="ChucVu" name="ChucVu" required>
+                            @foreach (var chucVu in ViewBag.ChucVus)
+                            {
+                                <option value="@chucVu.TenChucVu">@chucVu.TenChucVu</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="MoTa">Mô tả</label>
+                        <textarea class="form-control" id="MoTa" name="MoTa" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="Luong">Hệ số lương</label>
+                        <input type="number" class="form-control" id="Luong" name="Luong" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Thêm nhân viên</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Thêm jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Thêm Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+    // Khi click vào nút "Chỉnh sửa"
+    $('.edit-btn').click(function () {
+        var id = $(this).data('id');
+
+        $.ajax({
+            url: '@Url.Action("LayThongTinNhanVien", "NhanVien")',
+            type: 'GET',
+            data: { MaNhanVien: id },
+            success: function (data) {
+                debugger;
+                // Điền dữ liệu vào form trong modal
+                $('#MaNhanVien').val(data.MaNhanVien);
+                $('#TenNhanVien').val(data.TenNhanVien);
+                $('#Email').val(data.Email);
+                $('#SDT').val(data.SDT);
+                $('#CCCD').val(data.CCCD);
+                $('#VaiTro').val(data.VaiTro);
+                $('#NamSinh').val(data.NamSinh);
+                $('#ChucVu').val(data.ChucVu);
+                $('#MoTa').val(data.MoTa);
+                $('#Luong').val(data.HeSoLuong);
+
+                // Mở modal
+                $('#editModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                alert('Có lỗi khi tải thông tin nhân viên!');
+            }
+        });
+    });
+
+    // Khi submit form chỉnh sửa
+    $('#editForm').submit(function (e) {
+        e.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: '@Url.Action("SuaNhanVien", "NhanVien")', // URL để xử lý lưu thông tin
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                $('#editModal').modal('hide');
+                location.reload(); // Tải lại trang
+            },
+            error: function (xhr, status, error) {
+                alert('Có lỗi khi lưu thông tin!');
+            }
+        });
+    });
+    });
+
+
+</script>

@@ -18,8 +18,6 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
-
-
         public ActionResult DanhSachKhachHang(string searchKeyword = "", bool? isDeleted = null, int page = 1)
         {
             var query = db.KhachHangs.Include(kh => kh.TaiKhoans).AsQueryable();

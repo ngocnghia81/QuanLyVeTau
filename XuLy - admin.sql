@@ -592,8 +592,129 @@ UPDATE NhatKyTau SET TrangThai = N'Hoàn thành' WHERE MaNhatKy = 'TA111111241'
 UPDATE NhatKyTau SET TrangThai = N'Chưa hoàn thành' WHERE MaNhatKy = 'TA41911241'
 
 ------------end LichTrinh------------------------
-SELECT * FROM ChiTietLichTrinh WHERE MaLichTrinh = 'BC4'
+------------NhanVien------------------------
+DROP PROCEDURE ThemNhanVien
 
-SELECT * FROM NhatKyTau WHERE TrangThai = N'Hủy'
+CREATE PROCEDURE ThemNhanVien
+    @TenNhanVien NVARCHAR(100),
+    @Email VARCHAR(255),
+    @SDT VARCHAR(15),
+    @CCCD VARCHAR(12),
+	@NamSinh INT,
+    @VaiTro NVARCHAR(50),
+    @ChucVu NVARCHAR(100),
+    @MoTa NVARCHAR(255),
+    @Luong DECIMAL(10, 2),
+    @DefaultPassword NVARCHAR(100)
+AS
+BEGIN
+    BEGIN TRANSACTION;
 
-SELECT * FROM NhatKyTau WHERE MaNhatKy = 'TA111111241'
+    BEGIN TRY
+		DECLARE @CurrentYear INT = YEAR(GETDATE());
+        DECLARE @Age INT = @CurrentYear - @NamSinh;
+
+        IF @Age >= 60
+        BEGIN
+            RAISERROR('Tuổi phải bé hơn 60. Năm sinh không hợp lệ!', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+		
+        DECLARE @MaChucVu INT;
+        SELECT @MaChucVu = MaChucVu
+        FROM ChucVu
+        WHERE TenChucVu = @ChucVu;
+
+        IF @MaChucVu IS NULL
+        BEGIN
+            RAISERROR('Chức vụ không hợp lệ!', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        DECLARE @YearSuffix NVARCHAR(2) = RIGHT(CAST(YEAR(GETDATE()) AS NVARCHAR(4)), 2); 
+        DECLARE @StaffCount INT;
+
+        SELECT @StaffCount = COUNT(*) + 1
+        FROM NhanVien
+        WHERE LEFT(MaNhanVien, 4) = 'NV' + @YearSuffix; -- Lọc theo năm từ mã nhân viên
+
+        DECLARE @MaNhanVien NVARCHAR(10) = 'NV' + @YearSuffix + RIGHT('000' + CAST(@StaffCount AS NVARCHAR(3)), 3);
+
+        DECLARE @MaTaiKhoan NVARCHAR(20) = 'TK-' + @MaNhanVien + '-' + 
+                  UPPER(LEFT(@VaiTro, 1)) + 
+                  CASE
+                      WHEN LEN(@VaiTro) > 1 THEN UPPER(LEFT(SUBSTRING(@VaiTro, CHARINDEX(' ', @VaiTro) + 1, LEN(@VaiTro)), 1))
+                      ELSE ''
+                  END;
+
+        INSERT INTO NhanVien (MaNhanVien, TenNhanVien, MaChucVu, Email, SDT, CCCD,NamSinh, HeSoLuong)
+        VALUES (@MaNhanVien, @TenNhanVien, @MaChucVu, @Email, @SDT, @CCCD,@NamSinh, @Luong);
+
+        INSERT INTO TaiKhoanNhanVien (MaTaiKhoan, Email, MatKhau, VaiTro, DaXoa)
+        VALUES (@MaTaiKhoan, @Email, @DefaultPassword, @VaiTro, 0);
+
+        COMMIT TRANSACTION;
+
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+
+          DECLARE @ErrorMessage NVARCHAR(4000);
+		  DECLARE @ErrorSeverity INT;
+		  DECLARE @ErrorState INT;
+
+		  SELECT
+			@ErrorMessage=ERROR_MESSAGE(),
+			@ErrorSeverity=ERROR_SEVERITY(),
+			@ErrorState=ERROR_STATE();
+		  RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+
+DROP TRIGGER trg_SetDaXoa_TaiKhoanNhanVien
+CREATE TRIGGER trg_SetDaXoa_TaiKhoanNhanVien
+ON TaiKhoanNhanVien
+INSTEAD OF DELETE
+AS
+BEGIN
+    -- Khai báo biến kiểm tra nếu có lịch phân công chưa hoàn thành hoặc trong tương lai
+    DECLARE @HasPendingAssignment BIT;
+	DECLARE @MaNhanVien VARCHAR(20);
+
+	SELECT @MaNhanVien = MaNhanVien
+    FROM NhanVien 
+    WHERE Email = (SELECT Email FROM deleted);
+
+    -- Kiểm tra xem nhân viên có phân công nào chưa hoàn thành hoặc có nhật ký trong tương lai hay không
+    SELECT @HasPendingAssignment = 
+        CASE
+            WHEN EXISTS (
+                SELECT 1
+                FROM PhanCong pc
+                JOIN NhatKyTau nk ON pc.MaNhatKy = nk.MaNhatKy
+                WHERE pc.MaNhanVien = @MaNhanVien 
+                AND (nk.TrangThai = N'Chưa hoàn thành' AND nk.NgayGio >= GETDATE())
+            ) THEN 1
+            ELSE 0
+        END;
+
+    -- Nếu có phân công chưa hoàn thành hoặc trong tương lai, không cho phép xóa
+    IF @HasPendingAssignment = 1
+    BEGIN
+        -- Trả về thông báo lỗi hoặc có thể là hành động khác nếu muốn
+        RAISERROR(N'Không thể xóa nhân viên vì có lịch phân công chưa hoàn thành hoặc trong tương lai.',16,1);
+    END
+    ELSE
+    BEGIN
+        -- Nếu không có lịch phân công chưa hoàn thành hoặc trong tương lai, cập nhật DaXoa thành 1
+        UPDATE TaiKhoanNhanVien
+        SET DaXoa = 1
+        WHERE Email IN (SELECT Email FROM DELETED);
+        
+        -- Nếu cần, có thể thêm thông báo thành công
+        PRINT 'Nhân viên đã được đánh dấu là đã xóa.';
+    END
+END;
+------------end NhanVien------------------------

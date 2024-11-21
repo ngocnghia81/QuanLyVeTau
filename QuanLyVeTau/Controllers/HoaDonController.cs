@@ -58,9 +58,8 @@ namespace QuanLyVeTau.Controllers
                     .Where(hd => db.Ves
                         .Any(v => v.MaHoaDon == hd.MaHoaDon && nhatKyTauIds.Contains(v.MaNhatKy)))
                     .AsQueryable();
+
             }
-
-
 
             // Lấy dữ liệu chi tiết hóa đơn
             List<HoaDonViewModel> hoaDonViewModels = new List<HoaDonViewModel>();

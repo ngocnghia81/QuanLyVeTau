@@ -120,8 +120,11 @@
                     <i class="bi bi-calendar3 me-2"></i>Lịch trình
                 </a>
 
-                <a href="#manageStaff" class="list-group-item list-group-item-action bg-dark text-white"
-                   id="manageStaffLink"><i class="bi bi-people-fill me-2"></i>Quản lý Nhân viên</a>
+                <a href="@Url.Action("DanhSachNhanVien", "NhanVien")" class="list-group-item list-group-item-action bg-dark text-white"
+                   id="manageStaffLink"
+                   @if (ViewBag.ActiveLink == "manageStaffLink") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
+                    <i class="bi bi-people-fill me-2"></i>Quản lý Nhân viên
+                </a>
 
                 <a href="#manageAssignments" class="list-group-item list-group-item-action bg-dark text-white"
                    id="manageAssignmentsLink"><i class="bi bi-card-checklist me-2"></i>Phân công</a>

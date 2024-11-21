@@ -113,21 +113,6 @@
       <Association Name="LoaiToa_Toa" Member="Toas" ThisKey="MaLoaiToa" OtherKey="MaLoaiToa" Type="Toa" />
     </Type>
   </Table>
-  <Table Name="dbo.NhanVien" Member="NhanViens">
-    <Type Name="NhanVien">
-      <Column Name="MaNhanVien" Type="System.String" DbType="VarChar(15) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="TenNhanVien" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="MaChucVu" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="SDT" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
-      <Column Name="CCCD" Type="System.String" DbType="VarChar(12)" CanBeNull="true" />
-      <Column Name="NamSinh" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Luong" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
-      <Association Name="NhanVien_PhanCong" Member="PhanCongs" ThisKey="MaNhanVien" OtherKey="MaNhanVien" Type="PhanCong" />
-      <Association Name="NhanVien_TaiKhoanNhanVien" Member="TaiKhoanNhanViens" ThisKey="Email" OtherKey="Email" Type="TaiKhoanNhanVien" />
-      <Association Name="ChucVu_NhanVien" Member="ChucVu" ThisKey="MaChucVu" OtherKey="MaChucVu" Type="ChucVu" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.NhatKyTau" Member="NhatKyTaus">
     <Type Name="NhatKyTau">
       <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -146,8 +131,8 @@
       <Column Name="MaPhanCong" Type="System.String" DbType="VarChar(15) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="MaNhanVien" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
       <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
-      <Association Name="NhanVien_PhanCong" Member="NhanVien" ThisKey="MaNhanVien" OtherKey="MaNhanVien" Type="NhanVien" IsForeignKey="true" />
       <Association Name="NhatKyTau_PhanCong" Member="NhatKyTau" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="NhatKyTau" IsForeignKey="true" />
+      <Association Name="NhanVien_PhanCong" Member="NhanVien" ThisKey="MaNhanVien" OtherKey="MaNhanVien" Type="NhanVien" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PhanHoi" Member="PhanHois">
@@ -216,6 +201,21 @@
       <Association Name="HoaDon_Ve" Member="HoaDon" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="HoaDon" IsForeignKey="true" />
       <Association Name="Khoang_Ve" Member="Khoang" ThisKey="MaKhoang" OtherKey="MaKhoang" Type="Khoang" IsForeignKey="true" />
       <Association Name="NhatKyTau_Ve" Member="NhatKyTau" ThisKey="MaNhatKy" OtherKey="MaNhatKy" Type="NhatKyTau" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NhanVien" Member="NhanViens">
+    <Type Name="NhanVien">
+      <Column Name="MaNhanVien" Type="System.String" DbType="VarChar(15) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TenNhanVien" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MaChucVu" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SDT" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="CCCD" Type="System.String" DbType="VarChar(12)" CanBeNull="true" />
+      <Column Name="NamSinh" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="HeSoLuong" Type="System.Decimal" DbType="Decimal(10,2)" CanBeNull="true" />
+      <Association Name="NhanVien_PhanCong" Member="PhanCongs" ThisKey="MaNhanVien" OtherKey="MaNhanVien" Type="PhanCong" />
+      <Association Name="NhanVien_TaiKhoanNhanVien" Member="TaiKhoanNhanViens" ThisKey="Email" OtherKey="Email" Type="TaiKhoanNhanVien" />
+      <Association Name="ChucVu_NhanVien" Member="ChucVu" ThisKey="MaChucVu" OtherKey="MaChucVu" Type="ChucVu" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

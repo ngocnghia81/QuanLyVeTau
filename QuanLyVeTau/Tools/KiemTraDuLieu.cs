@@ -14,7 +14,6 @@ namespace QuanLyVeTau.Tools
         // Kiểm tra số điện thoại hợp lệ của Việt Nam
         public static bool KiemTraSDT_VN(string sdt)
         {
-            // Định dạng số điện thoại VN: bắt đầu bằng 0 và theo sau là 9-10 chữ số (tùy thuộc vào mạng)
             string pattern = @"^0[1-9][0-9]{8,9}$";
             return Regex.IsMatch(sdt, pattern);
         }

@@ -143,6 +143,7 @@
     <Compile Include="Controllers\KhuyenMaiController.cs" />
     <Compile Include="Controllers\LichTrinhController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />
+    <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Controllers\PhanHoiController.cs" />
     <Compile Include="Controllers\QuanTriController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\LichTrinhViewModel.cs" />
+    <Compile Include="Models\NhanVienViewModel.cs" />
     <Compile Include="Models\NhatKyViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
@@ -321,6 +323,7 @@
     <Content Include="Views\LichTrinh\DanhSachLichTrinh.cshtml" />
     <Content Include="Views\Shared\_ChiTietLichTrinhModal.cshtml" />
     <Content Include="Views\LichTrinh\XemNhatKy.cshtml" />
+    <Content Include="Views\NhanVien\DanhSachNhanVien.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -718,3 +718,37 @@ BEGIN
     END
 END;
 ------------end NhanVien------------------------
+
+------------PhanCong------------------------
+CREATE VIEW dbo.Vw_LichPhanCong AS
+SELECT 
+    pc.MaPhanCong,
+    nv.TenNhanVien,
+    nk.MaNhatKy,
+    nk.MaLichTrinh,
+    nk.NgayGio,
+    nk.TrangThai,
+    nv.Email,
+    nv.SDT
+FROM 
+    NhatKyTau nk
+LEFT JOIN 
+    PhanCong pc ON nk.MaNhatKy = pc.MaNhatKy
+LEFT JOIN 
+    NhanVien nv ON pc.MaNhanVien = nv.MaNhanVien
+
+
+
+CREATE VIEW Vw_NhanVienDangHoatDong AS
+SELECT nv.MaNhanVien, nv.TenNhanVien, nv.Email, nv.SDT, nv.NamSinh, nv.HeSoLuong
+FROM NhanVien nv
+JOIN TaiKhoanNhanVien tk ON nv.Email = tk.Email
+WHERE tk.DaXoa = 0;
+
+
+CREATE VIEW Vw_NhatKyTauChuaHoanThanh AS
+SELECT MaNhatKy, MaLichTrinh, NgayGio, TrangThai
+FROM NhatKyTau
+WHERE TrangThai = 'Chưa hoàn thành';
+------------end PhanCong------------------------
+

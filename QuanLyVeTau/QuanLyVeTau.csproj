@@ -144,6 +144,7 @@
     <Compile Include="Controllers\LichTrinhController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />
     <Compile Include="Controllers\NhanVienController.cs" />
+    <Compile Include="Controllers\PhanCongController.cs" />
     <Compile Include="Controllers\PhanHoiController.cs" />
     <Compile Include="Controllers\QuanTriController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Models\LichTrinhViewModel.cs" />
     <Compile Include="Models\NhanVienViewModel.cs" />
     <Compile Include="Models\NhatKyViewModel.cs" />
+    <Compile Include="Models\PhanCongViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -163,6 +165,7 @@
     <Compile Include="Models\VeChiTietViewModel.cs" />
     <Compile Include="Models\VeRepository.cs" />
     <Compile Include="Models\XemToaViewModel.cs" />
+    <Compile Include="Tools\CongCu.cs" />
     <Compile Include="Tools\EmailSender.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -324,6 +327,7 @@
     <Content Include="Views\Shared\_ChiTietLichTrinhModal.cshtml" />
     <Content Include="Views\LichTrinh\XemNhatKy.cshtml" />
     <Content Include="Views\NhanVien\DanhSachNhanVien.cshtml" />
+    <Content Include="Views\PhanCong\XemLichPhanCong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

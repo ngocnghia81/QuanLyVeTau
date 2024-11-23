@@ -150,11 +150,16 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
+<<<<<<< HEAD
     <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\LichTrinhViewModel.cs" />
     <Compile Include="Models\NhanVienViewModel.cs" />
     <Compile Include="Models\NhatKyViewModel.cs" />
+=======
+    <Compile Include="Models\DataSender.cs" />
+    <Compile Include="Models\GheDaChon.cs" />
+>>>>>>> ThemVe
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -304,6 +309,7 @@
     <Content Include="Views\TaiKhoan\DangNhap.cshtml" />
     <Content Include="Views\TaiKhoan\DangKy.cshtml" />
     <Content Include="Views\TaiKhoan\QuenMatKhau.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\QuanTri\DangNhap.cshtml" />
     <Content Include="Views\QuanTri\DashBoard.cshtml" />
     <Content Include="Views\QuanTri\QuanLyKhachHang.cshtml" />
@@ -324,6 +330,13 @@
     <Content Include="Views\Shared\_ChiTietLichTrinhModal.cshtml" />
     <Content Include="Views\LichTrinh\XemNhatKy.cshtml" />
     <Content Include="Views\NhanVien\DanhSachNhanVien.cshtml" />
+=======
+    <Content Include="Views\Ve\HienThiToa.cshtml" />
+    <Content Include="Views\Ve\HienThiKhoang.cshtml" />
+    <Content Include="Views\NguoiDung\Index.cshtml" />
+    <Content Include="Views\NguoiDung\HoaDon.cshtml" />
+    <Content Include="Views\NguoiDung\Lichsu.cshtml" />
+>>>>>>> ThemVe
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

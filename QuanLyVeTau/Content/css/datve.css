@@ -6,13 +6,14 @@
 
 body{
     scroll-behavior:smooth;
-
+    position:relative;
 }
 
-main{
-    display:flex;
-    align-items:center;
-    justify-content:center;
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .container{
@@ -84,7 +85,7 @@ h3 span{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 10px;
     flex-flow: column;
     position: relative;
 }
@@ -105,7 +106,7 @@ h3 span{
 .train_info .value{
     position: absolute;
     right: 5px;
-    top: 2px;
+    top: 0;
     font-size: 10px;
     /* margin-left: 5px; */
 }
@@ -125,8 +126,8 @@ h3 span{
     text-align: center;
 }
 
-/* CHỌN TOA */
-.train {
+/* CHỌN toaDetailsContainer */
+.trainDetailsContainer {
     margin: 20px;
     display: flex;
     align-items: center;
@@ -220,7 +221,7 @@ h3 span{
 }
 
 
-.toa {
+.toaDetailsContainer {
     width: 80%;
     display: flex;
     align-items: center;
@@ -230,14 +231,14 @@ h3 span{
     cursor:pointer;
 }
 
-    .toa .toa__name {
+    .toaDetailsContainer .toa__name {
         font-size: 30px;
         font-weight: bold;
         color: aqua;
         margin-bottom: 20px;
     }
 
-    .toa .toa__container {
+    .toaDetailsContainer .toa__container {
         border: 2px solid cornflowerblue;
         border-radius: 20px;
         width: 760px;
@@ -248,14 +249,14 @@ h3 span{
         padding-top: 10px;
     }
 
-    .toa .toRight {
+    .toaDetailsContainer .toRight {
         position: absolute;
         left: 65%;
         top: 20%;
         cursor: pointer;
     }
 
-    .toa .toLeft {
+    .toaDetailsContainer .toLeft {
         position: absolute;
         left: 14%;
         top: 20%;
@@ -394,6 +395,9 @@ h3 span{
     margin: 0 auto;
     margin-bottom:20px;
     border-radius:5px;
+    position:fixed;
+    top:100px;
+    right:20px;
 
 }
 
@@ -421,7 +425,7 @@ h3 span{
     justify-content:space-between;   
 }
 
-.cart__info__train h6 span{
+.cart__info h6 span{
     font-weight: normal;
 }
 

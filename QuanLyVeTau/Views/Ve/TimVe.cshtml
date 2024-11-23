@@ -75,6 +75,8 @@
     });
     // Đợi khi trang web được tải xong
     document.addEventListener('DOMContentLoaded', function () {
+        localStorage.removeItem('TimVe');
+
         // Lấy phần tử button đổi chỗ
         var interchangeBtn = document.getElementById('interchangeBtn');
 
@@ -104,4 +106,8 @@
             //returnDateInput.disabled = false;
         });
     });
+
+    
+
+    
 </script>

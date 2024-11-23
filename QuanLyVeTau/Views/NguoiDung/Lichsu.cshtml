@@ -1,0 +1,147 @@
+﻿@model IEnumerable<QuanLyVeTau.Models.HoaDon>
+
+@{
+    ViewBag.Title = "Lichsu";
+    Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+}
+
+<style>
+    /* Tổng quan cho bảng */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-family: 'Arial', sans-serif;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        table th, table td {
+            padding: 15px 20px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            vertical-align: middle;
+        }
+
+    /* Dòng tiêu đề */
+    th {
+        background: linear-gradient(90deg, #4caf50, #66bb6a);
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 14px;
+    }
+
+    /* Các dòng trong bảng */
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    /* Hiệu ứng khi di chuột qua dòng */
+    tr:hover {
+        background-color: #f1f1f1;
+        transform: scale(1.01);
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* Chỉnh sửa liên kết */
+    a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+        a:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
+
+        /* Nút liên kết */
+        a.btn {
+            padding: 10px 15px;
+            margin: 0 5px;
+            text-align: center;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            a.btn:hover {
+                background-color: #218838;
+                transform: translateY(-2px);
+            }
+
+        /* Kiểu cho các nút cụ thể */
+        a.btn-edit, a.btn-details, a.btn-delete {
+            background-color: #007bff;
+            color: white;
+        }
+
+            a.btn-edit:hover, a.btn-details:hover, a.btn-delete:hover {
+                background-color: #0056b3;
+            }
+
+    /* Tạo kiểu cho thẻ thông tin chi tiết */
+    div.details {
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+        font-family: 'Arial', sans-serif;
+    }
+
+        div.details h3 {
+            color: #333333;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        div.details p {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            color: #555555;
+        }
+</style>
+
+
+<table>
+    <tr>
+        <th>STT</th>
+        <th>Mã Hoá Đơn</th>
+        <th>Khuyến Mãi</th>
+        <th>Thành Tiền</th>
+        <th>Thời gian</th>
+        <th>Hành Động</th>
+    </tr>
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        var hoaDon = Model.ElementAt(i);
+        var tienGiam = ViewBag.TienGiams[i];
+
+        <tr>
+            <td>@(i + 1)</td>
+            <td>@Html.DisplayFor(modelItem => hoaDon.MaHoaDon)</td>
+            <td>@tienGiam.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+            <td>@hoaDon.ThanhTien.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+            <td>@Html.DisplayFor(modelItem => hoaDon.ThoiGianLapHoaDon)</td>
+            <td>
+                @Html.ActionLink("Xem Chi Tiết", "HoaDon", "NguoiDung", new { mahoadon = hoaDon.MaHoaDon }, new { @class = "btn btn-details" })
+            </td>
+        </tr>
+    }
+</table>

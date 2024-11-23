@@ -140,6 +140,8 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\TrangChinhController.cs" />
     <Compile Include="Controllers\VeController.cs" />
+    <Compile Include="Models\DataSender.cs" />
+    <Compile Include="Models\GheDaChon.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -293,6 +295,9 @@
     <Content Include="Views\TaiKhoan\QuenMatKhau.cshtml" />
     <Content Include="Views\Ve\HienThiToa.cshtml" />
     <Content Include="Views\Ve\HienThiKhoang.cshtml" />
+    <Content Include="Views\NguoiDung\Index.cshtml" />
+    <Content Include="Views\NguoiDung\HoaDon.cshtml" />
+    <Content Include="Views\NguoiDung\Lichsu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

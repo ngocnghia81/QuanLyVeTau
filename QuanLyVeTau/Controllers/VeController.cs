@@ -1,8 +1,11 @@
 ﻿using QuanLyVeTau.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
@@ -10,9 +13,10 @@ namespace QuanLyVeTau.Controllers
     public class VeController : Controller
     {
         QuanLyVeTauDBDataContext db;
+        string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
         public VeController()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString;
+            
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
         // GET: Ve
@@ -27,7 +31,7 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult TimVe()
         {
-            
+
             return View();
         }
 
@@ -67,6 +71,9 @@ namespace QuanLyVeTau.Controllers
                     adapter.Fill(dt);
 
                 }
+
+
+
             }
             if (form["roundTrip"] != null)
             {
@@ -90,6 +97,12 @@ namespace QuanLyVeTau.Controllers
 
 
             }
+            List<KhuyenMai> khuyenMai = db.KhuyenMais.Where(
+                    t => t.SoLuongConLai > 0 &&
+                    t.NgayBatDau <= DateTime.Now &&
+                    t.NgayKetThuc > DateTime.Now
+                ).ToList();
+            ViewBag.KMs = khuyenMai;
             ViewBag.dt = dt;
             // Sau khi xử lý, có thể chuyển hướng tới View khác hoặc trả về View với dữ liệu đã xử lý
             return View("KetQuaChonVe"); // Tên của View bạn muốn hiển thị
@@ -97,6 +110,7 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult KetQuaChonVe()
         {
+
             return View();
         }
 
@@ -125,8 +139,8 @@ namespace QuanLyVeTau.Controllers
             }
             return PartialView("HienThiToa", dt);
         }
-        
-        public ActionResult HienThiKhoang(string maToa)
+
+        public ActionResult HienThiKhoang(string maToa, string from,string to, string maNK,int oneway)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
             // Tạo câu lệnh SQL để gọi hàm LayTau
@@ -150,21 +164,82 @@ namespace QuanLyVeTau.Controllers
                 }
             }
 
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            if (oneway == 0)
+            {
+                data.Add("from", from);
+                data.Add("to", to);
+            }
+            else
+            {
+                data.Add("to", from);
+                data.Add("from", to);
+            }
+            
+            data.Add("maNK", maNK);
+
             var gheDaBanTheoKhoang = new Dictionary<string, HashSet<int>>();
-            foreach(DataRow dr in dt.Rows)
+            foreach (DataRow dr in dt.Rows)
             {
                 string maKhoang = dr["MaKhoang"].ToString();
                 VeRepository veRepository = new VeRepository();
-                gheDaBanTheoKhoang[maKhoang] = veRepository.GetGheDaBan(maKhoang);
+                gheDaBanTheoKhoang[maKhoang] = veRepository.GetGheDaBan(maKhoang, data);
             }
 
             ViewBag.gheDaBanTheoKhoang = gheDaBanTheoKhoang;
 
-            return PartialView("HienThiKhoang",dt);
+            return PartialView("HienThiKhoang", dt);
         }
 
+        [HttpPost]
+        public ActionResult TaoVe([System.Web.Http.FromBody] DataSender data)
+        {
+            List<GheDaChon> dsGhe = data.dsGhe;
+            Dictionary<string,string> timVe = data.timVe;
+            int thanhTien = data.ThanhTien;
+            string maKM = data.MaKM;
+            string email = User.Identity.Name;
+            string maNK = data.MaNK;
+            string maNKReturned = data.MaNKRereturned;
+            //Tạo hoá đơn
+            string queryHoaDon = string.Format("exec dbo.TAOHOADON @email = '{0}', @MaKhuyenMai = {1}, @ThanhTien = '{2}', @ThoiGian = null", email, maKM, thanhTien);
+            Debug.WriteLine(queryHoaDon);
+            string maHoaDon = "";
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string queryTaoMa = string.Format("select from dbo.TaoMa('HD',Getdate())");
+                DataTable dt =  new DataTable();
+                using (var adapter = new SqlDataAdapter(queryHoaDon, conn))
+                {
+                    // Điền dữ liệu vào DataTable
+                    adapter.Fill(dt);
+                    maHoaDon = dt.Rows[0][0].ToString();
+
+                }
+                
+            }
+            foreach (GheDaChon ghe in dsGhe)
+            {
+                string queryVe = "";
+                if (ghe.OneWay)
+                {
+                     queryVe = string.Format("EXEC dbo.TAOVE @MaNhatKy = '{0}', @MaHoaDon = '{1}', @GiaVe = {2}, @MaKhoang = '{3}', @stt = {4}, @DiemDi = N'{5}', @DiemDen = N'{6}'",
+              maNK, maHoaDon, ghe.Gia, ghe.MaKhoang, ghe.Stt, timVe["from"], timVe["to"]);
+
+                }
+                else
+                {
+                     queryVe = string.Format("EXEC dbo.TAOVE @MaNhatKy = '{0}', @MaHoaDon = '{1}', @GiaVe = {2}, @MaKhoang = '{3}', @stt = {4}, @DiemDi = N'{5}', @DiemDen = N'{6}'",
+              maNKReturned, maHoaDon, ghe.Gia, ghe.MaKhoang, ghe.Stt, timVe["to"], timVe["from"]);
+                }
+                db.ExecuteCommand(queryVe);
+            }
+
+            return Json(new { success = true, message = "Dữ liệu đã được lưu thành công.", urlHoaDon = Url.Action("HoaDon","NguoiDung",new { mahoadon = maHoaDon}) });
+        }
+
+        
+
+
     }
-
-
-
 }

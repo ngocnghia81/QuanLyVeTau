@@ -14,7 +14,6 @@ namespace QuanLyVeTau.Models
         public string TrangThai { get; set; }
         public List<NhanVien> NhanViens { get; set; }
         public List<string> ChucVus { get; set; }
-        public string SDT { get; set; }
         public bool ChuaPhanCong { get; set; }
     }
 

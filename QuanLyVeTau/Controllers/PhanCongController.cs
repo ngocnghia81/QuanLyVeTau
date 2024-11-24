@@ -1,8 +1,10 @@
-﻿using QuanLyVeTau.Models;
+﻿using Microsoft.Ajax.Utilities;
+using QuanLyVeTau.Models;
 using QuanLyVeTau.Tools;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -45,18 +47,23 @@ namespace QuanLyVeTau.Controllers
                     MaLichTrinh = data.MaLichTrinh,
                     NgayGio = data.NgayGio,
                     TrangThai = data.TrangThai,
-                    SDT = data.SDT,
                     NhanViens = db.PhanCongs
-                        .Where(pc => pc.MaNhatKy == data.MaNhatKy)
-                        .Join(db.NhanViens, pc => pc.MaNhanVien, nv => nv.MaNhanVien, (pc, nv) => nv)
-                        .ToList(),
+                            .Where(pc => pc.MaNhatKy == data.MaNhatKy)  // Lọc theo MaNhatKy
+                            .Join(db.NhanViens,
+                                  pc => pc.MaNhanVien,   // Join vào bảng NhanViens theo MaNhanVien
+                                  nv => nv.MaNhanVien,   // Điều kiện join trên MaNhanVien
+                                  (pc, nv) => nv)
+                            .Distinct()
+                            .ToList(),
                     ChucVus = db.PhanCongs
                         .Where(pc => pc.MaNhatKy == data.MaNhatKy)
                         .Join(db.NhanViens, pc => pc.MaNhanVien, nv => nv.MaNhanVien, (pc, nv) => nv.MaChucVu)
                         .Join(db.ChucVus, maChucVu => maChucVu, cv => cv.MaChucVu, (maChucVu, cv) => cv.TenChucVu)
+                        .Distinct()
                         .ToList(),
                     ChuaPhanCong = string.IsNullOrEmpty(data.TenNhanVien)
                 })
+                .DistinctBy(pc => pc.MaNhatKy)
                 .ToList();
 
             ViewBag.Employees = db.Vw_NhanVienDangHoatDongs.ToList();
@@ -129,6 +136,81 @@ namespace QuanLyVeTau.Controllers
             {
                 TempData["ErrorMessage"] = $"Lỗi: {ex.Message}";
                 return RedirectToAction("XemLichPhanCong");
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult LayNhanVienPhuHopNhatKy(string maNhatKy)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                string sql = "EXEC LayNhanVienChuaPhanCong @MaNhatKyChon";
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    // Thêm tham số vào stored procedure
+                    command.Parameters.AddWithValue("@MaNhatKyChon", maNhatKy);
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var nhanVienList = new List<dynamic>();
+
+                        while (reader.Read())
+                        {
+                            nhanVienList.Add(new
+                            {
+                                MaNhanVien = reader["MaNhanVien"],
+                                TenNhanVien = reader["TenNhanVien"],
+                                MaChucVu = reader["MaChucVu"],
+                                Email = reader["Email"],
+                                SDT = reader["SDT"],
+                                CCCD = reader["CCCD"],
+                                NamSinh = reader["NamSinh"],
+                                HeSoLuong = reader["HeSoLuong"],
+                                ChucVu = db.ChucVus
+                                    .Join(db.NhanViens,
+                                          cv => cv.MaChucVu,
+                                          nv => nv.MaChucVu,
+                                          (cv, nv) => new { cv.TenChucVu, nv.MaNhanVien })
+                                    .Where(x => x.MaNhanVien == (string)reader["MaNhanVien"])
+                                    .Select(x => x.TenChucVu)
+                                    .FirstOrDefault()
+
+                            });
+                        }
+
+                        nhanVienList = nhanVienList
+                            .OrderBy(nv => nv.TenNhanVien.Split(' ')[nv.TenNhanVien.Split(' ').Length - 1])
+                            .ToList();
+
+                        return Json(nhanVienList, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult XoaNhanVien(string maNhanVien)
+        {
+            try
+            {
+                var assignment = db.PhanCongs.FirstOrDefault(pc => pc.MaNhanVien == maNhanVien);
+                if (assignment != null)
+                {
+                    db.PhanCongs.DeleteOnSubmit(assignment);
+                    db.SubmitChanges();
+                    return Json(new { success = true });
+                }
+
+                return Json(new { success = false, errorMessage = "Nhân viên không tồn tại trong cơ sở dữ liệu" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, errorMessage = ex.Message });
             }
         }
     }

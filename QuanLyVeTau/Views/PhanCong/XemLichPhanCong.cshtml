@@ -10,33 +10,28 @@
 }
 
 <style>
-    /* Trạng thái "Chưa hoàn thành" */
     td.pending {
-        background-color: #fff3cd; /* Vàng nhạt */
-        color: #856404; /* Nâu vàng đậm */
+        background-color: #fff3cd;
+        color: #856404;
     }
 
-    /* Trạng thái "Hoàn thành" */
     td.completed {
-        background-color: #d4edda; /* Xanh lá nhạt */
-        color: #155724; /* Xanh lá đậm */
+        background-color: #d4edda;
+        color: #155724;
         font-weight: bold;
     }
 
-    /* Trạng thái "Hủy" */
     td.cancelled {
-        background-color: #f8d7da; /* Cam đỏ nhạt */
-        color: #721c24; /* Đỏ đậm */
+        background-color: #f8d7da;
+        color: #721c24;
         font-weight: bold;
     }
 
-    /* Mặc định, hiển thị tên và số điện thoại rút gọn */
     .hover-info {
         position: relative;
         display: inline-block;
     }
 
-        /* Khi hover, hiển thị đầy đủ thông tin */
         .hover-info:hover::after {
             content: attr(title);
             position: absolute;
@@ -50,7 +45,6 @@
         }
 </style>
 
-<!-- Hiển thị thông báo thành công hoặc lỗi -->
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
@@ -68,30 +62,21 @@
     <div class="container d-flex justify-content-center align-items-center">
         <div class="card p-4" style="max-width: 500px; width: 100%;">
             <h4 class="text-center mb-4">Phân Công Nhân Viên</h4>
+
             <div class="form-group">
-                <label for="maNhanVien">Chọn Nhân Viên:</label>
-                <select id="maNhanVien" name="maNhanVien" class="form-control">
-                    @{
-                        var employees = ViewBag.Employees;
-                        foreach (var employee in employees)
-                        {
-                            <option value="@employee.MaNhanVien">@employee.TenNhanVien</option>
-                        }
+                <label for="maNhatKy">Chọn Nhật Ký:</label>
+                <select id="maNhatKy" name="maNhatKy" class="form-control">
+                    @foreach (var logbook in ViewBag.Logbooks)
+                    {
+                        <option value="@logbook.MaNhatKy">@logbook.MaNhatKy - @logbook.TrangThai</option>
                     }
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="maNhatKy">Chọn Nhật Ký:</label>
-                <select id="maNhatKy" name="maNhatKy" class="form-control">
-                    @{
-                        var logbooks = ViewBag.Logbooks;
-
-                        foreach (var logbook in logbooks)
-                        {
-                            <option value="@logbook.MaNhatKy">@logbook.MaNhatKy - @logbook.TrangThai</option>
-                        }
-                    }
+                <label for="maNhanVien">Chọn Nhân Viên:</label>
+                <select id="maNhanVien" name="maNhanVien" class="form-control">
+                    <option value="">-- Vui lòng chọn nhật ký trước --</option>
                 </select>
             </div>
 
@@ -99,7 +84,6 @@
         </div>
     </div>
 }
-
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">Lịch Phân Công Tuần (@startOfWeek.ToString("dd/MM/yyyy") - @endOfWeek.ToString("dd/MM/yyyy"))</h2>
@@ -144,12 +128,16 @@
                                     {
                                         foreach (var nv in item.NhanViens)
                                         {
-                                            <small>@(nv.TenNhanVien) - @nv.SDT</small><br />
+                                            int i = 0;
+                                            <div>
+                                                <small class="hover-info" title="Tên: @(nv.TenNhanVien) - SĐT: @(nv.SDT)">
+                                                    @(nv.TenNhanVien.Length > 20 ? nv.TenNhanVien.Substring(0, 10) + "..." : nv.TenNhanVien) - @(nv.SDT) - @nv.ChucVu.TenChucVu
+                                                    <button class="btn btn-sm ml-2" onclick="deleteEmployee('@nv.MaNhanVien')">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </small><br />
+                                            </div>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <small>@item.SDT</small><br />
                                     }
 
                                     <small>Trạng thái: @item.TrangThai</small>
@@ -158,10 +146,11 @@
                         }
                         else
                         {
-                            <div class="text-muted">Không có lịch</div> <!-- Hiển thị khi không có lịch -->
+                            <div class="text-muted">Không có lịch</div>
                         }
                     </td>
                 }
+
             </tr>
 
             <!-- Hàng chiều -->
@@ -181,20 +170,16 @@
                                     <strong>Mã lịch trình: @item.MaLichTrinh</strong><br />
                                     @if (item.ChuaPhanCong == false)
                                     {
-                                        int i = 0;
-                                        foreach (var nv in item.NhanViens)
+                                        for (int i = 0; i < item.NhanViens.Count(); i++)
                                         {
+                                            var nv = item.NhanViens[i];  // Lấy nhân viên tại vị trí i
                                             <small class="hover-info" title="Tên: @(nv.TenNhanVien) - SĐT: @(nv.SDT)">
-                                                @(nv.TenNhanVien.Length > 20 ? nv.TenNhanVien.Substring(0, 10) + "..." : nv.TenNhanVien) -
-                                                @(nv.SDT) - @item.ChucVus[i]
+                                                @(nv.TenNhanVien.Length > 20 ? nv.TenNhanVien.Substring(0, 10) + "..." : nv.TenNhanVien) - @(nv.SDT) - @nv.ChucVu.TenChucVu
+                                                <button class="btn btn-sm ml-2" onclick="deleteEmployee('@nv.MaNhanVien')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </small><br />
-
                                         }
-
-                                    }
-                                    else
-                                    {
-                                        <small>@item.SDT</small><br />
                                     }
 
                                     <small>Trạng thái: @item.TrangThai</small>
@@ -243,4 +228,76 @@
         }
         return "text-muted";
     }
+
 }
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const maNhanVienSelect = $('#maNhanVien');
+
+        // Hàm để lấy danh sách nhân viên phù hợp với mã nhật ký
+        function loadNhanVien(maNhatKy) {
+            maNhanVienSelect.empty();
+            maNhanVienSelect.append('<option>Đang tải...</option>');
+
+            // Gọi AJAX để lấy danh sách nhân viên
+            $.getJSON('/PhanCong/LayNhanVienPhuHopNhatKy', { maNhatKy: maNhatKy }, function (data) {
+                debugger;
+                maNhanVienSelect.empty();
+                if (data && data.length > 0) {
+                    maNhanVienSelect.append('<option value="">-- Chọn nhân viên --</option>');
+                    data.forEach(employee => {
+                        maNhanVienSelect.append(`<option value="${employee.MaNhanVien}">${employee.TenNhanVien} - ${employee.ChucVu}</option>`);
+                    });
+                } else {
+                    maNhanVienSelect.append('<option value="">Không có nhân viên phù hợp</option>');
+                }
+            }).fail(function () {
+                maNhanVienSelect.empty();
+                maNhanVienSelect.append('<option value="">Lỗi khi tải nhân viên</option>');
+            });
+        }
+
+        // Khi mã nhật ký thay đổi
+        $('#maNhatKy').change(function () {
+            debugger;
+            const maNhatKy = $(this).val();
+            if (maNhatKy) {
+                loadNhanVien(maNhatKy);  // Gọi lại hàm tải nhân viên mới
+            } else {
+                maNhanVienSelect.empty();
+                maNhanVienSelect.append('<option value="">-- Vui lòng chọn nhật ký --</option>');
+            }
+        });
+
+        // Tải danh sách nhân viên mặc định khi trang load nếu có mã nhật ký hiện tại
+        const maNhatKyHienTai = $('#maNhatKy').val();
+        if (maNhatKyHienTai) {
+            loadNhanVien(maNhatKyHienTai);
+        }
+    });
+
+    function deleteEmployee(maNhanVien) {
+        if (confirm('Bạn có chắc chắn muốn xóa nhân viên này không?')) {
+            $.ajax({
+                url: '/PhanCong/XoaNhanVien', 
+                type: 'POST',
+                data: { maNhanVien: maNhanVien },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Xóa nhân viên thành công');
+                        location.reload();
+                    } else {
+                        alert('Lỗi: ' + response.errorMessage);
+                    }
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi khi xóa nhân viên');
+                }
+            });
+        }
+    }
+
+</script>

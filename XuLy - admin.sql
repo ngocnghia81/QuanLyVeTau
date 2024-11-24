@@ -745,10 +745,130 @@ FROM NhanVien nv
 JOIN TaiKhoanNhanVien tk ON nv.Email = tk.Email
 WHERE tk.DaXoa = 0;
 
+DROP PROCEDURE LayNhanVienChuaPhanCong
+CREATE PROCEDURE LayNhanVienChuaPhanCong
+    @MaNhatKyChon VARCHAR(11)
+AS
+BEGIN
+    -- Biến tạm
+    DECLARE @NgayGio DATETIME;
+    DECLARE @MaLT VARCHAR(20);
+    DECLARE @ThoiGianDen DATETIME;
+    DECLARE @Ma_ga_dau VARCHAR(20);
+    DECLARE @Ma_ga_cuoi VARCHAR(20);
 
-CREATE VIEW Vw_NhatKyTauChuaHoanThanh AS
-SELECT MaNhatKy, MaLichTrinh, NgayGio, TrangThai
-FROM NhatKyTau
-WHERE TrangThai = 'Chưa hoàn thành';
+    -- Lấy thông tin từ bảng NhatKyTau
+    SELECT @NgayGio = NgayGio, @MaLT = MaLichTrinh
+    FROM NhatKyTau 
+    WHERE MaNhatKy = @MaNhatKyChon;
+
+    -- Lấy ga đầu tiên trong lịch trình
+    SELECT TOP 1 @Ma_ga_dau = MaGa 
+    FROM ChiTietLichTrinh 
+    WHERE MaLichTrinh = @MaLT 
+    ORDER BY Stt_Ga;
+
+    -- Lấy ga cuối cùng trong lịch trình
+    SELECT TOP 1 @Ma_ga_cuoi = MaGa 
+    FROM ChiTietLichTrinh 
+    WHERE MaLichTrinh = @MaLT 
+    ORDER BY Stt_Ga DESC;
+
+    -- Tính thời gian kết thúc của nhật ký được chọn
+    SELECT @ThoiGianDen = dbo.TinhTongThoiGianDiChuyen(
+        @MaNhatKyChon,
+        @NgayGio,
+        @Ma_ga_dau,
+        @Ma_ga_cuoi
+    );
+
+    -- Debug: In giá trị kiểm tra
+    PRINT 'NgayGio: ' + CAST(@NgayGio AS NVARCHAR(50));
+    PRINT 'ThoiGianDen: ' + CAST(@ThoiGianDen AS NVARCHAR(50));
+
+    -- Lấy danh sách nhân viên chưa bị phân công trùng thời gian và nghỉ đủ 1 ngày
+    SELECT *
+    FROM NhanVien NV
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM PhanCong PC
+        JOIN NhatKyTau NK ON PC.MaNhatKy = NK.MaNhatKy
+        WHERE 
+            PC.MaNhanVien = NV.MaNhanVien
+            AND (
+                -- Trường hợp thời gian bị trùng với nhật ký khác
+                (
+                    @NgayGio BETWEEN NK.NgayGio AND 
+                    DATEADD(DAY, 1, dbo.TinhTongThoiGianDiChuyen(NK.MaNhatKy, NK.NgayGio, @Ma_ga_dau, @Ma_ga_cuoi))
+                    AND NK.TrangThai = N'Chưa hoàn thành'
+                )
+                OR
+                (
+                    @ThoiGianDen BETWEEN NK.NgayGio AND 
+                    DATEADD(DAY, 1, dbo.TinhTongThoiGianDiChuyen(NK.MaNhatKy, NK.NgayGio, @Ma_ga_dau, @Ma_ga_cuoi))
+                    AND NK.TrangThai = N'Chưa hoàn thành'
+                )
+            )
+    );
+END;
+
+
+CREATE TRIGGER trg_InsertPhanCong
+ON PhanCong
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @MaxStt INT, @NewMaPhanCong VARCHAR(15);
+
+    SELECT @MaxStt = ISNULL(MAX(CAST(SUBSTRING(MaPhanCong, 3, LEN(MaPhanCong) - 2) AS INT)), 0)
+    FROM PhanCong;
+
+    INSERT INTO PhanCong (MaPhanCong, MaNhanVien, MaNhatKy)
+    SELECT 
+        'PC' + CAST(@MaxStt + ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS VARCHAR),
+        MaNhanVien,
+        MaNhatKy
+    FROM INSERTED;
+END;
+
+DROP TRIGGER trg_KiemTraTruocKhiXoaPhanCong
+CREATE TRIGGER trg_KiemTraTruocKhiXoaPhanCong
+ON PhanCong
+INSTEAD OF DELETE
+AS
+BEGIN
+    DECLARE @MaNhatKy VARCHAR(11);
+    DECLARE @TrangThai VARCHAR(50);
+    DECLARE @NgayGio DATETIME;
+    DECLARE @CurrentTime DATETIME;
+
+    SELECT @MaNhatKy = MaNhatKy FROM deleted;
+
+    SELECT @TrangThai = TrangThai, @NgayGio = NgayGio
+    FROM NhatKyTau
+    WHERE MaNhatKy = @MaNhatKy;
+
+    SET @CurrentTime = GETDATE();
+
+    IF @TrangThai IN ('Hoàn thành', 'Huỷ')
+    BEGIN
+        RAISERROR('Không thể xóa phân công vì nhật ký đã hoàn thành hoặc bị huỷ.',16,2);
+    END
+    ELSE
+    BEGIN
+        IF DATEDIFF(MINUTE, @CurrentTime, @NgayGio) <= 10
+        BEGIN
+            RAISERROR('Không thể xóa phân công vì chỉ còn 10 phút hoặc ít hơn để khởi hành.',16,1);
+        END
+        ELSE
+        BEGIN
+            DELETE FROM PhanCong WHERE MaNhatKy = @MaNhatKy;
+        END
+    END
+END;
+
+
 ------------end PhanCong------------------------
 

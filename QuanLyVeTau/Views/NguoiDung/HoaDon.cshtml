@@ -1,0 +1,280 @@
+﻿@{
+    ViewBag.Title = "HoaDon";
+    Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+}
+
+@{
+    var hoaDon = ViewBag.HoaDon;
+    List<QuanLyVeTau.Models.Ve> danhSachVe = ViewBag.DanhSachVe;
+}
+<link rel="stylesheet" href="https://atugatran.github.io/FontAwesome6Pro/css/all.min.css">
+<style>
+    /* Phông chữ toàn trang */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    /* Container chính */
+    .hoa-don-container {
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 1200px;
+    }
+
+    /* Tiêu đề */
+    .hoa-don-container h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #4CAF50;
+        text-align: center;
+    }
+
+    .hoa-don-container h2 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        color: #007bff;
+        text-align: center;
+    }
+
+    /* Bảng dữ liệu */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+    }
+
+    .table th {
+        background: linear-gradient(90deg, #4caf50, #66bb6a);
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .table tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    .table tr:hover {
+        background-color: #f1f1f1;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Thông báo khi không có dữ liệu */
+    .hoa-don-container p {
+        text-align: center;
+        font-size: 16px;
+        color: #666;
+        margin: 20px 0;
+    }
+
+    /* Hiển thị tiền tệ */
+    .table td:last-child {
+        font-weight: bold;
+        color: #4caf50;
+    }
+
+    /* Kích thước thân thiện với màn hình nhỏ */
+    @@media (max-width: 768px) {
+        .hoa-don-container {
+            padding: 15px;
+        }
+
+        .table {
+            font-size: 14px;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+        }
+
+        .hoa-don-container h1 {
+            font-size: 20px;
+        }
+
+        .hoa-don-container h2 {
+            font-size: 18px;
+        }
+    }
+    .btn-delete {
+        background-color: #ff4d4f;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 4px;
+
+    }
+    
+
+        .btn-delete:hover {
+            background-color: #e63946;
+        }
+    .Trave td{
+        background-color: #EF99b6 !important; /* Màu xanh nhạt */
+        color: #155724; /* Màu chữ xanh đậm */
+        font-weight: bold;
+    }
+    .Trave .btn-delete {
+        cursor: not-allowed;
+    }
+    tr.success .btn-delete {
+        cursor: not-allowed;
+        background-color:lightgray;
+        color:green;
+    }
+</style>
+
+
+<div class="hoa-don-container">
+    <h1>Thông Tin Hóa Đơn</h1>
+    @if (hoaDon != null)
+    {
+        <table class="table">
+            <tr>
+                <th>Mã Hóa Đơn</th>
+                <th>Khách Hàng</th>
+                <th>Tổng Tiền</th>
+                <th>Khuyến Mãi</th>
+                <th>Thành Tiền</th>
+                <th>Thời Gian Lập</th>
+            </tr>
+            <tr>
+                <td>@hoaDon.MaHoaDon</td>
+                <td>@ViewBag.TenKhachHang</td>
+                <td>@ViewBag.TongTien.ToString("N0") VND</td>
+                <td>@ViewBag.TienKhuyenMai.ToString("N0") VND</td>
+                <td>@hoaDon.ThanhTien.ToString("N0") VND</td>
+                <td>@hoaDon.ThoiGianLapHoaDon</td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <p>Không tìm thấy thông tin hóa đơn.</p>
+    }
+
+    <h2>Danh Sách Vé</h2>
+    @if (danhSachVe != null && danhSachVe.Count > 0)
+    {
+        <table class="table">
+            <tr>
+                <th>Mã Vé</th>
+                <th>Giá Vé</th>
+                <th>Chuyến</th>
+                <th>Thời gian</th>
+                <th>Tàu</th>
+                <th>Vị Trí</th>
+                <th>Hành Động</th>
+            </tr>
+            @for (int i = 0; i < danhSachVe.Count; i++)
+            {
+              <tr data-isDone="@ViewBag.isDone[i]" class="ve @((danhSachVe[i].DaThuHoi ? "Trave" : ""))">
+
+                  <td>@danhSachVe[i].MaVe</td>
+                  <td>@danhSachVe[i].GiaVe.ToString("N0") VND</td>
+                  <td>@ViewBag.dsDi[i] - @ViewBag.dsDen[i]</td>
+                  <td>@ViewBag.dsThoiGian[i]</td>
+                  <td>@ViewBag.dsTau[i]</td>
+                  <td>@ViewBag.dsGhe[i]</td>
+                  <td>
+                      <button type="button" class="btn-delete" onclick="TraVe(this,'@danhSachVe[i].MaVe')">
+                          @if (danhSachVe[i].DaThuHoi)
+                          {
+                              @:X
+                          }
+                          else if (ViewBag.isDone[i])
+                          {
+                              <i class="fa-solid fa-check"></i>
+                          }
+                          else
+                          {
+                              <i class="fa-duotone fa-solid fa-rotate-left"></i>
+                          }
+                      </button>
+
+
+                  </td>
+
+              </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p>Không tìm thấy vé liên quan.</p>
+    }
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const Ves = document.querySelectorAll('.ve');
+        Ves.forEach(ve => {
+            if (ve.getAttribute("data-isDone")) {
+                if (ve.classList.contains('Trave')) 
+                    return;
+                ve.classList.add("success");
+            }
+        });
+
+    });
+    function TraVe(row, maVe) {
+        row = row.closest('tr');
+        if (row.classList.contains('Trave')) {
+            alert("Vé đã trả")
+            return;
+        }
+        else if (row.classList.contains('success')){
+            alert("Vé đã được sử dụng");
+            return;
+        }
+        
+        
+        // Hiển thị hộp thoại xác nhận trước khi thực hiện
+        if (confirm("Bạn có chắc chắn muốn trả vé này không?")) {
+            // Gửi yêu cầu AJAX tới controller
+            fetch(`/NguoiDung/TraVe`, {
+                method: 'POST', // Phương thức gửi (POST để bảo mật hơn GET)
+                headers: {
+                    'Content-Type': 'application/json' // Dữ liệu gửi là JSON
+                },
+                body: JSON.stringify({mave:maVe}) // Gửi mã vé
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Trả vé thành công");
+                        // Tải lại trang hoặc cập nhật giao diện nếu cần
+                        location.reload();
+                    } else {
+                        alert("Trả vé thất bại. Vui lòng thử lại.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi khi trả vé:', error);
+                    alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                });
+        }
+    }
+</script>

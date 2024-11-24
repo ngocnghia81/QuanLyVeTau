@@ -13,7 +13,7 @@ function getAllUserData() {
     let userData = JSON.parse(localStorage.getItem("userData")) ?? [];
     return userData;
 }
-}
+
 
 function createPData() {
     let passengerList = JSON.parse(localStorage.getItem("passengerList")) ?? [];
@@ -106,7 +106,7 @@ plog.addEventListener("submit", (ev) => {
     let user = ev.target.pUsername;
     let pass = ev.target.pPassword;
     let userData = JSON.parse(localStorage.getItem("userData")) ?? null;
-
+    console.log("222");
     if (userData == null) {
         alert("First you create account");
     } else {

@@ -1,18 +1,11 @@
-<<<<<<< HEAD
 ﻿using PagedList;
 using QuanLyVeTau.Models;
-=======
-﻿using QuanLyVeTau.Models;
->>>>>>> ThemVe
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-<<<<<<< HEAD
-=======
 using System.Diagnostics;
->>>>>>> ThemVe
 using System.Linq;
 using System.Web.Mvc;
 
@@ -201,7 +194,6 @@ namespace QuanLyVeTau.Controllers
             return PartialView("HienThiKhoang", dt);
         }
 
-<<<<<<< HEAD
 
         //Admin
         public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
@@ -374,7 +366,6 @@ namespace QuanLyVeTau.Controllers
             return thoiGianDiChuyen;
         }
 
-=======
         [HttpPost]
         public ActionResult TaoVe([System.Web.Http.FromBody] DataSender data)
         {
@@ -421,9 +412,6 @@ namespace QuanLyVeTau.Controllers
 
             return Json(new { success = true, message = "Dữ liệu đã được lưu thành công.", urlHoaDon = Url.Action("HoaDon","NguoiDung",new { mahoadon = maHoaDon}) });
         }
-
-        
->>>>>>> ThemVe
 
 
     }

@@ -20,7 +20,6 @@ namespace QuanLyVeTau.Controllers
             
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
-        // GET: Ve
         public ActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)

@@ -152,7 +152,9 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
+    <Compile Include="Models\BaoCaoHoaDonModel.cs" />
     <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
+    <Compile Include="Models\DoanhThuNgay.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\LichTrinhViewModel.cs" />
     <Compile Include="Models\NhanVienViewModel.cs" />
@@ -165,6 +167,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ThongTinVe.cs" />
     <Compile Include="Models\VeChiTietViewModel.cs" />
     <Compile Include="Models\VeRepository.cs" />
     <Compile Include="Models\XemToaViewModel.cs" />
@@ -336,9 +339,11 @@
     <Content Include="Views\NguoiDung\HoaDon.cshtml" />
     <Content Include="Views\NguoiDung\Lichsu.cshtml" />
     <Content Include="Views\PhanCong\XemLichPhanCong.cshtml" />
+    <Content Include="Views\PhanHoi\DanhSachPhanHoi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BaoCao\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

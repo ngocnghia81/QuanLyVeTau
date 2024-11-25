@@ -129,7 +129,7 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult XemPhanHoi(string id = null)
         {
-            List<PhanHoi> phanHois = db.PhanHois.Where(p => p.MaKhach == id).ToList();
+            List<PhanHoi> phanHois = db.PhanHois.Where(p => p.HoaDon.MaKhach == id).ToList();
             return View(phanHois);
         }
     }

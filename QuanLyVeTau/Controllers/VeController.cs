@@ -412,6 +412,26 @@ namespace QuanLyVeTau.Controllers
             return Json(new { success = true, message = "Dữ liệu đã được lưu thành công.", urlHoaDon = Url.Action("HoaDon","NguoiDung",new { mahoadon = maHoaDon}) });
         }
 
+        [HttpPost]
+        public JsonResult ThemHanhLy(string maVe, float khoiLuong)
+        {
+            try
+            {
+                var hanhLy = new HanhLy
+                {
+                    MaVe = maVe,
+                    KhoiLuong = khoiLuong
+                };
+
+                db.HanhLies.InsertOnSubmit(hanhLy);  
+                db.SubmitChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
 
     }
 }

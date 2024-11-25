@@ -1,4 +1,73 @@
-﻿
+﻿----Dashboard---------------------
+CREATE VIEW Vw_TongNguoiDung AS
+SELECT COUNT(*) AS TongNguoiDung
+FROM TaiKhoan;
+GO;
+CREATE VIEW Vw_TongVeDaBan AS
+SELECT COUNT(*) AS TongVeDaBan
+FROM Ve v
+WHERE v.DaThuHoi = 0 
+AND NOT EXISTS (
+    SELECT 1 FROM LichSuDoiTraVe ls WHERE ls.MaVe = v.MaVe AND ls.HanhDong = 'Trả'
+);
+GO;
+CREATE VIEW Vw_TongDoanhThu AS
+SELECT 
+    (SELECT SUM(ThanhTien) FROM HoaDon) + 
+    ISNULL((SELECT SUM(LePhi) FROM LichSuDoiTraVe),0) AS TongDoanhThu
+GO;
+CREATE VIEW Vw_TongPhanHoi AS
+SELECT COUNT(*) AS TongPhanHoi
+FROM PhanHoi;
+GO;
+CREATE VIEW Vw_DoanhThuTheoThang AS
+SELECT 
+    YEAR(ThoiGianLapHoaDon) AS Nam, 
+    MONTH(ThoiGianLapHoaDon) AS Thang,
+    SUM(ThanhTien) AS TongDoanhThu
+FROM HoaDon
+GROUP BY YEAR(ThoiGianLapHoaDon), MONTH(ThoiGianLapHoaDon)
+ORDER BY Nam, Thang;
+GO;
+CREATE VIEW Vw_SoKhachHang AS
+SELECT COUNT(*) AS SoKhachHang
+FROM KhachHang;
+GO;
+CREATE VIEW Vw_SoKhuyenMai AS
+SELECT COUNT(*) AS SoKhuyenMai
+FROM KhuyenMai;
+GO;
+CREATE VIEW Vw_SoVeTheoThang AS
+SELECT 
+    YEAR(hd.ThoiGianLapHoaDon) AS Nam,
+    MONTH(hd.ThoiGianLapHoaDon) AS Thang,
+    COUNT(v.MaVe) AS SoVeBan
+FROM Ve v
+JOIN HoaDon hd ON v.MaHoaDon = hd.MaHoaDon
+WHERE v.DaThuHoi = 0
+AND NOT EXISTS (
+    SELECT 1 FROM LichSuDoiTraVe ls WHERE ls.MaVe = v.MaVe AND ls.HanhDong = 'Trả'
+)
+GROUP BY YEAR(hd.ThoiGianLapHoaDon), MONTH(hd.ThoiGianLapHoaDon);
+GO;
+
+DROP VIEW Vw_DoanhThuThucNhan
+CREATE VIEW Vw_DoanhThuThucNhan AS
+SELECT 
+    (SELECT SUM(ThanhTien) 
+     FROM HoaDon hd 
+     WHERE EXISTS (
+         SELECT 1 FROM Ve v
+         WHERE v.MaHoaDon = hd.MaHoaDon 
+         AND v.MaNhatKy IN (SELECT MaNhatKy 
+                             FROM NhatKyTau nk
+                             WHERE nk.TrangThai = 'Hoàn thành')
+     )
+    ) + 
+    ISNULL((SELECT SUM(LePhi) FROM LichSuDoiTraVe),0) AS DoanhThuThucNhan;
+GO;
+
+----end Dashboard---------------------
 -------------Tau------------------------
 DROP TRIGGER trg_ThemTau
 
@@ -872,3 +941,135 @@ END;
 
 ------------end PhanCong------------------------
 
+------------Baocao------------------------
+
+DROP VIEW Vw_DoanhThuTheoNgay
+CREATE VIEW Vw_DoanhThuTheoNgay AS
+SELECT 
+    CONVERT(DATE, ThoiGianLapHoaDon) AS Ngay,
+    SUM(ThanhTien) AS DoanhThu
+FROM HoaDon
+GROUP BY CONVERT(DATE, ThoiGianLapHoaDon);
+
+
+DROP FUNCTION dbo.HoaDonTheoNgay
+CREATE FUNCTION dbo.HoaDonTheoNgay (@Ngay DATE)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        h.MaHoaDon,
+        k.TenKhach,
+		k.MaKhach,
+        h.ThanhTien,
+        h.ThoiGianLapHoaDon
+    FROM HoaDon h
+    JOIN KhachHang k ON h.MaKhach = k.MaKhach
+    WHERE CAST(h.ThoiGianLapHoaDon AS DATE) = @Ngay
+)
+
+
+CREATE VIEW vw_ThongTinVeDaBan AS
+SELECT 
+    Ve.MaVe,
+    Ve.MaNhatKy,
+    Tau.TenTau,
+    LichTrinhTau.TenLichTrinh,
+    Ve.GiaVe,
+    ChiTietLichTrinh_DiemDi.MaGa AS DiemDi,
+    ChiTietLichTrinh_DiemDen.MaGa AS DiemDen,
+    Ve.DaThuHoi
+FROM Ve
+JOIN NhatKyTau ON Ve.MaNhatKy = NhatKyTau.MaNhatKy
+JOIN Tau ON NhatKyTau.MaTau = Tau.MaTau
+JOIN ChiTietLichTrinh AS ChiTietLichTrinh_DiemDi ON Ve.DiemDi = ChiTietLichTrinh_DiemDi.MaChiTiet
+JOIN ChiTietLichTrinh AS ChiTietLichTrinh_DiemDen ON Ve.DiemDen = ChiTietLichTrinh_DiemDen.MaChiTiet
+JOIN LichTrinhTau ON NhatKyTau.MaLichTrinh = LichTrinhTau.MaLichTrinh;
+
+CREATE PROCEDURE sp_DoanhThuTheoTau
+AS
+BEGIN
+    SELECT 
+        T.TenTau, 
+        COUNT(V.MaVe) AS SoLuongVeBan,
+        SUM(V.GiaVe) AS DoanhThu
+    FROM Ve V
+    JOIN NhatKyTau NK ON V.MaNhatKy = NK.MaNhatKy
+    JOIN Tau T ON NK.MaTau = T.MaTau
+    GROUP BY T.TenTau;
+END;
+
+
+
+------------end Baocao------------------------
+
+----------------- PhanHoi-------------------------
+
+
+CREATE TRIGGER trg_TuDongSetTrangThaiSauKhiThem
+ON PhanHoi
+AFTER INSERT
+AS
+BEGIN
+    UPDATE PhanHoi
+    SET TrangThai = N'Đã xử lý'
+    FROM PhanHoi ph
+    INNER JOIN inserted i ON ph.MaPhanHoi = i.MaPhanHoi
+    WHERE i.SoSao = 5;
+END;
+
+
+
+----------------- end PhanHoi-------------------------
+
+----------------- HanhLy-------------------------
+DROP TRIGGER trg_Them_HanhLy
+CREATE TRIGGER trg_Them_HanhLy
+ON HanhLy
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @max_stt BIGINT;
+    DECLARE @MaVe VARCHAR(20);
+
+    -- Lấy mã vé từ bảng inserted
+    SELECT @MaVe = MaVe FROM inserted;
+
+    -- Kiểm tra trạng thái vé
+    IF EXISTS(
+        SELECT 1 
+        FROM NhatKyTau nk 
+        JOIN Ve v ON v.MaNhatKy = nk.MaNhatKy
+        WHERE nk.TrangThai IN (N'Đã hoàn thành', N'Huỷ', N'Hủy') 
+          AND v.MaVe = @MaVe
+    )
+    BEGIN
+        RAISERROR(N'Không thể thêm hành lý vào vé đã sử dụng hoặc nhật ký đã huỷ', 16, 1);
+        RETURN;
+    END;
+
+    -- Lấy giá trị lớn nhất của số thứ tự trong các mã hợp lệ
+    SELECT @max_stt = MAX(CAST(SUBSTRING(MaHanhLy, 3, LEN(MaHanhLy) - 2) AS BIGINT))
+    FROM HanhLy
+    WHERE MaHanhLy LIKE 'HL[0-9]%';
+
+    -- Đặt giá trị mặc định nếu không tìm thấy
+    IF @max_stt IS NULL
+        SET @max_stt = 0;
+
+    -- Thêm dữ liệu mới vào bảng
+    INSERT INTO HanhLy (MaHanhLy, MaVe, KhoiLuong)
+    SELECT 
+        'HL' + RIGHT('0000000000' + CAST(@max_stt + 1 AS VARCHAR(10)), 10),
+        MaVe,
+        KhoiLuong
+    FROM inserted;
+END;
+
+----------------- end HanhLy-------------------------
+SELECT * FROM NhatKyTau
+
+SELECT * FROM Ve WHERE MaNhatKy = 'TA10111241'
+SELECT * FROM HanhLy
+DELETE FROM HanhLy WHERE MaHanhLy = 'HL0000411244'

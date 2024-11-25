@@ -61,6 +61,7 @@
                 <th>Giá vé</th>
                 <th>Trạng thái thu hồi</th>
                 <th>Thao tác</th>
+                <th>Hành lý</th>
             </tr>
         </thead>
         <tbody>
@@ -72,10 +73,29 @@
                     <td>@ve.Khoang.Toa.Tau.MaTau</td>
                     <td>@ve.ChiTietLichTrinh.MaGa</td>
                     <td>@ve.ChiTietLichTrinh1.Ga.MaGa</td>
+
                     <td>@String.Format("{0:N0} VND", ve.GiaVe)</td>
                     <td>@(ve.DaThuHoi ? "Đã thu hồi" : "Chưa thu hồi")</td>
                     <td>
-                        <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })" class="btn btn-info btn-sm">Chi tiết</a>
+                        <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> <!-- Biểu tượng mắt (eye) -->
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addHanhLyModal" data-ma-ve="@ve.MaVe">
+                            <i class="fas fa-suitcase"></i>
+                        </a>
+                    </td>
+                    <td>
+                        @{
+                            var hanhLy = ve.HanhLies.FirstOrDefault(h => h.MaVe == ve.MaVe);
+                            if (hanhLy != null)
+                            {
+                                @(ve.HanhLies.FirstOrDefault(h => h.MaVe == ve.MaVe).KhoiLuong + "Kg | " + (hanhLy.MaHanhLy))                          }
+                            else
+                            {
+                                @("0Kg")
+                            }
+                        }
                     </td>
                 </tr>
             }
@@ -159,3 +179,104 @@
         }
     </ul>
 </div>
+
+
+<!-- Modal thêm hành lý -->
+<div class="modal fade" id="addHanhLyModal" tabindex="-1" role="dialog" aria-labelledby="addHanhLyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addHanhLyModalLabel">Thêm hành lý vào vé</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addHanhLyForm">
+                    <div class="form-group">
+                        <label for="maVe">Mã vé</label>
+                        <input type="text" class="form-control" id="maVe" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="khoiLuong">Khối lượng (kg)</label>
+                        <input type="number" class="form-control" id="khoiLuong" min="0.1" max="10" step="0.1" required />
+                    </div>
+                    <button type="submit" class="mt-2 btn btn-primary">Thêm hành lý</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Thêm thư viện Bootstrap và jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function updateTrangThai(maPhanHoi) {
+        var trangThai = $("#trangThai_" + maPhanHoi).val();
+        $.ajax({
+            url: '@Url.Action("CapNhatTrangThai", "PhanHoi")',
+            type: 'POST',
+            data: { id: maPhanHoi, trangThai: trangThai },
+            success: function (response) {
+                if (response.success) {
+                    // Nếu cập nhật thành công, thay đổi trạng thái trong giao diện
+                    $("#trangThai_" + maPhanHoi).val(response.newTrangThai);
+                } else {
+                    // Nếu có lỗi, hiển thị thông báo cho người dùng
+                    alert(response.message);
+                    // Reset dropdown về trạng thái cũ nếu có lỗi
+                    location.reload();
+                }
+            },
+            error: function () {
+                alert("Lỗi khi cập nhật trạng thái.");
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Khi nhấn vào icon hành lý
+        $('a[data-toggle="modal"]').click(function () {
+            var maVe = $(this).data('ma-ve');
+            $('#maVe').val(maVe);  // Gán giá trị MaVe vào trường input trong modal
+        });
+
+        // Xử lý form thêm hành lý
+        $('#addHanhLyForm').submit(function (e) {
+            e.preventDefault();  // Ngừng việc submit form
+
+            var maVe = $('#maVe').val();
+            var khoiLuong = $('#khoiLuong').val();
+
+            if (khoiLuong < 0.1 || khoiLuong > 10) {
+                alert('Khối lượng hành lý phải nằm trong khoảng từ 0.1kg đến 10kg.');
+                return;
+            }
+
+            // Gửi dữ liệu qua AJAX
+            $.ajax({
+                url: '@Url.Action("ThemHanhLy", "Ve")',  // Đảm bảo URL hành động đúng
+                type: 'POST',
+                data: { maVe: maVe, khoiLuong: khoiLuong },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Thêm hành lý thành công!');
+                        $('#addHanhLyModal').modal('hide');  // Đóng modal sau khi thêm thành công
+                        location.reload();  // Tải lại trang để cập nhật thông tin
+                    } else {
+                        alert('Có lỗi xảy ra: ' + response.message);
+                    }
+                },
+                error: function (response) {
+                    alert('Lỗi khi gửi dữ liệu: ' + response.message);
+                }
+            });
+        });
+    });
+
+</script>

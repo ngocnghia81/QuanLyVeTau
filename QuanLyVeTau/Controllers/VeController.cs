@@ -1,18 +1,13 @@
-<<<<<<< HEAD
-﻿using PagedList;
+
+//﻿using PagedList;
 using QuanLyVeTau.Models;
-=======
 ﻿using QuanLyVeTau.Models;
->>>>>>> ThemVe
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-<<<<<<< HEAD
-=======
 using System.Diagnostics;
->>>>>>> ThemVe
 using System.Linq;
 using System.Web.Mvc;
 
@@ -201,56 +196,54 @@ namespace QuanLyVeTau.Controllers
             return PartialView("HienThiKhoang", dt);
         }
 
-<<<<<<< HEAD
-
         //Admin
-        public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
-        {
-            var ves = db.Ves.AsQueryable();
+        //public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
+        //{
+        //    var ves = db.Ves.AsQueryable();
 
-            if (daThuHoi.HasValue)
-            {
-                ves = ves.Where(v => v.DaThuHoi == daThuHoi);
-            }
+        //    if (daThuHoi.HasValue)
+        //    {
+        //        ves = ves.Where(v => v.DaThuHoi == daThuHoi);
+        //    }
 
-            if (!string.IsNullOrEmpty(maTau))
-            {
-                ves = ves.Where(v => v.Khoang.Toa.Tau.MaTau.ToLower().Contains(maTau));
-            }
+        //    if (!string.IsNullOrEmpty(maTau))
+        //    {
+        //        ves = ves.Where(v => v.Khoang.Toa.Tau.MaTau.ToLower().Contains(maTau));
+        //    }
 
-            if (!string.IsNullOrEmpty(maKhach))
-            {
-                ves = ves.Where(v => v.HoaDon.MaKhach.ToLower().Contains(maKhach.ToLower()));
-            }
+        //    if (!string.IsNullOrEmpty(maKhach))
+        //    {
+        //        ves = ves.Where(v => v.HoaDon.MaKhach.ToLower().Contains(maKhach.ToLower()));
+        //    }
 
-            // Lọc theo mã vé
-            if (!string.IsNullOrEmpty(maVe))
-            {
-                ves = ves.Where(v => v.MaVe.ToLower().Contains(maVe.ToLower()));
-            }
+        //    // Lọc theo mã vé
+        //    if (!string.IsNullOrEmpty(maVe))
+        //    {
+        //        ves = ves.Where(v => v.MaVe.ToLower().Contains(maVe.ToLower()));
+        //    }
 
-            // Lọc theo điểm đi
-            if (!string.IsNullOrEmpty(diemDi))
-            {
-                ves = ves.Where(v => v.ChiTietLichTrinh.Ga.DiaChi.ToLower().Contains(diemDi.ToLower()));
-            }
+        //    // Lọc theo điểm đi
+        //    if (!string.IsNullOrEmpty(diemDi))
+        //    {
+        //        ves = ves.Where(v => v.ChiTietLichTrinh.Ga.DiaChi.ToLower().Contains(diemDi.ToLower()));
+        //    }
 
-            // Lọc theo điểm đến
-            if (!string.IsNullOrEmpty(diemDen))
-            {
-                ves = ves.Where(v => v.ChiTietLichTrinh1.Ga.DiaChi.ToLower().Contains(diemDen.ToLower()));
-            }
+        //    // Lọc theo điểm đến
+        //    if (!string.IsNullOrEmpty(diemDen))
+        //    {
+        //        ves = ves.Where(v => v.ChiTietLichTrinh1.Ga.DiaChi.ToLower().Contains(diemDen.ToLower()));
+        //    }
 
-            // Tạo ViewBag cho liên kết của menu
-            ViewBag.ActiveLink = "manageTicketsLink";
+        //    // Tạo ViewBag cho liên kết của menu
+        //    ViewBag.ActiveLink = "manageTicketsLink";
 
-            // Phân trang
-            int pageSize = 12;  // Số vé hiển thị trên mỗi trang
-            var result = ves.ToPagedList(page, pageSize);  // Phân trang danh sách vé
+        //    // Phân trang
+        //    int pageSize = 12;  // Số vé hiển thị trên mỗi trang
+        //    var result = ves.ToPagedList(page, pageSize);  // Phân trang danh sách vé
 
-            // Trả về view với danh sách vé đã phân trang
-            return View(result);  // Trả về IPagedList<Ve> cho View
-        }
+        //    // Trả về view với danh sách vé đã phân trang
+        //    return View(result);  // Trả về IPagedList<Ve> cho View
+        //}
 
 
 
@@ -373,8 +366,6 @@ namespace QuanLyVeTau.Controllers
 
             return thoiGianDiChuyen;
         }
-
-=======
         [HttpPost]
         public ActionResult TaoVe([System.Web.Http.FromBody] DataSender data)
         {
@@ -420,10 +411,7 @@ namespace QuanLyVeTau.Controllers
             }
 
             return Json(new { success = true, message = "Dữ liệu đã được lưu thành công.", urlHoaDon = Url.Action("HoaDon","NguoiDung",new { mahoadon = maHoaDon}) });
-        }
-
-        
->>>>>>> ThemVe
+        }       
 
 
     }

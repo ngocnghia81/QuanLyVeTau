@@ -9,5 +9,10 @@ namespace QuanLyVeTau.Controllers
         {
             return View();
         }
+
+        public ActionResult PhanHoi()
+        {
+            return View();
+        }
     }
 }

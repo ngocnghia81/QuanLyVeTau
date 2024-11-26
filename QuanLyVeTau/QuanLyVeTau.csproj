@@ -143,28 +143,41 @@
     <Compile Include="Controllers\KhuyenMaiController.cs" />
     <Compile Include="Controllers\LichTrinhController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />
+    <Compile Include="Controllers\NguoiDungController.cs" />
     <Compile Include="Controllers\NhanVienController.cs" />
+    <Compile Include="Controllers\PhanCongController.cs" />
     <Compile Include="Controllers\PhanHoiController.cs" />
     <Compile Include="Controllers\QuanTriController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
+<<<<<<< HEAD
+=======
+    <Compile Include="Models\BaoCaoHoaDonModel.cs" />
+>>>>>>> c670abc483c145cad0e84c39937f9dbd55c06186
     <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
+    <Compile Include="Models\DoanhThuNgay.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\LichTrinhViewModel.cs" />
     <Compile Include="Models\NhanVienViewModel.cs" />
     <Compile Include="Models\NhatKyViewModel.cs" />
     <Compile Include="Models\DataSender.cs" />
     <Compile Include="Models\GheDaChon.cs" />
+<<<<<<< HEAD
+=======
+    <Compile Include="Models\PhanCongViewModel.cs" />
+>>>>>>> c670abc483c145cad0e84c39937f9dbd55c06186
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ThongTinVe.cs" />
     <Compile Include="Models\VeChiTietViewModel.cs" />
     <Compile Include="Models\VeRepository.cs" />
     <Compile Include="Models\XemToaViewModel.cs" />
+    <Compile Include="Tools\CongCu.cs" />
     <Compile Include="Tools\EmailSender.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -331,9 +344,15 @@
     <Content Include="Views\NguoiDung\Index.cshtml" />
     <Content Include="Views\NguoiDung\HoaDon.cshtml" />
     <Content Include="Views\NguoiDung\Lichsu.cshtml" />
+<<<<<<< HEAD
+=======
+    <Content Include="Views\PhanCong\XemLichPhanCong.cshtml" />
+    <Content Include="Views\PhanHoi\DanhSachPhanHoi.cshtml" />
+>>>>>>> c670abc483c145cad0e84c39937f9dbd55c06186
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BaoCao\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

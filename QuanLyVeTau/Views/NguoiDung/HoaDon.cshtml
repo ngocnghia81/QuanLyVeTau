@@ -88,12 +88,6 @@
         margin: 20px 0;
     }
 
-    /* Hiển thị tiền tệ */
-    .table td:last-child {
-        font-weight: bold;
-        color: #4caf50;
-    }
-
     /* Kích thước thân thiện với màn hình nhỏ */
     @@media (max-width: 768px) {
         .hoa-don-container {
@@ -227,7 +221,12 @@
                             </div>
 
                         }
-                    }
+
+                        else
+                        {
+                            @ViewBag.PhanHoi.NoiDung
+                        }
+                        }
 
                 </td>
             </tr>

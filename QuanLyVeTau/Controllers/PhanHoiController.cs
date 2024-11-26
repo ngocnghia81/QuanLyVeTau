@@ -18,24 +18,25 @@ namespace QuanLyVeTau.Controllers
 
         public PhanHoiController()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString4"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
         [HttpPost]
-        public ActionResult PhanHoi(FormCollection form,string mahoadon)
-        {          
+        public ActionResult PhanHoi(FormCollection form, string mahoadon)
+        {
             string noiDung = form["NoiDung"];
             int soSao = int.Parse(form["SoSao"]);
 
             string sql = string.Format("INSERT INTO PhanHoi (MaHoaDon, NoiDung, NgayPhanHoi, SoSao) " +
                                        "VALUES ('{0}', N'{1}', Getdate(), {2})",
                                        mahoadon, noiDung, soSao);
+            Debug.WriteLine(sql);
             db.ExecuteCommand(sql);
-            return RedirectToAction("HoaDon","NguoiDung", new { mahoadon });
+            return RedirectToAction("HoaDon", "NguoiDung", new { mahoadon });
         }
 
-        public ActionResult DanhSachPhanHoi(string search = "", int? soSao = null, string trangThai = "",int page = 1)
+        public ActionResult DanhSachPhanHoi(string search = "", int? soSao = null, string trangThai = "", int page = 1)
         {
             var phanHois = db.PhanHois.AsQueryable();
 
@@ -66,27 +67,27 @@ namespace QuanLyVeTau.Controllers
             return View(pagedSortedResult);
         }
 
-        [HttpPost]
-        public JsonResult CapNhatTrangThai(string id, string trangThai)
-        {
-            var phanHoi = db.PhanHois.SingleOrDefault(p => p.MaPhanHoi == id);
+       
+        //public JsonResult CapNhatTrangThai(string id, string trangThai)
+        //{
+        //    var phanHoi = db.PhanHois.SingleOrDefault(p => p.MaPhanHoi == id);
 
-            if (phanHoi != null)
-            {
-                if (phanHoi.TrangThai != "Đã xử lý")
-                {
-                    phanHoi.TrangThai = trangThai;
-                    db.SubmitChanges();
-                    return Json(new { success = true, newTrangThai = phanHoi.TrangThai });
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Không thể thay đổi trạng thái khi phản hồi đã xử lý." });
-                }
-            }
+        //    if (phanHoi != null)
+        //    {
+        //        if (phanHoi.TrangThai != "Đã xử lý")
+        //        {
+        //            phanHoi.TrangThai = trangThai;
+        //            db.SubmitChanges();
+        //            return Json(new { success = true, newTrangThai = phanHoi.TrangThai });
+        //        }
+        //        else
+        //        {
+        //            return Json(new { success = false, message = "Không thể thay đổi trạng thái khi phản hồi đã xử lý." });
+        //        }
+        //    }
 
-            return Json(new { success = false, message = "Phản hồi không tồn tại." });
-        }
+        //    return Json(new { success = false, message = "Phản hồi không tồn tại." });
+        //}
 
-    }
+     }
 }

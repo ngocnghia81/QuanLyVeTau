@@ -152,10 +152,14 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
-<<<<<<< HEAD
-=======
+
+
+
     <Compile Include="Models\BaoCaoHoaDonModel.cs" />
->>>>>>> c670abc483c145cad0e84c39937f9dbd55c06186
+
+
+    <Compile Include="Models\BaoCaoHoaDonModel.cs" />
+
     <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
     <Compile Include="Models\DoanhThuNgay.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
@@ -164,10 +168,14 @@
     <Compile Include="Models\NhatKyViewModel.cs" />
     <Compile Include="Models\DataSender.cs" />
     <Compile Include="Models\GheDaChon.cs" />
-<<<<<<< HEAD
-=======
+
+
+
     <Compile Include="Models\PhanCongViewModel.cs" />
->>>>>>> c670abc483c145cad0e84c39937f9dbd55c06186
+
+
+    <Compile Include="Models\PhanCongViewModel.cs" />
+
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -341,14 +349,20 @@
     <Content Include="Views\NhanVien\DanhSachNhanVien.cshtml" />
     <Content Include="Views\Ve\HienThiToa.cshtml" />
     <Content Include="Views\Ve\HienThiKhoang.cshtml" />
-    <Content Include="Views\NguoiDung\Index.cshtml" />
     <Content Include="Views\NguoiDung\HoaDon.cshtml" />
     <Content Include="Views\NguoiDung\Lichsu.cshtml" />
-<<<<<<< HEAD
-=======
+
+
+
     <Content Include="Views\PhanCong\XemLichPhanCong.cshtml" />
     <Content Include="Views\PhanHoi\DanhSachPhanHoi.cshtml" />
->>>>>>> c670abc483c145cad0e84c39937f9dbd55c06186
+
+
+    <Content Include="Views\PhanCong\XemLichPhanCong.cshtml" />
+    <Content Include="Views\PhanHoi\DanhSachPhanHoi.cshtml" />
+    <Content Include="Views\NguoiDung\CapNhatThongTin.cshtml" />
+    <Content Include="Views\NguoiDung\Index.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

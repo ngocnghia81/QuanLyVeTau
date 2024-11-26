@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
@@ -29,6 +30,9 @@ namespace QuanLyVeTau.Controllers
 
             HoaDon hoaDon = db.HoaDons.FirstOrDefault(t => t.MaHoaDon == mahoadon);
             List<Ve> DanhSachVe = db.Ves.Where(t => t.MaHoaDon == mahoadon).ToList();
+            PhanHoi phanHoi = db.PhanHois.FirstOrDefault(t => t.MaHoaDon == mahoadon);
+            
+
             ViewBag.HoaDon = hoaDon;
             ViewBag.DanhSachVe = DanhSachVe;
             double TienKhuyenMai = 0;
@@ -112,6 +116,7 @@ namespace QuanLyVeTau.Controllers
             ViewBag.TenKhachHang = khachHang.TenKhach;
             ViewBag.TongTien = TongTien;
             ViewBag.TienKhuyenMai = TienKhuyenMai;
+            ViewBag.PhanHoi = phanHoi;
             return View();
         }
 
@@ -180,5 +185,54 @@ namespace QuanLyVeTau.Controllers
                 return false;
             }
         }
+    
+        public ActionResult CapNhatThongTin(string email,string message = null)
+        {
+            string sql = string.Format("select * from KhachHang where email = '{0}'", email);
+            KhachHang khachHang = db.KhachHangs.FirstOrDefault(h => h.Email == email);
+            ViewBag.khach = khachHang;
+            ViewBag.ErrorMessage = message;
+            return View(khachHang);
+        }
+        [HttpPost]
+        public ActionResult CapNhat(FormCollection form)
+        {
+            
+            string hoTen = form["HoTen"];
+            DateTime namSinh = DateTime.Parse(form["NamSinh"]);
+            string sdt = form["SDT"];
+            string cccd = form["CCCD"];
+            string diaChi = form["DiaChi"];
+            string email = form["Email"];
+
+            string ErrorMessage = null;
+
+            KhachHang khachHang = db.KhachHangs.First(t => t.Email == email);
+
+            
+            try
+            {
+                khachHang.TenKhach = hoTen;
+                khachHang.NamSinh = namSinh;
+                khachHang.SDT = sdt;
+                khachHang.CCCD = cccd;
+                khachHang.DiaChi = diaChi;
+
+                db.SubmitChanges();
+
+            }
+            catch
+            {
+                if (db.KhachHangs.FirstOrDefault(t=>t.CCCD == cccd && t.Email != email) != null)
+                    ErrorMessage = "CCCD đã được sử dụng";
+                else if (db.KhachHangs.FirstOrDefault(t => t.SDT == sdt && t.Email != email) != null)
+                    ErrorMessage = "SDT đã được sử dụng";
+                ErrorMessage = "Đã xảy ra lỗi khi cập nhật thông tin: " + ErrorMessage;
+ 
+                
+            }
+            return RedirectToAction("CapNhatThongTin", new { email = form["email"],message = ErrorMessage });
+        }
+        
     }
 }

@@ -1,0 +1,303 @@
+﻿@{
+    ViewBag.Title = "Lịch phân công";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+@model IEnumerable<QuanLyVeTau.Models.PhanCongViewModel>
+@{
+    DateTime startOfWeek = (DateTime)ViewBag.StartOfWeek;
+    DateTime endOfWeek = startOfWeek.AddDays(6);
+    var daysOfWeek = Enumerable.Range(0, 7).Select(d => startOfWeek.AddDays(d)).ToList();
+}
+
+<style>
+    td.pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    td.completed {
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: bold;
+    }
+
+    td.cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: bold;
+    }
+
+    .hover-info {
+        position: relative;
+        display: inline-block;
+    }
+
+        .hover-info:hover::after {
+            content: attr(title);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 5px;
+            z-index: 10;
+            white-space: nowrap;
+        }
+</style>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+@using (Html.BeginForm("PhanCong", "PhanCong", FormMethod.Post))
+{
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="card p-4" style="max-width: 500px; width: 100%;">
+            <h4 class="text-center mb-4">Phân Công Nhân Viên</h4>
+
+            <div class="form-group">
+                <label for="maNhatKy">Chọn Nhật Ký:</label>
+                <select id="maNhatKy" name="maNhatKy" class="form-control">
+                    @foreach (var logbook in ViewBag.Logbooks)
+                    {
+                        <option value="@logbook.MaNhatKy">@logbook.MaNhatKy - @logbook.TrangThai</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="maNhanVien">Chọn Nhân Viên:</label>
+                <select id="maNhanVien" name="maNhanVien" class="form-control">
+                    <option value="">-- Vui lòng chọn nhật ký trước --</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Phân Công</button>
+        </div>
+    </div>
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Lịch Phân Công Tuần (@startOfWeek.ToString("dd/MM/yyyy") - @endOfWeek.ToString("dd/MM/yyyy"))</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <form method="get" class="form-inline">
+            <div class="input-group">
+                <input type="date" name="ngayBatDau" class="form-control" value="@startOfWeek.ToString("yyyy-MM-dd")" />
+                <button type="submit" class="btn btn-primary">Xem lịch</button>
+            </div>
+        </form>
+        <button class="btn btn-success" onclick="window.print()">In lịch</button>
+    </div>
+
+    <table class="table table-bordered table-striped text-center">
+        <thead class="table-dark">
+            <tr>
+                <th class="align-middle">Buổi</th>
+                @foreach (var day in daysOfWeek)
+                {
+                    <th class="align-middle">@Html.Raw(day.ToString("dddd<br>dd/MM/yyyy"))</th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            <!-- Hàng sáng -->
+            <tr>
+                <td class="align-middle">Sáng</td>
+                @foreach (var day in daysOfWeek)
+                {
+                    <td class="@GetStatusClass(day, true)">
+                        @if (Model.Any(x => x.NgayGio.Date == day.Date && x.NgayGio.Hour < 12))
+                        {
+                            foreach (var item in Model.Where(x => x.NgayGio.Date == day.Date && x.NgayGio.Hour < 12))
+                            {
+                                string cellClass = GetStatusClass(item);
+                                <div class="@cellClass">
+                                    <strong>Mã nhật ký: @item.MaNhatKy</strong><br />
+                                    <strong>Mã lịch trình: @item.MaLichTrinh</strong><br />
+                                    @if (item.ChuaPhanCong == false)
+                                    {
+                                        foreach (var nv in item.NhanViens)
+                                        {
+                                            int i = 0;
+                                            <div>
+                                                <small class="hover-info" title="Tên: @(nv.TenNhanVien) - SĐT: @(nv.SDT)">
+                                                    @(nv.TenNhanVien.Length > 20 ? nv.TenNhanVien.Substring(0, 10) + "..." : nv.TenNhanVien) - @(nv.SDT) - @nv.ChucVu.TenChucVu
+                                                    <button class="btn btn-sm ml-2" onclick="deleteEmployee('@nv.MaNhanVien')">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </small><br />
+                                            </div>
+                                        }
+                                    }
+
+                                    <small>Trạng thái: @item.TrangThai</small>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-muted">Không có lịch</div>
+                        }
+                    </td>
+                }
+
+            </tr>
+
+            <!-- Hàng chiều -->
+            <tr>
+                <td class="align-middle">Chiều</td>
+                @foreach (var day in daysOfWeek)
+                {
+                    <td class="@GetStatusClass(day, false)">
+                        @if (Model.Any(x => x.NgayGio.Date == day.Date && x.NgayGio.Hour >= 12))
+                        {
+                            foreach (var item in Model.Where(x => x.NgayGio.Date == day.Date && x.NgayGio.Hour >= 12))
+                            {
+
+                                string cellClass = GetStatusClass(item);
+                                <div class="@cellClass">
+                                    <strong>Mã nhật ký: @item.MaNhatKy</strong><br />
+                                    <strong>Mã lịch trình: @item.MaLichTrinh</strong><br />
+                                    @if (item.ChuaPhanCong == false)
+                                    {
+                                        for (int i = 0; i < item.NhanViens.Count(); i++)
+                                        {
+                                            var nv = item.NhanViens[i];  // Lấy nhân viên tại vị trí i
+                                            <small class="hover-info" title="Tên: @(nv.TenNhanVien) - SĐT: @(nv.SDT)">
+                                                @(nv.TenNhanVien.Length > 20 ? nv.TenNhanVien.Substring(0, 10) + "..." : nv.TenNhanVien) - @(nv.SDT) - @nv.ChucVu.TenChucVu
+                                                <button class="btn btn-sm ml-2" onclick="deleteEmployee('@nv.MaNhanVien')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </small><br />
+                                        }
+                                    }
+
+                                    <small>Trạng thái: @item.TrangThai</small>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-muted">Không có lịch</div>
+                        }
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@functions {
+    public string GetStatusClass(dynamic item)
+    {
+        if (item.TrangThai == "Chưa hoàn thành")
+        {
+            return "alert alert-warning p-2"; // Màu vàng
+        }
+        else if (item.TrangThai == "Hoàn thành")
+        {
+            return "alert alert-success p-2"; // Màu xanh lá
+        }
+        else if (item.TrangThai == "Hủy")
+        {
+            return "alert alert-danger p-2"; // Màu đỏ
+        }
+        else
+        {
+            return "alert alert-secondary p-2";
+        }
+    }
+
+    // Hàm lấy trạng thái của lịch trình theo ngày và buổi (sáng/chiều)
+    public string GetStatusClass(DateTime day, bool isMorning)
+    {
+        var item = Model.FirstOrDefault(x => x.NgayGio.Date == day.Date && x.NgayGio.Hour < 12 == isMorning);
+        if (item != null)
+        {
+            return GetStatusClass(item);
+        }
+        return "text-muted";
+    }
+
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const maNhanVienSelect = $('#maNhanVien');
+
+        // Hàm để lấy danh sách nhân viên phù hợp với mã nhật ký
+        function loadNhanVien(maNhatKy) {
+            maNhanVienSelect.empty();
+            maNhanVienSelect.append('<option>Đang tải...</option>');
+
+            // Gọi AJAX để lấy danh sách nhân viên
+            $.getJSON('/PhanCong/LayNhanVienPhuHopNhatKy', { maNhatKy: maNhatKy }, function (data) {
+                debugger;
+                maNhanVienSelect.empty();
+                if (data && data.length > 0) {
+                    maNhanVienSelect.append('<option value="">-- Chọn nhân viên --</option>');
+                    data.forEach(employee => {
+                        maNhanVienSelect.append(`<option value="${employee.MaNhanVien}">${employee.TenNhanVien} - ${employee.ChucVu}</option>`);
+                    });
+                } else {
+                    maNhanVienSelect.append('<option value="">Không có nhân viên phù hợp</option>');
+                }
+            }).fail(function () {
+                maNhanVienSelect.empty();
+                maNhanVienSelect.append('<option value="">Lỗi khi tải nhân viên</option>');
+            });
+        }
+
+        // Khi mã nhật ký thay đổi
+        $('#maNhatKy').change(function () {
+            debugger;
+            const maNhatKy = $(this).val();
+            if (maNhatKy) {
+                loadNhanVien(maNhatKy);  // Gọi lại hàm tải nhân viên mới
+            } else {
+                maNhanVienSelect.empty();
+                maNhanVienSelect.append('<option value="">-- Vui lòng chọn nhật ký --</option>');
+            }
+        });
+
+        // Tải danh sách nhân viên mặc định khi trang load nếu có mã nhật ký hiện tại
+        const maNhatKyHienTai = $('#maNhatKy').val();
+        if (maNhatKyHienTai) {
+            loadNhanVien(maNhatKyHienTai);
+        }
+    });
+
+    function deleteEmployee(maNhanVien) {
+        if (confirm('Bạn có chắc chắn muốn xóa nhân viên này không?')) {
+            $.ajax({
+                url: '/PhanCong/XoaNhanVien', 
+                type: 'POST',
+                data: { maNhanVien: maNhanVien },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Xóa nhân viên thành công');
+                        location.reload();
+                    } else {
+                        alert('Lỗi: ' + response.errorMessage);
+                    }
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi khi xóa nhân viên');
+                }
+            });
+        }
+    }
+
+</script>

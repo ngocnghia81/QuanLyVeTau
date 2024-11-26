@@ -1,7 +1,6 @@
 
-//﻿using PagedList;
 using QuanLyVeTau.Models;
-﻿using QuanLyVeTau.Models;
+﻿using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -22,7 +21,6 @@ namespace QuanLyVeTau.Controllers
             
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
-        // GET: Ve
         public ActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)
@@ -195,7 +193,6 @@ namespace QuanLyVeTau.Controllers
 
             return PartialView("HienThiKhoang", dt);
         }
-
         //Admin
         //public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
         //{
@@ -366,6 +363,7 @@ namespace QuanLyVeTau.Controllers
 
             return thoiGianDiChuyen;
         }
+
         [HttpPost]
         public ActionResult TaoVe([System.Web.Http.FromBody] DataSender data)
         {
@@ -411,8 +409,27 @@ namespace QuanLyVeTau.Controllers
             }
 
             return Json(new { success = true, message = "Dữ liệu đã được lưu thành công.", urlHoaDon = Url.Action("HoaDon","NguoiDung",new { mahoadon = maHoaDon}) });
-        }       
+        }           
+        [HttpPost]
+        public JsonResult ThemHanhLy(string maVe, float khoiLuong)
+        {
+            try
+            {
+                var hanhLy = new HanhLy
+                {
+                    MaVe = maVe,
+                    KhoiLuong = khoiLuong
+                };
 
+                db.HanhLies.InsertOnSubmit(hanhLy);  
+                db.SubmitChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
 
     }
 }

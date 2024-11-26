@@ -1,13 +1,27 @@
-﻿using System.Web.Mvc;
+﻿using QuanLyVeTau.Models;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.Common.CommandTrees.ExpressionBuilder;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
     public class BaoCaoController : Controller
     {
-        // GET: BaoCao
-        public ActionResult Index()
+        private readonly QuanLyVeTauDBDataContext db;
+        private readonly string connectionString;
+
+        public BaoCaoController()
         {
-            return View();
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString4"].ConnectionString;
+            db = new QuanLyVeTauDBDataContext(connectionString);
         }
+
+        
     }
+
 }

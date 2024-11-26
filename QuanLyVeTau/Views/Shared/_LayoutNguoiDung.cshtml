@@ -1,5 +1,5 @@
 ﻿@{ 
-    var homelink = "/";
+    var homelink = "/NguoiDung/Index";
 }
 
 <!DOCTYPE html>
@@ -45,7 +45,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item" id="log">
-                            <a href="#" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-target="#plogModal">
+                            <a href="@Url.Action("CapNhatThongTin","NguoiDung",new {email = User.Identity.Name})" type="button" class="nav-link pLogActive" id="pLogSwitch" data-bs-target="#plogModal">
                                 Tài khoản
                             </a>
                         </li>

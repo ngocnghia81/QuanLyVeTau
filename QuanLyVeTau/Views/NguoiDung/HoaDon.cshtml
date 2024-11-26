@@ -28,23 +28,23 @@
         max-width: 1200px;
     }
 
-    /* Tiêu đề */
-    .hoa-don-container h1 {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #4CAF50;
-        text-align: center;
-    }
+        /* Tiêu đề */
+        .hoa-don-container h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            text-align: center;
+        }
 
-    .hoa-don-container h2 {
-        font-size: 20px;
-        font-weight: bold;
-        margin-top: 40px;
-        margin-bottom: 20px;
-        color: #007bff;
-        text-align: center;
-    }
+        .hoa-don-container h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #007bff;
+            text-align: center;
+        }
 
     /* Bảng dữ liệu */
     .table {
@@ -54,31 +54,31 @@
         font-size: 16px;
     }
 
-    .table th, .table td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: center;
-    }
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
 
-    .table th {
-        background: linear-gradient(90deg, #4caf50, #66bb6a);
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
+        .table th {
+            background: linear-gradient(90deg, #4caf50, #66bb6a);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 
-    .table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
 
-    .table tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
+        .table tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
 
-    .table tr:hover {
-        background-color: #f1f1f1;
-        transition: background-color 0.3s ease;
-    }
+        .table tr:hover {
+            background-color: #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
 
     /* Thông báo khi không có dữ liệu */
     .hoa-don-container p {
@@ -104,9 +104,9 @@
             font-size: 14px;
         }
 
-        .table th, .table td {
-            padding: 8px;
-        }
+            .table th, .table td {
+                padding: 8px;
+            }
 
         .hoa-don-container h1 {
             font-size: 20px;
@@ -116,6 +116,7 @@
             font-size: 18px;
         }
     }
+
     .btn-delete {
         background-color: #ff4d4f;
         color: white;
@@ -124,26 +125,43 @@
         font-size: 14px;
         cursor: pointer;
         border-radius: 4px;
-
     }
-    
+
 
         .btn-delete:hover {
             background-color: #e63946;
         }
-    .Trave td{
+
+    .Trave td {
         background-color: #EF99b6 !important; /* Màu xanh nhạt */
         color: #155724; /* Màu chữ xanh đậm */
         font-weight: bold;
     }
+
     .Trave .btn-delete {
         cursor: not-allowed;
     }
+
     tr.success .btn-delete {
         cursor: not-allowed;
-        background-color:lightgray;
-        color:green;
+        background-color: lightgray;
+        color: green;
     }
+
+    .btn {
+        background-color: #4CAF50; /* Màu nền xanh lá */
+        color: white; /* Màu chữ */
+        border: none; /* Xóa viền */
+        /*padding: 10px 20px;*/ /* Khoảng cách trong nút */
+        font-size: 16px; /* Kích thước chữ */
+        cursor: pointer; /* Con trỏ chuột dạng tay */
+        border-radius: 5px; /* Góc bo tròn */
+        transition: background-color 0.3s ease; /* Hiệu ứng mượt khi hover */
+    }
+
+        .btn:hover {
+            background-color: #45a049; /* Đổi màu khi hover */
+        }
 </style>
 
 
@@ -159,6 +177,7 @@
                 <th>Khuyến Mãi</th>
                 <th>Thành Tiền</th>
                 <th>Thời Gian Lập</th>
+                <th>Đánh giá</th>
             </tr>
             <tr>
                 <td>@hoaDon.MaHoaDon</td>
@@ -167,6 +186,50 @@
                 <td>@ViewBag.TienKhuyenMai.ToString("N0") VND</td>
                 <td>@hoaDon.ThanhTien.ToString("N0") VND</td>
                 <td>@hoaDon.ThoiGianLapHoaDon</td>
+                <td>
+                    @{
+                        if (ViewBag.PhanHoi == null)
+                        {
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                                Đánh Giá
+                            </button>
+                            <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="feedbackModalLabel">Đánh giá của bạn</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Form đánh giá -->
+                                            <form action="@Url.Action("PhanHoi", "PhanHoi", new {mahoadon = hoaDon.MaHoaDon})" method="POST">
+                                                <div class="form-group">
+                                                    <label for="SoSao">Xếp hạng:</label>
+                                                    <select id="SoSao" class="form-control" name="SoSao" required>
+                                                        <option value="1">1 sao</option>
+                                                        <option value="2">2 sao</option>
+                                                        <option value="3">3 sao</option>
+                                                        <option value="4">4 sao</option>
+                                                        <option value="5">5 sao</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="NoiDung">Nhận xét:</label>
+                                                    <textarea id="NoiDung" class="form-control" name="NoiDung" rows="4" required></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    }
+
+                </td>
             </tr>
         </table>
     }
@@ -190,34 +253,34 @@
             </tr>
             @for (int i = 0; i < danhSachVe.Count; i++)
             {
-              <tr data-isDone="@ViewBag.isDone[i]" class="ve @((danhSachVe[i].DaThuHoi ? "Trave" : ""))">
+                <tr data-isDone="@ViewBag.isDone[i]" class="ve @((danhSachVe[i].DaThuHoi ? "Trave" : ""))">
 
-                  <td>@danhSachVe[i].MaVe</td>
-                  <td>@danhSachVe[i].GiaVe.ToString("N0") VND</td>
-                  <td>@ViewBag.dsDi[i] - @ViewBag.dsDen[i]</td>
-                  <td>@ViewBag.dsThoiGian[i]</td>
-                  <td>@ViewBag.dsTau[i]</td>
-                  <td>@ViewBag.dsGhe[i]</td>
-                  <td>
-                      <button type="button" class="btn-delete" onclick="TraVe(this,'@danhSachVe[i].MaVe')">
-                          @if (danhSachVe[i].DaThuHoi)
-                          {
-                              @:X
-                          }
-                          else if (ViewBag.isDone[i])
-                          {
-                              <i class="fa-solid fa-check"></i>
-                          }
-                          else
-                          {
-                              <i class="fa-duotone fa-solid fa-rotate-left"></i>
-                          }
-                      </button>
+                    <td>@danhSachVe[i].MaVe</td>
+                    <td>@danhSachVe[i].GiaVe.ToString("N0") VND</td>
+                    <td>@ViewBag.dsDi[i] - @ViewBag.dsDen[i]</td>
+                    <td>@ViewBag.dsThoiGian[i]</td>
+                    <td>@ViewBag.dsTau[i]</td>
+                    <td>@ViewBag.dsGhe[i]</td>
+                    <td>
+                        <button type="button" class="btn-delete" onclick="TraVe(this,'@danhSachVe[i].MaVe')">
+                            @if (danhSachVe[i].DaThuHoi)
+                            {
+                                @:X
+                            }
+                            else if (ViewBag.isDone[i])
+                            {
+                                <i class="fa-solid fa-check"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-duotone fa-solid fa-rotate-left"></i>
+                            }
+                        </button>
 
 
-                  </td>
+                    </td>
 
-              </tr>
+                </tr>
             }
         </table>
     }
@@ -233,7 +296,7 @@
         const Ves = document.querySelectorAll('.ve');
         Ves.forEach(ve => {
             if (ve.getAttribute("data-isDone")) {
-                if (ve.classList.contains('Trave')) 
+                if (ve.classList.contains('Trave'))
                     return;
                 ve.classList.add("success");
             }
@@ -246,12 +309,12 @@
             alert("Vé đã trả")
             return;
         }
-        else if (row.classList.contains('success')){
+        else if (row.classList.contains('success')) {
             alert("Vé đã được sử dụng");
             return;
         }
-        
-        
+
+
         // Hiển thị hộp thoại xác nhận trước khi thực hiện
         if (confirm("Bạn có chắc chắn muốn trả vé này không?")) {
             // Gửi yêu cầu AJAX tới controller
@@ -260,7 +323,7 @@
                 headers: {
                     'Content-Type': 'application/json' // Dữ liệu gửi là JSON
                 },
-                body: JSON.stringify({mave:maVe}) // Gửi mã vé
+                body: JSON.stringify({ mave: maVe }) // Gửi mã vé
             })
                 .then(response => {
                     if (response.ok) {

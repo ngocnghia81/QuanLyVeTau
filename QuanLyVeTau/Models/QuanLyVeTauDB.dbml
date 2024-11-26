@@ -37,11 +37,8 @@
       <Column Name="ThanhTien" Type="System.Decimal" DbType="Decimal(19,2) NOT NULL" CanBeNull="false" />
       <Column Name="ThoiGianLapHoaDon" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="HoaDon_Ve" Member="Ves" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="Ve" />
-<<<<<<< HEAD
       <Association Name="HoaDon_PhanHoi" Member="PhanHois" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="PhanHoi" />
-=======
       <Association Name="HoaDon_PhanHoi" Member="PhanHoi" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="PhanHoi" Cardinality="One" />
->>>>>>> PhanHoi
       <Association Name="KhachHang_HoaDon" Member="KhachHang" ThisKey="MaKhach" OtherKey="MaKhach" Type="KhachHang" IsForeignKey="true" />
       <Association Name="KhuyenMai_HoaDon" Member="KhuyenMai" ThisKey="MaKhuyenMai" OtherKey="MaKhuyenMai" Type="KhuyenMai" IsForeignKey="true" />
     </Type>
@@ -302,20 +299,7 @@
       <Column Name="TongDoanhThu" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
     </Type>
   </Table>
-<<<<<<< HEAD
-  <Table Name="dbo.PhanHoi" Member="PhanHois">
-    <Type Name="PhanHoi">
-      <Column Name="MaPhanHoi" Type="System.String" DbType="VarChar(15) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="NgayPhanHoi" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="SoSao" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="MaHoaDon" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
-      <Association Name="HoaDon_PhanHoi" Member="HoaDon" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="HoaDon" IsForeignKey="true" />
-    </Type>
-  </Table>
-=======
->>>>>>> PhanHoi
+
   <Table Name="dbo.HanhLy" Member="HanhLies">
     <Type Name="HanhLy">
       <Column Name="MaHanhLy" Type="System.String" DbType="VarChar(15) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -324,8 +308,8 @@
       <Association Name="Ve_HanhLy" Member="Ve" ThisKey="MaVe" OtherKey="MaVe" Type="Ve" IsForeignKey="true" />
     </Type>
   </Table>
-<<<<<<< HEAD
-=======
+
+
   <Table Name="dbo.PhanHoi" Member="PhanHois">
     <Type Name="PhanHoi">
       <Column Name="MaHoaDon" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -336,5 +320,5 @@
       <Association Name="HoaDon_PhanHoi" Member="HoaDon" ThisKey="MaHoaDon" OtherKey="MaHoaDon" Type="HoaDon" IsForeignKey="true" />
     </Type>
   </Table>
->>>>>>> PhanHoi
+
 </Database>

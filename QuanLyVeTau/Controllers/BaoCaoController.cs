@@ -21,7 +21,22 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
-        
+
+        public ActionResult Top3KhachHangPartial()
+        {
+            var topKhachHang = db.Top3KhachHangs.ToList()
+                .OrderByDescending(k => k.SoChuyenDi)
+                .ThenByDescending(k => k.TongTienMua).Take(3);
+
+            if (topKhachHang == null || !topKhachHang.Any())
+            {
+                Console.WriteLine("Không có dữ liệu Top 3 khách hàng!");
+            }
+
+            return PartialView("Top3KhachHangPartial", topKhachHang);
+        }
+
+
     }
 
 }

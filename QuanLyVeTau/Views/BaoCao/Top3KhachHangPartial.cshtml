@@ -1,0 +1,39 @@
+﻿@model IEnumerable<dynamic>
+<link href="~/Content/css/TopCus.css" rel="stylesheet" />
+<div class="top-customers">
+    <h4>🔥 Top 3 Khách Hàng Đi Nhiều Nhất</h4>
+    <div class="scrolling-text">
+        <div class="scrolling-content">
+            @if (Model != null && Model.Any())
+            {
+                int rank = 1;
+                foreach (var item in Model)
+                {
+                    <span class="customer">
+                        <strong>Top @rank: </strong>@item.TenKhach (Chuyến đi: @item.SoChuyenDi, Tổng: @item.TongTienMua.ToString("C", new System.Globalization.CultureInfo("vi-VN")))
+                    </span>
+                    rank++;
+                }
+            }
+            else
+            {
+                <span>Không có dữ liệu!</span>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadTopCustomers() {
+        $.ajax({
+            url: '/BaoCao/Top3KhachHangPartial',
+            type: 'GET',
+            success: function (html) {
+                $('#topCustomersContainer').html(html);
+            }
+        });
+    }
+
+    // Tải lại mỗi 60 giây
+    setInterval(loadTopCustomers, 60000);
+</script>

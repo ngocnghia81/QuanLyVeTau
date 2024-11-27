@@ -387,6 +387,14 @@ namespace QuanLyVeTau.Models
 				return this.GetTable<Vw_TongPhanHoi>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Top3KhachHang> Top3KhachHangs
+		{
+			get
+			{
+				return this.GetTable<Top3KhachHang>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ChiTietLichTrinh")]
@@ -5838,6 +5846,87 @@ namespace QuanLyVeTau.Models
 				if ((this._TongPhanHoi != value))
 				{
 					this._TongPhanHoi = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Top3KhachHang")]
+	public partial class Top3KhachHang
+	{
+		
+		private string _MaKhach;
+		
+		private string _TenKhach;
+		
+		private System.Nullable<int> _SoChuyenDi;
+		
+		private System.Nullable<int> _TongTienMua;
+		
+		public Top3KhachHang()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaKhach", DbType="VarChar(15) NOT NULL", CanBeNull=false)]
+		public string MaKhach
+		{
+			get
+			{
+				return this._MaKhach;
+			}
+			set
+			{
+				if ((this._MaKhach != value))
+				{
+					this._MaKhach = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TenKhach", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string TenKhach
+		{
+			get
+			{
+				return this._TenKhach;
+			}
+			set
+			{
+				if ((this._TenKhach != value))
+				{
+					this._TenKhach = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoChuyenDi", DbType="Int")]
+		public System.Nullable<int> SoChuyenDi
+		{
+			get
+			{
+				return this._SoChuyenDi;
+			}
+			set
+			{
+				if ((this._SoChuyenDi != value))
+				{
+					this._SoChuyenDi = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TongTienMua", DbType="Int")]
+		public System.Nullable<int> TongTienMua
+		{
+			get
+			{
+				return this._TongTienMua;
+			}
+			set
+			{
+				if ((this._TongTienMua != value))
+				{
+					this._TongTienMua = value;
 				}
 			}
 		}

@@ -185,6 +185,7 @@
     <Content Include="Content\all.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\LabelInput.css" />
+    <Content Include="Content\css\TopCus.css" />
     <Content Include="Content\Icons\arrows.png" />
     <Content Include="Content\Icons\Azadi-Ka-Amrit-Mahotsav-Logo.png" />
     <Content Include="Content\Icons\card.png" />
@@ -345,10 +346,10 @@
     <Content Include="Views\PhanHoi\DanhSachPhanHoi.cshtml" />
     <Content Include="Views\NguoiDung\CapNhatThongTin.cshtml" />
     <Content Include="Views\NguoiDung\Index.cshtml" />
+    <Content Include="Views\BaoCao\Top3KhachHangPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\BaoCao\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

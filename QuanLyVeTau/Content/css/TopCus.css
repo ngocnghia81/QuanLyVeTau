@@ -1,0 +1,117 @@
+﻿/* CSS để định vị phần tử */
+.top-customers-container {
+    position: absolute;
+    bottom: 280px;
+    right: 0;
+    width: auto;
+    max-width: 450px;
+    padding: 10px; 
+    /* background: linear-gradient(135deg, #f9a8d4, #a5b4fc); */
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 9999;
+}
+
+
+/* TopCus.css */
+body {
+    font-family: 'Roboto', sans-serif; /* Thêm font đẹp */
+}
+
+.top-customers {
+    background: linear-gradient(135deg, #f9a8d4, #a5b4fc); /* Nền gradient đẹp */
+    padding: 10px 15px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    height: 70px;
+    margin: 10px auto;
+    text-align: center;
+    color: #333;
+    font-size: 14px; /* Giảm kích thước font */
+}
+
+h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.scrolling-text {
+    overflow: hidden;
+    width: 100%; /* Đảm bảo chữ chạy hết chiều rộng */
+    white-space: nowrap;
+    display: block;
+}
+
+.scrolling-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-text 20s linear infinite; /* Giảm thời gian animation */
+}
+
+@keyframes scroll-text {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.customer {
+    font-size: 14px; /* Giảm kích thước font chữ cho từng khách hàng */
+    font-weight: 500;
+    color: #fff;
+    padding-right: 30px;
+    margin: 5px 0;
+    text-transform: capitalize;
+    display: inline-block;
+}
+
+    .customer strong {
+        font-weight: 700;
+        color: #ffd700; /* Màu vàng cho chữ "Top X" */
+    }
+
+    .customer:hover {
+        color: #fbbf24; /* Màu hover */
+        transform: translateY(-3px); /* Hiệu ứng nâng lên khi hover */
+        transition: 0.3s;
+    }
+
+.scroll-button {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #fbbf24;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+    .scroll-button:hover {
+        background-color: #f59e0b;
+    }
+
+@media (max-width: 768px) {
+    .top-customers {
+        max-width: 90%;
+        padding: 10px;
+    }
+
+    .scroll-button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}

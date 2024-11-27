@@ -2,8 +2,13 @@
     ViewBag.Title = "TimVe";
     Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
 }
+<link href="~/Content/css/TopCus.css" rel="stylesheet" />
 <div class="tab-content" id="myTabContent">
     <!-- Hero Section Start  -->
+    <div class="top-customers-container">
+        @Html.Action("Top3KhachHangPartial", "BaoCao")
+    </div>
+
     <section class="heroSection fade show active" id="heroSection" role="tabpanel" aria-labelledby="heroSection-tab">
         <div class="content active">
             <div class="bgImg">

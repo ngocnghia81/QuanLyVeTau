@@ -316,4 +316,12 @@
       <Column Name="TongPhanHoi" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Top3KhachHang" Member="Top3KhachHangs">
+    <Type Name="Top3KhachHang">
+      <Column Name="MaKhach" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="TenKhach" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="SoChuyenDi" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TongTienMua" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

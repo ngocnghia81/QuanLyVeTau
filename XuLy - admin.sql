@@ -1066,8 +1066,47 @@ BEGIN
 END;
 
 ----------------- end HanhLy-------------------------
-SELECT * FROM NhatKyTau
 
-SELECT * FROM Ve WHERE MaNhatKy = 'TA10111241'
-SELECT * FROM HanhLy
-DELETE FROM HanhLy WHERE MaHanhLy = 'HL0000411244'
+----------------- BaoCao-------------------------
+
+CREATE PROCEDURE BaoCaoTheoNgay
+    @Ngay DATE
+AS
+BEGIN
+    SELECT 
+        nv.TenNhanVien,
+        pc.MaPhanCong,
+        nk.MaNhatKy,
+        nk.NgayGio,
+        COUNT(ve.MaVe) AS SoVeBanDuoc,
+        SUM(ve.GiaVe) AS TongDoanhThu
+    FROM PhanCong pc
+    INNER JOIN NhanVien nv ON pc.MaNhanVien = nv.MaNhanVien
+    INNER JOIN NhatKyTau nk ON pc.MaNhatKy = nk.MaNhatKy
+    INNER JOIN Ve ve ON nk.MaNhatKy = ve.MaNhatKy
+    WHERE CAST(nk.NgayGio AS DATE) = @Ngay
+    GROUP BY nv.TenNhanVien, pc.MaPhanCong, nk.MaNhatKy, nk.NgayGio
+END
+
+CREATE VIEW Top3KhachHang AS
+SELECT 
+    kh.MaKhach,
+    kh.TenKhach,
+    COUNT(*) AS SoChuyenDi,
+    SUM(ve.GiaVe) AS TongTienMua
+FROM 
+    KhachHang kh
+JOIN 
+    HoaDon hd ON kh.MaKhach = hd.MaKhach
+JOIN 
+    Ve ve ON hd.MaHoaDon = ve.MaHoaDon
+JOIN 
+    NhatKyTau nk ON ve.MaNhatKy = nk.MaNhatKy
+WHERE 
+    nk.NgayGio >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) 
+    AND nk.NgayGio <= GETDATE()
+GROUP BY 
+    kh.MaKhach, kh.TenKhach;
+
+
+----------------- end BaoCao-------------------------

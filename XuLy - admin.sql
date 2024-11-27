@@ -1108,5 +1108,31 @@ WHERE
 GROUP BY 
     kh.MaKhach, kh.TenKhach;
 
-
+DROP VIEW Vw_BaoCaoDoanhThuTheoNgay 
+CREATE VIEW Vw_BaoCaoDoanhThuTheoNgay AS
+SELECT 
+    CONVERT(DATE, h.ThoiGianLapHoaDon) AS NgayLapHoaDon,  -- Ngày lập hóa đơn
+    COUNT(v.MaVe) AS SoLuongVeBanRa,                       -- Số lượng vé bán ra
+    SUM(h.ThanhTien) + SUM(COALESCE(lsdt.LePhi, 0)) AS DoanhThu,  -- Tổng doanh thu từ vé cộng với lệ phí (nếu có)
+    h.MaHoaDon,
+    nk.MaNhatKy,                                          -- Mã nhật ký tàu
+    nk.NgayGio,                                           -- Ngày giờ tàu hoạt động
+    nv.MaNhanVien,                                        -- Mã nhân viên
+    nv.TenNhanVien,                                       -- Tên nhân viên
+    cv.TenChucVu                                          -- Chức vụ của nhân viên
+FROM HoaDon h
+JOIN Ve v ON h.MaHoaDon = v.MaHoaDon                     -- Kết nối với bảng vé
+JOIN NhatKyTau nk ON v.MaNhatKy = nk.MaNhatKy           -- Kết nối với nhật ký tàu
+JOIN PhanCong pc ON nk.MaNhatKy = pc.MaNhatKy           -- Kết nối với bảng phân công
+JOIN NhanVien nv ON pc.MaNhanVien = nv.MaNhanVien       -- Kết nối với nhân viên
+JOIN ChucVu cv ON nv.MaChucVu = cv.MaChucVu             -- Kết nối với chức vụ nhân viên
+LEFT JOIN LichSuDoiTraVe lsdt ON v.MaVe = lsdt.MaVe      -- Kết nối với bảng LichSuDoiTraVe để tính lệ phí
+GROUP BY 
+    CONVERT(DATE, h.ThoiGianLapHoaDon),
+    nk.MaNhatKy, 
+    nk.NgayGio, 
+    nv.MaNhanVien, 
+    nv.TenNhanVien, 
+    cv.TenChucVu,
+    h.MaHoaDon;
 ----------------- end BaoCao-------------------------

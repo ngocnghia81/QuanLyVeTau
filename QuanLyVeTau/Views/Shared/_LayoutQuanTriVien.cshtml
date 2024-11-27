@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Bootstrap CSS và Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" />
@@ -14,29 +13,43 @@
     <title>Quản trị Đường sắt</title>
     <link href="~/Content/all.css" rel="stylesheet" />
     <style>
-        .list-group-item.active {
-            background-color: #007bff; /* Màu nền khi item được chọn */
-            color: white; /* Màu chữ khi item được chọn */
+        /* Cải thiện hiệu ứng hover */
+        .list-group-item {
+            transition: background-color 0.3s ease, color 0.3s ease, font-size 0.3s ease, font-weight 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px; /* Bo góc cho các item */
+            padding: 12px 20px; /* Thêm padding để các item đẹp hơn */
+            cursor: pointer; /* Thêm con trỏ pointer cho item */
         }
 
-        .list-group-item.active {
-            background-color: #0D6EFD !important; /* Màu nền khi active */
-            color: white !important;
-        }
-
+        /* Màu nền và màu chữ khi hover */
         .list-group-item:hover {
             background-color: #0056b3; /* Màu nền khi hover */
-            color: white;
+            color: white; /* Màu chữ khi hover */
+            font-weight: bold; /* Đậm chữ khi hover */
+            font-size: 15px; /* Tăng kích thước chữ khi hover */
+            transform: scale(1.05); /* Tăng nhẹ kích thước item khi hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ khi hover */
         }
 
-        .list-group-item {
-            transition: background-color 0.3s ease, color 0.3s ease;
+        /* Màu nền và màu chữ khi item được chọn (active) */
+        .list-group-item.active {
+            background-color: #007bff; /* Màu nền khi active */
+            color: white; /* Màu chữ khi active */
+            font-weight: bold; /* Đậm chữ khi active */
+            font-size: 20px; /* Tăng kích thước chữ khi active */
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* Thêm bóng đổ mạnh hơn khi active */
         }
 
-            .list-group-item:hover {
-                background-color: #fff !important;
-                color: #343a40 !important;
-            }
+        /* Cải thiện hiệu ứng hover khi item được active */
+        .list-group-item.active:hover {
+            background-color: #0056b3; /* Màu nền khi hover và active */
+            color: white; /* Màu chữ khi hover và active */
+            font-weight: bold; /* Đậm chữ khi hover và active */
+            font-size: 15px; /* Tăng kích thước chữ khi hover và active */
+            transform: scale(1.05); /* Tăng nhẹ kích thước item khi hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ đậm khi hover và active */
+        }
+
 
 
         #wrapper {
@@ -132,7 +145,7 @@
                     <i class="bi bi-card-checklist me-2"></i>Phân công
                 </a>
 
-                <a href="@Url.Action("DoanhThuNgay", "BaoCao")" class="list-group-item list-group-item-action bg-dark text-white"
+                <a href="@Url.Action("DoanhThuTheoNgay", "BaoCao")" class="list-group-item list-group-item-action bg-dark text-white"
                    id="reports"
                    @if (ViewBag.ActiveLink == "reports") { <text> class="list-group-item list-group-item-action bg-dark text-white active" </text> }>
                     <i class="bi bi-graph-up me-2"></i>Báo cáo
@@ -160,16 +173,15 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#profile">Xin chào, @TempData["Email"]</a>
+                                <a class="nav-link" href="#profile">Xin chào, @Session["Email"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="DangXuat">Đăng xuất</a>
+                                <a class="nav-link" href="/QuanTri/DangXuat">Đăng xuất</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-
             @RenderBody()
         </div>
         <!-- Page Content End -->
@@ -226,6 +238,21 @@
         });
 
 
+    </script>
+
+    <script>
+        // Điều khiển việc mở/đóng menu con khi nhấn vào "Báo cáo"
+        document.getElementById("reports").addEventListener("click", function () {
+            var reportsMenu = document.getElementById("reportsMenu");
+            // Kiểm tra trạng thái hiện tại và chuyển sang trạng thái ngược lại (mở/đóng)
+            if (reportsMenu.classList.contains("collapse")) {
+                reportsMenu.classList.remove("collapse");
+                reportsMenu.classList.add("show");
+            } else {
+                reportsMenu.classList.remove("show");
+                reportsMenu.classList.add("collapse");
+            }
+        });
     </script>
 
 </body>

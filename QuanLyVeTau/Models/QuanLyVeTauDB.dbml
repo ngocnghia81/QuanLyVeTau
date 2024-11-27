@@ -324,4 +324,17 @@
       <Column Name="TongTienMua" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Vw_BaoCaoDoanhThuTheoNgay" Member="Vw_BaoCaoDoanhThuTheoNgays">
+    <Type Name="Vw_BaoCaoDoanhThuTheoNgay">
+      <Column Name="NgayLapHoaDon" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="SoLuongVeBanRa" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DoanhThu" Type="System.Decimal" DbType="Decimal(38,2)" CanBeNull="true" />
+      <Column Name="MaHoaDon" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="MaNhatKy" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
+      <Column Name="NgayGio" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="MaNhanVien" Type="System.String" DbType="VarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="TenNhanVien" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="TenChucVu" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>

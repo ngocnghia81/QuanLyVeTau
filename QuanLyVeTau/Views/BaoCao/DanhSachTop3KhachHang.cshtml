@@ -1,0 +1,41 @@
+﻿@model IEnumerable<QuanLyVeTau.Models.Top3KhachHang>
+
+@{
+    ViewBag.Title = "Danh Sách Top 3 Khách Hàng";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Danh Sách Top 3 Khách Hàng</h2>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Mã khách</th>
+                <th>Tên khách</th>
+                <th>Số chuyến đi</th>
+                <th>Tổng tiền mua</th>
+                <th>Hoá đơn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.MaKhach)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TenKhach)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SoChuyenDi)</td>
+                    <td>@(Convert.ToDecimal(item.TongTienMua).ToString("C0", new System.Globalization.CultureInfo("vi-VN")))</td>
+                    <td>
+                        <a href="@Url.Action("DanhSachHoaDon", "HoaDon", new { maKhach = item.MaKhach })" class="btn btn-link">
+                            <i class="fa fa-file-invoice"></i>
+                        </a>
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

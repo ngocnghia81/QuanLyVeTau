@@ -1,0 +1,151 @@
+﻿@model PagedList.IPagedList<QuanLyVeTau.Models.Vw_BaoCaoDoanhThuTheoNgay>
+
+@{
+    ViewBag.Title = "Báo cáo doanh thu theo ngày";
+    Layout = "~/Views/Shared/_LayoutQuanTriVien.cshtml";
+}
+
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Báo cáo doanh thu theo ngày</h2>
+
+    <!-- Form lọc ngày -->
+    <div class="d-flex justify-content-between">
+        <form method="get" action="@Url.Action("DoanhThuTheoNgay", "BaoCao")" class="row g-3">
+            <div class="col-md-4">
+                <label for="from" class="form-label">Từ ngày:</label>
+                <input type="date" class="form-control" id="from" name="from" value="@Request.QueryString["from"]">
+            </div>
+            <div class="col-md-4">
+                <label for="to" class="form-label">Đến ngày:</label>
+                <input type="date" class="form-control" id="to" name="to" value="@Request.QueryString["to"]">
+            </div>
+            <div class="col-md-3 align-self-end">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </form>
+
+        <!-- Nút xem Top khách hàng -->
+        <a href="@Url.Action("DanhSachTop3KhachHang", "BaoCao")" class="btn btn-info align-self-end ml-3">
+            Top khách hàng
+        </a>
+    </div>
+
+    <!-- Bảng hiển thị dữ liệu -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã hoá đơn</th>
+                    <th>Ngày lập hóa đơn</th>
+                    <th>Số lượng vé bán ra</th>
+                    <th>Doanh thu</th>
+                    <th>Mã nhật ký</th>
+                    <th>Ngày giờ</th>
+                    <th>Mã nhân viên</th>
+                    <th>Tên nhân viên</th>
+                    <th>Chức vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.MaHoaDon</td>
+                            <td>@item.NgayLapHoaDon.ToString()</td>
+                            <td>@item.SoLuongVeBanRa</td>
+                            <td>@item.DoanhThu.ToString()</td>
+                            <td>@item.MaNhatKy</td>
+                            <td>@item.NgayGio.ToString()</td>
+                            <td>@item.MaNhanVien</td>
+                            <td>@item.TenNhanVien</td>
+                            <td>@item.TenChucVu</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center">Không có dữ liệu</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Phân trang với Bootstrap -->
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination pagination-sm">
+        <!-- Các nút phân trang -->
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DoanhThuTheoNgay", new { page = 1 })" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;&laquo;</span>
+            </li>
+        }
+
+        @if (Model.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DoanhThuTheoNgay", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+        }
+
+        @for (var i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("DoanhThuTheoNgay", new { page = i })">@i</a>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DoanhThuTheoNgay", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("DoanhThuTheoNgay", new { page = Model.PageCount })" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;&raquo;</span>
+            </li>
+        }
+    </ul>
+</div>

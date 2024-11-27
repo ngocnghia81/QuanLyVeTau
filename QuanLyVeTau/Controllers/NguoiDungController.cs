@@ -12,7 +12,7 @@ namespace QuanLyVeTau.Controllers
     public class NguoiDungController : Controller
     {
         
-        string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
+        string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
         QuanLyVeTauDBDataContext db;
         public NguoiDungController()
         {

@@ -18,7 +18,7 @@ namespace QuanLyVeTau.Controllers
 
         public PhanCongController()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 

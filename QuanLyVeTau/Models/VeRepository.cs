@@ -10,6 +10,11 @@ namespace QuanLyVeTau.Models
 {
     public class VeRepository
     {
+        private readonly string connectionString;
+        public VeRepository()
+        {
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
+        }
         public HashSet<int> GetGheDaBan(string maKhoang,Dictionary<string,string> data)
         {
             var maNK = data["maNK"];
@@ -17,7 +22,7 @@ namespace QuanLyVeTau.Models
             var to = data["to"];
 
             var gheDaBan = new HashSet<int>();
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "select STT_Ghe from dbo.LayVeTheoGaDiDen(@MaKhoang,@MaNK,@DiemDi,@DiemDen)";

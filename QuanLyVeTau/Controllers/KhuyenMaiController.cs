@@ -17,7 +17,7 @@ namespace QuanLyVeTau.Controllers
 
         public KhuyenMaiController()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString4"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 

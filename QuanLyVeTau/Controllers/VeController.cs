@@ -1,15 +1,5 @@
-
-
+using PagedList;
 using QuanLyVeTau.Models;
-
-﻿using QuanLyVeTau.Models;
-
-﻿using PagedList;
-using QuanLyVeTau.Models;
-
-
-﻿using PagedList;
-
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -23,11 +13,11 @@ namespace QuanLyVeTau.Controllers
 {
     public class VeController : Controller
     {
-        QuanLyVeTauDBDataContext db;
-        string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
+        private readonly QuanLyVeTauDBDataContext db;
+        private readonly string connectionString;
         public VeController()
         {
-            
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
         public ActionResult Index()
@@ -39,8 +29,6 @@ namespace QuanLyVeTau.Controllers
             return View("TimVe");
         }
 
-
-
         public ActionResult TimVe()
         {
 
@@ -50,7 +38,6 @@ namespace QuanLyVeTau.Controllers
         [HttpPost]
         public ActionResult ChonVe(FormCollection form)
         {
-            // Lấy dữ liệu từ FormCollection
             string from = form["from"];
             string to = form["to"];
             string date = form["date"];
@@ -61,31 +48,19 @@ namespace QuanLyVeTau.Controllers
             ViewBag.to = to;
             ViewBag.date = date;
             ViewBag.KhuHoi = false;
-            // Chuỗi kết nối đến cơ sở dữ liệu của bạn
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
 
-            // Tạo câu lệnh SQL để gọi hàm LayTau
             string sql = string.Format("SELECT * FROM LayTau('{0}', N'{1}', N'{2}')", date, from, to);
             ViewBag.sql = sql;
-            // Tạo một DataTable để chứa kết quả trả về
             DataTable dt = new DataTable();
 
-            // Sử dụng SqlConnection và SqlDataAdapter để thực thi truy vấn
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(this.connectionString))
             {
-                // Mở kết nối đến cơ sở dữ liệu
                 connection.Open();
 
-                // Tạo SqlDataAdapter để thực thi truy vấn và điền kết quả vào DataTable
                 using (var adapter = new SqlDataAdapter(sql, connection))
                 {
-                    // Điền dữ liệu vào DataTable
                     adapter.Fill(dt);
-
                 }
-
-
-
             }
             if (form["roundTrip"] != null)
             {
@@ -96,13 +71,10 @@ namespace QuanLyVeTau.Controllers
                 ViewBag.dtReturned = dtReturned;
                 using (var connection = new SqlConnection(connectionString))
                 {
-                    // Mở kết nối đến cơ sở dữ liệu
                     connection.Open();
 
-                    // Tạo SqlDataAdapter để thực thi truy vấn và điền kết quả vào DataTable
                     using (var adapter = new SqlDataAdapter(sql2, connection))
                     {
-                        // Điền dữ liệu vào DataTable
                         adapter.Fill(dtReturned);
                     }
                 }
@@ -116,8 +88,7 @@ namespace QuanLyVeTau.Controllers
                 ).ToList();
             ViewBag.KMs = khuyenMai;
             ViewBag.dt = dt;
-            // Sau khi xử lý, có thể chuyển hướng tới View khác hoặc trả về View với dữ liệu đã xử lý
-            return View("KetQuaChonVe"); // Tên của View bạn muốn hiển thị
+            return View("KetQuaChonVe"); 
         }
 
         public ActionResult KetQuaChonVe()
@@ -128,23 +99,15 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult HienThiToa(string maTau)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
-
-            // Tạo câu lệnh SQL để gọi hàm LayTau
             string sql = string.Format("SELECT * FROM LayToa('{0}') ORDER BY SoToa DESC", maTau);
-            // Tạo một DataTable để chứa kết quả trả về
             DataTable dt = new DataTable();
 
-            // Sử dụng SqlConnection và SqlDataAdapter để thực thi truy vấn
             using (var connection = new SqlConnection(connectionString))
             {
-                // Mở kết nối đến cơ sở dữ liệu
                 connection.Open();
 
-                // Tạo SqlDataAdapter để thực thi truy vấn và điền kết quả vào DataTable
                 using (var adapter = new SqlDataAdapter(sql, connection))
                 {
-                    // Điền dữ liệu vào DataTable
                     adapter.Fill(dt);
 
                 }
@@ -154,22 +117,15 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult HienThiKhoang(string maToa, string from,string to, string maNK,int oneway)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
-            // Tạo câu lệnh SQL để gọi hàm LayTau
             string sql = string.Format("SELECT * FROM LayKhoang('{0}') ORDER BY SoKhoang DESC", maToa);
-            // Tạo một DataTable để chứa kết quả trả về
             DataTable dt = new DataTable();
 
-            // Sử dụng SqlConnection và SqlDataAdapter để thực thi truy vấn
             using (var connection = new SqlConnection(connectionString))
             {
-                // Mở kết nối đến cơ sở dữ liệu
                 connection.Open();
 
-                // Tạo SqlDataAdapter để thực thi truy vấn và điền kết quả vào DataTable
                 using (var adapter = new SqlDataAdapter(sql, connection))
                 {
-                    // Điền dữ liệu vào DataTable
                     adapter.Fill(dt);
                     ViewBag.SoToa = dt.Rows[0]["SoToa"];
 
@@ -204,60 +160,48 @@ namespace QuanLyVeTau.Controllers
         }
 
 
-
-
-
-
-
-
         //Admin
-        //public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
-        //{
-        //    var ves = db.Ves.AsQueryable();
+        public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
+        {
+            var ves = db.Ves.AsQueryable();
 
-        //    if (daThuHoi.HasValue)
-        //    {
-        //        ves = ves.Where(v => v.DaThuHoi == daThuHoi);
-        //    }
+            if (daThuHoi.HasValue)
+            {
+                ves = ves.Where(v => v.DaThuHoi == daThuHoi);
+            }
 
-        //    if (!string.IsNullOrEmpty(maTau))
-        //    {
-        //        ves = ves.Where(v => v.Khoang.Toa.Tau.MaTau.ToLower().Contains(maTau));
-        //    }
+            if (!string.IsNullOrEmpty(maTau))
+            {
+                ves = ves.Where(v => v.Khoang.Toa.Tau.MaTau.ToLower().Contains(maTau));
+            }
 
-        //    if (!string.IsNullOrEmpty(maKhach))
-        //    {
-        //        ves = ves.Where(v => v.HoaDon.MaKhach.ToLower().Contains(maKhach.ToLower()));
-        //    }
+            if (!string.IsNullOrEmpty(maKhach))
+            {
+                ves = ves.Where(v => v.HoaDon.MaKhach.ToLower().Contains(maKhach.ToLower()));
+            }
 
-        //    // Lọc theo mã vé
-        //    if (!string.IsNullOrEmpty(maVe))
-        //    {
-        //        ves = ves.Where(v => v.MaVe.ToLower().Contains(maVe.ToLower()));
-        //    }
+            if (!string.IsNullOrEmpty(maVe))
+            {
+                ves = ves.Where(v => v.MaVe.ToLower().Contains(maVe.ToLower()));
+            }
 
-        //    // Lọc theo điểm đi
-        //    if (!string.IsNullOrEmpty(diemDi))
-        //    {
-        //        ves = ves.Where(v => v.ChiTietLichTrinh.Ga.DiaChi.ToLower().Contains(diemDi.ToLower()));
-        //    }
+            if (!string.IsNullOrEmpty(diemDi))
+            {
+                ves = ves.Where(v => v.ChiTietLichTrinh.Ga.DiaChi.ToLower().Contains(diemDi.ToLower()));
+            }
 
-        //    // Lọc theo điểm đến
-        //    if (!string.IsNullOrEmpty(diemDen))
-        //    {
-        //        ves = ves.Where(v => v.ChiTietLichTrinh1.Ga.DiaChi.ToLower().Contains(diemDen.ToLower()));
-        //    }
+            if (!string.IsNullOrEmpty(diemDen))
+            {
+                ves = ves.Where(v => v.ChiTietLichTrinh1.Ga.DiaChi.ToLower().Contains(diemDen.ToLower()));
+            }
 
-        //    // Tạo ViewBag cho liên kết của menu
-        //    ViewBag.ActiveLink = "manageTicketsLink";
+            ViewBag.ActiveLink = "manageTicketsLink";
 
-        //    // Phân trang
-        //    int pageSize = 12;  // Số vé hiển thị trên mỗi trang
-        //    var result = ves.ToPagedList(page, pageSize);  // Phân trang danh sách vé
+            int pageSize = 12;  
+            var result = ves.ToPagedList(page, pageSize); 
 
-        //    // Trả về view với danh sách vé đã phân trang
-        //    return View(result);  // Trả về IPagedList<Ve> cho View
-        //}
+            return View(result); 
+        }
 
 
 
@@ -345,32 +289,26 @@ namespace QuanLyVeTau.Controllers
         private DateTime LayTongThoiGianDiChuyen(string maNhatKy, DateTime thoiGianDi, string maGaDi, string maGaDen)
         {
             DataTable dtReturned = new DataTable();
-            DateTime thoiGianDiChuyen = DateTime.MinValue; // Khởi tạo giá trị mặc định nếu không có dữ liệu
+            DateTime thoiGianDiChuyen = DateTime.MinValue;
 
-            // Chuỗi truy vấn để gọi hàm SQL với các tham số truyền vào
             string sql2 = string.Format("SELECT dbo.TinhTongThoiGianDiChuyen('{0}', '{1}', '{2}', '{3}')",
                                         maNhatKy,
                                         thoiGianDi.ToString("yyyy-MM-dd HH:mm:ss"),
                                         maGaDi,
                                         maGaDen);
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString))
+            using (var connection = new SqlConnection(connectionString))
             {
-                // Mở kết nối đến cơ sở dữ liệu
                 connection.Open();
 
-                // Tạo SqlDataAdapter để thực thi truy vấn và điền kết quả vào DataTable
                 using (var adapter = new SqlDataAdapter(sql2, connection))
                 {
-                    // Điền dữ liệu vào DataTable
                     adapter.Fill(dtReturned);
                 }
             }
 
-            // Kiểm tra nếu DataTable có ít nhất một hàng kết quả
             if (dtReturned.Rows.Count > 0)
             {
-                // Giả sử kết quả trả về chứa thời gian ở cột đầu tiên (cột index 0)
                 thoiGianDiChuyen = Convert.ToDateTime(dtReturned.Rows[0][0]);
             }
             else
@@ -380,13 +318,6 @@ namespace QuanLyVeTau.Controllers
 
             return thoiGianDiChuyen;
         }
-
-
-
-
-
-
-
 
         [HttpPost]
         public ActionResult TaoVe([System.Web.Http.FromBody] DataSender data)
@@ -444,7 +375,6 @@ namespace QuanLyVeTau.Controllers
                     MaVe = maVe,
                     KhoiLuong = khoiLuong
                 };
-
 
                 db.HanhLies.InsertOnSubmit(hanhLy);  
                 db.SubmitChanges();

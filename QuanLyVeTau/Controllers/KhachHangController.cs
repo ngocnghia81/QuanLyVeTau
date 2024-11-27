@@ -14,7 +14,7 @@ namespace QuanLyVeTau.Controllers
 
         public KhachHangController()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 

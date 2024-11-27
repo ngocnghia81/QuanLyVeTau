@@ -13,7 +13,7 @@ namespace QuanLyVeTau.Controllers
 
         public HoaDonController()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString4"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 

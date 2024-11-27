@@ -1,16 +1,8 @@
-﻿using Antlr.Runtime.Tree;
-using PagedList;
+﻿using PagedList;
 using QuanLyVeTau.Models;
-
 using System.Configuration;
-
-using System;
-using System.Configuration;
-using System.Diagnostics;
-
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace QuanLyVeTau.Controllers
@@ -22,7 +14,7 @@ namespace QuanLyVeTau.Controllers
 
         public PhanHoiController()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
@@ -71,30 +63,30 @@ namespace QuanLyVeTau.Controllers
             return View(pagedSortedResult);
         }
 
-    
 
-       
-        //public JsonResult CapNhatTrangThai(string id, string trangThai)
-        //{
-        //    var phanHoi = db.PhanHois.SingleOrDefault(p => p.MaPhanHoi == id);
 
-        //    if (phanHoi != null)
-        //    {
-        //        if (phanHoi.TrangThai != "Đã xử lý")
-        //        {
-        //            phanHoi.TrangThai = trangThai;
-        //            db.SubmitChanges();
-        //            return Json(new { success = true, newTrangThai = phanHoi.TrangThai });
-        //        }
-        //        else
-        //        {
-        //            return Json(new { success = false, message = "Không thể thay đổi trạng thái khi phản hồi đã xử lý." });
-        //        }
-        //    }
+        [HttpPost]
+        public JsonResult CapNhatTrangThai(string id, string trangThai)
+        {
+            var phanHoi = db.PhanHois.SingleOrDefault(p => p.MaHoaDon == id);
 
-        //    return Json(new { success = false, message = "Phản hồi không tồn tại." });
-        //}
+            if (phanHoi != null)
+            {
+                if (phanHoi.TrangThai != "Đã xử lý")
+                {
+                    phanHoi.TrangThai = trangThai;
+                    db.SubmitChanges();
+                    return Json(new { success = true, newTrangThai = phanHoi.TrangThai });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Không thể thay đổi trạng thái khi phản hồi đã xử lý." });
+                }
+            }
 
-     }
+            return Json(new { success = false, message = "Phản hồi không tồn tại." });
+        }
+
+    }
 
 }

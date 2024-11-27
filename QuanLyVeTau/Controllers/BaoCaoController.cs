@@ -17,7 +17,7 @@ namespace QuanLyVeTau.Controllers
 
         public BaoCaoController()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString4"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 

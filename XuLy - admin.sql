@@ -1005,8 +1005,6 @@ END;
 ------------end Baocao------------------------
 
 ----------------- PhanHoi-------------------------
-
-
 CREATE TRIGGER trg_TuDongSetTrangThaiSauKhiThem
 ON PhanHoi
 AFTER INSERT
@@ -1015,7 +1013,7 @@ BEGIN
     UPDATE PhanHoi
     SET TrangThai = N'Đã xử lý'
     FROM PhanHoi ph
-    INNER JOIN inserted i ON ph.MaPhanHoi = i.MaPhanHoi
+    INNER JOIN inserted i ON ph.MaHoaDon = i.MaHoaDon
     WHERE i.SoSao = 5;
 END;
 

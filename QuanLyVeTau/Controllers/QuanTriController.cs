@@ -3,18 +3,11 @@ using PagedList;
 using QuanLyVeTau.Models;
 using QuanLyVeTau.Tools;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Data.Entity;
-using System.Data.SqlClient;
-using System.Data.Linq;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using System.Web.UI;
-using WebGrease.Css.Extensions;
 
 namespace QuanLyVeTau.Controllers
 {
@@ -25,7 +18,7 @@ namespace QuanLyVeTau.Controllers
 
         public QuanTriController()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 

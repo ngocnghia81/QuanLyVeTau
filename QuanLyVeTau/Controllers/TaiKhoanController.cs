@@ -12,11 +12,11 @@ namespace QuanLyVeTau.Controllers
 {
     public class TaiKhoanController : Controller
     {
-        private QuanLyVeTauDBDataContext db;
-
+        private readonly QuanLyVeTauDBDataContext db;
+        private readonly string connectionString;
         public TaiKhoanController()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
@@ -170,9 +170,7 @@ namespace QuanLyVeTau.Controllers
                 }
                 catch
                 {
-                    // Xử lý lỗi khi không thể lưu vào cơ sở dữ liệu
                     TempData["ErrorMessage"] = "Có lỗi xảy ra trong quá trình reset mật khẩu. Vui lòng thử lại sau.";
-                    // Log lỗi hoặc xử lý phù hợp
                 }
             }
             else

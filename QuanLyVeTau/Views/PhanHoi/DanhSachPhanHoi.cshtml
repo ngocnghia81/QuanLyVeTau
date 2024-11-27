@@ -85,9 +85,9 @@
                             }
                             else
                             {
-                                @Html.DropDownList("trangThai_" + phanHoi.MaPhanHoi,
+                                @Html.DropDownList("trangThai_" + phanHoi.MaHoaDon,
                                     new SelectList(new List<string> { "Đã xử lý", "Chưa xử lý" }, phanHoi.TrangThai),
-                                    new { @class = "form-control", onchange = "updateTrangThai('" + phanHoi.MaPhanHoi + "');" })
+                                    new { @class = "form-control", onchange = "updateTrangThai('" + phanHoi.MaHoaDon + "');" })
                             }
                         </td>
                     </tr>

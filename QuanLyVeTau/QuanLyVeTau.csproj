@@ -165,7 +165,6 @@
     <Compile Include="Models\DataSender.cs" />
     <Compile Include="Models\GheDaChon.cs" />
     <Compile Include="Models\PhanCongViewModel.cs" />
-    <Compile Include="Models\PhanCongViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -969,7 +969,6 @@ RETURN
     WHERE CAST(h.ThoiGianLapHoaDon AS DATE) = @Ngay
 )
 
-
 CREATE VIEW vw_ThongTinVeDaBan AS
 SELECT 
     Ve.MaVe,

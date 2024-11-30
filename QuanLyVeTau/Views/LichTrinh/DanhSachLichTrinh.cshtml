@@ -128,7 +128,8 @@
                 <td class="text-center align-middle">
                     <select class="form-control text-center trangThaiDropdown"
                             style="width: 150px; margin: auto;"
-                            data-id="@item.MaLichTrinh">
+                            data-id="@item.MaLichTrinh"
+                            onchange="toggleAddButton(this)">
                         <option value="Đang hoạt động" @if (item.TrangThai == "Đang hoạt động") { <text> selected</text> }>Đang hoạt động</option>
                         <option value="Tạm ngưng" @if (item.TrangThai == "Tạm ngưng") { <text> selected</text> }>Tạm ngưng</option>
                         <option value="Ngưng" @if (item.TrangThai == "Ngưng") { <text> selected</text> }>Ngưng</option>
@@ -147,10 +148,13 @@
                         <i class="fas fa-edit"></i>
                     </button>
 
-                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-id="@item.MaLichTrinh" data-target="#themNhatKyModal" onclick="openThemNhatKyModal(this)">
+                    <button class="btn btn-primary btn-sm btnThemNhatKy"
+                            data-toggle="modal"
+                            data-id="@item.MaLichTrinh"
+                            data-target="#themNhatKyModal"
+                            onclick="openThemNhatKyModal(this)">
                         <i class="fas fa-plus"></i>
                     </button>
-
                     <button class="btn btn-info btn-sm" data-id="@item.MaLichTrinh" onclick="xemNhatKyLichTrinh('@item.MaLichTrinh')">
                         <i class="fas fa-book"></i>
                     </button>
@@ -408,7 +412,7 @@
                             <option value="">Loading...</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="visibility: visible; display:none">
                         <label for="MaLichTrinh">Mã Lịch Trình</label>
                         <input type="text" name="MaLichTrinh" id="MaLichTrinh" class="form-control" readonly>
                     </div>
@@ -738,5 +742,25 @@
         let url = `/LichTrinh/XemNhatKy?MaLichTrinh=${maLichTrinh}`;
         window.location.href = url;
     }
+
+    function toggleAddButton(selectElement) {
+        // Lấy hàng chứa dropdown và nút
+        const row = selectElement.closest('tr');
+        const addButton = row.querySelector('.btnThemNhatKy');
+
+        // Kiểm tra trạng thái dropdown
+        if (selectElement.value === "Ngưng" || selectElement.value === "Tạm ngưng") {
+            addButton.disabled = true; // Vô hiệu hóa nút
+        } else {
+            addButton.disabled = false; // Kích hoạt nút
+        }
+    }
+
+    // Áp dụng ngay khi trang tải
+    document.querySelectorAll('.trangThaiDropdown').forEach(select => {
+        toggleAddButton(select); // Thiết lập trạng thái nút ban đầu
+    });
+
+
 </script>
 

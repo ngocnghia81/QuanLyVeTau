@@ -375,9 +375,24 @@ namespace QuanLyVeTau.Controllers
                 {
                     return Json(new { success = false, message = "Định dạng ngày giờ không hợp lệ" });
                 }
+                List<NhatKyTau> nks = db.NhatKyTaus.Where(n => n.MaLichTrinh == maLichTrinh && n.MaTau == maTau).ToList();
+                if(nks.Count != 0)
+                {
+                    foreach(NhatKyTau nk in nks)
+                    {
+                        DateTime? thoiGianDen = TinhTongThoiGianDiChuyen(nk.MaNhatKy, nk.NgayGio);
+
+                        if (thoiGianDen.HasValue && thoiGianDen > parsedNgayGioKhoiHanh)
+                        {
+                            return Json(new { success = false, message = "Tàu chưa hoàn thành nhật ký trước hoặc đang trong thời gian nghỉ!" });
+                        }
+                    }
+
+
+                }
 
                 string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
-                string sql2 = string.Format("SELECT dbo.TaoMa('{0}', GETDATE())", maTau);
+                string sql2 = string.Format("SELECT dbo.TaoMa('{0}', '{1}')", maTau, parsedNgayGioKhoiHanh.Date);
                 DataTable dtReturned = new DataTable();
                 using (var connection = new SqlConnection(connectionString))
                 {

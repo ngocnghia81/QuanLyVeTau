@@ -185,7 +185,8 @@
     <Content Include="Content\all.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\LabelInput.css" />
-    <Content Include="Content\css\TopCus.css" />
+    <Content Include="Content\css\TimVe.css" />
+    <Content Include="Content\DatVe.js" />
     <Content Include="Content\Icons\arrows.png" />
     <Content Include="Content\Icons\Azadi-Ka-Amrit-Mahotsav-Logo.png" />
     <Content Include="Content\Icons\card.png" />
@@ -281,7 +282,6 @@
     </None>
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\chart.js" />
-    <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -347,6 +347,7 @@
     <Content Include="Views\NguoiDung\CapNhatThongTin.cshtml" />
     <Content Include="Views\NguoiDung\Index.cshtml" />
     <Content Include="Views\BaoCao\Top3KhachHangPartial.cshtml" />
+    <Content Include="Views\Ve\KetQuaChonVe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

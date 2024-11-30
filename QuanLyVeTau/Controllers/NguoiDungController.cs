@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
+    [Authorize]
     public class NguoiDungController : Controller
     {
         

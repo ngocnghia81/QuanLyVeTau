@@ -10,6 +10,8 @@ using System.Web.UI;
 
 namespace QuanLyVeTau.Controllers
 {
+    [Authorize]
+
     public class KhuyenMaiController : Controller
     {
 

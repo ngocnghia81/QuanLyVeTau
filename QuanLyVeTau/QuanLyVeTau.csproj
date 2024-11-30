@@ -139,7 +139,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BaoCaoController.cs" />
-    <Compile Include="Controllers\HanhLyController.cs" />
     <Compile Include="Controllers\KhuyenMaiController.cs" />
     <Compile Include="Controllers\LichTrinhController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />

@@ -18,6 +18,7 @@ using WebGrease.Css.Extensions;
 
 namespace QuanLyVeTau.Controllers
 {
+
     public class QuanTriController : Controller
     {
 
@@ -28,6 +29,7 @@ namespace QuanLyVeTau.Controllers
             string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString1"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
+        [Authorize]
 
         public ActionResult DashBoard()
         {
@@ -66,7 +68,7 @@ namespace QuanLyVeTau.Controllers
         }
 
 
-
+        
         public ActionResult DangNhap()
         {
             return View("DangNhap");
@@ -97,12 +99,12 @@ namespace QuanLyVeTau.Controllers
                 return View();
             }
         }
-
+        [Authorize]
         public ActionResult DangXuat()
         {
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("Index", "Ve");
+            return RedirectToAction("DangNhap", "QuanTri");
         }
     }
 }

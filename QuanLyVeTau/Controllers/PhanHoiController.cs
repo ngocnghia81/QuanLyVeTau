@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace QuanLyVeTau.Controllers
 {
+    [Authorize]
     public class PhanHoiController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;

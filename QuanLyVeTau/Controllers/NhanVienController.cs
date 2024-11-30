@@ -13,6 +13,7 @@ using QuanLyVeTau.Tools;
 
 namespace QuanLyVeTau.Controllers
 {
+    [Authorize]
     public class NhanVienController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;

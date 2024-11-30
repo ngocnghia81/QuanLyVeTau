@@ -19,6 +19,7 @@ namespace QuanLyVeTau.Controllers
             string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
+        [Authorize]
 
         public ActionResult Index()
         {
@@ -125,7 +126,6 @@ namespace QuanLyVeTau.Controllers
             TempData["Message"] = "Đăng ký thành công!";
             return RedirectToAction("DangNhap", "TaiKhoan");  // Ví dụ chuyển hướng đến trang đăng nhập          
         }
-
 
         public ActionResult QuenMatKhau()
         {

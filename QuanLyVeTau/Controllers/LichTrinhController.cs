@@ -10,6 +10,8 @@ using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
+    [Authorize]
+
     public class LichTrinhController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;

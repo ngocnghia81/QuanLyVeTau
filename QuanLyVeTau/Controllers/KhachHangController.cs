@@ -8,6 +8,8 @@ using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
+    [Authorize]
+
     public class KhachHangController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;

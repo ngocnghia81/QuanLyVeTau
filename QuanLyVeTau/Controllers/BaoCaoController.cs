@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
+    [Authorize]
     public class BaoCaoController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;

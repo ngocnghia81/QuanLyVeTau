@@ -19,7 +19,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="NamSinh" class="form-label">Ngày Sinh:</label>
-                    <input type="date" id="NamSinh" name="NamSinh" class="form-control" value="@khachHang.NamSinh.ToString("yyyy-MM-dd")" required>
+                    <input type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" id="NamSinh" name="NamSinh" class="form-control" value="@khachHang.NamSinh.ToString("yyyy-MM-dd")" required>
                 </div>
                 <div class="mb-3">
                     <label for="Email" class="form-label">Email:</label>

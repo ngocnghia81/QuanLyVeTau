@@ -221,13 +221,19 @@ namespace QuanLyVeTau.Controllers
                 db.SubmitChanges();
 
             }
-            catch
+            catch (Exception ex)
             {
                 if (db.KhachHangs.FirstOrDefault(t=>t.CCCD == cccd && t.Email != email) != null)
                     ErrorMessage = "CCCD đã được sử dụng";
                 else if (db.KhachHangs.FirstOrDefault(t => t.SDT == sdt && t.Email != email) != null)
                     ErrorMessage = "SDT đã được sử dụng";
-                ErrorMessage = "Đã xảy ra lỗi khi cập nhật thông tin: " + ErrorMessage;
+                else
+                {
+                    string error = ex.Message.Split('.')[0];
+                    ErrorMessage =  error;
+
+                }
+                
  
                 
             }

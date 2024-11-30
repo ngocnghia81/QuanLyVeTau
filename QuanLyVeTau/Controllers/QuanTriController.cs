@@ -95,7 +95,7 @@ namespace QuanLyVeTau.Controllers
         {
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("Index", "Ve");
+            return RedirectToAction("DangNhap", "QuanTri");
         }
     }
 }

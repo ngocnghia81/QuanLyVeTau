@@ -26,7 +26,7 @@
 
     /* Dòng tiêu đề */
     th {
-        background: linear-gradient(90deg, #4caf50, #66bb6a);
+        /*        background: linear-gradient(90deg, #4caf50, #66bb6a);*/
         color: white;
         font-weight: bold;
         text-transform: uppercase;
@@ -118,30 +118,42 @@
 </style>
 
 
-<table>
-    <tr>
-        <th>STT</th>
-        <th>Mã Hoá Đơn</th>
-        <th>Khuyến Mãi</th>
-        <th>Thành Tiền</th>
-        <th>Thời gian</th>
-        <th>Hành Động</th>
-    </tr>
-
-    @for (int i = 0; i < Model.Count(); i++)
+@{
+    if (Model.Count() <= 0)
     {
-        var hoaDon = Model.ElementAt(i);
-        var tienGiam = ViewBag.TienGiams[i];
-
-        <tr>
-            <td>@(i + 1)</td>
-            <td>@Html.DisplayFor(modelItem => hoaDon.MaHoaDon)</td>
-            <td>@tienGiam.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
-            <td>@hoaDon.ThanhTien.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
-            <td>@Html.DisplayFor(modelItem => hoaDon.ThoiGianLapHoaDon)</td>
-            <td>
-                @Html.ActionLink("Xem Chi Tiết", "HoaDon", "NguoiDung", new { mahoadon = hoaDon.MaHoaDon }, new { @class = "btn btn-details" })
-            </td>
-        </tr>
+        <h6>Chưa có hoá đơn!</h6>
     }
-</table>
+    else
+    {
+        <table>
+            <tr class="bg-dark">
+                <th>STT</th>
+                <th>Mã Hoá Đơn</th>
+                <th>Khuyến Mãi</th>
+                <th>Thành Tiền</th>
+                <th>Thời gian</th>
+                <th>Hành Động</th>
+            </tr>
+
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                var hoaDon = Model.ElementAt(i);
+                var tienGiam = ViewBag.TienGiams[i];
+
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@Html.DisplayFor(modelItem => hoaDon.MaHoaDon)</td>
+                    <td>@tienGiam.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                    <td>@hoaDon.ThanhTien.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                    <td>@Html.DisplayFor(modelItem => hoaDon.ThoiGianLapHoaDon)</td>
+                    <td>
+                        @Html.ActionLink("Xem Chi Tiết", "HoaDon", "NguoiDung", new { mahoadon = hoaDon.MaHoaDon }, new { @class = "btn btn-details" })
+                    </td>
+                </tr>
+            }
+        </table>
+
+    }
+}
+
+

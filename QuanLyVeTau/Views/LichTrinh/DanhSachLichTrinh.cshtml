@@ -33,7 +33,7 @@
 <div id="loadingSpinner" style="display:none;">
     <img src="~/Content/Images/loading.gif" />
 </div>
-<h2 class="text-center mb-2 font-weight-bold text-primary">Danh sách Lịch Trình</h2>
+<h2 class="text-center mb-2 font-weight-bold">Danh sách Lịch Trình</h2>
 <div class="container">
     <div class="card shadow p-3 mb-2 border-0">
 
@@ -693,7 +693,7 @@
 
     function themNhatKy(event) {
         event.preventDefault(); // Ngừng việc form mặc định gửi dữ liệu và reload trang
-
+        debugger;
         const maTau = document.getElementById('MaTau').value;
         const maLichTrinh = document.getElementById('MaLichTrinh').value;
         const ngayGioKhoiHanh = document.getElementById('NgayGioKhoiHanh').value;

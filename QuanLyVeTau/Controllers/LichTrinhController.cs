@@ -376,7 +376,7 @@ namespace QuanLyVeTau.Controllers
                     return Json(new { success = false, message = "Định dạng ngày giờ không hợp lệ" });
                 }
 
-                string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString5"].ConnectionString;
+                string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
                 string sql2 = string.Format("SELECT dbo.TaoMa('{0}', GETDATE())", maTau);
                 DataTable dtReturned = new DataTable();
                 using (var connection = new SqlConnection(connectionString))
@@ -504,7 +504,7 @@ namespace QuanLyVeTau.Controllers
 
         private DateTime? TinhTongThoiGianDiChuyen(string MaNhatKy, DateTime ThoiGianDi)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
 
             NhatKyTau nk = db.NhatKyTaus.FirstOrDefault(n => n.MaNhatKy == MaNhatKy);
 

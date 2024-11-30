@@ -102,20 +102,8 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult HienThiToa(string maTau)
         {
-            string sql = string.Format("SELECT * FROM LayToa('{0}') ORDER BY SoToa DESC", maTau);
-            DataTable dt = new DataTable();
-
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                using (var adapter = new SqlDataAdapter(sql, connection))
-                {
-                    adapter.Fill(dt);
-
-                }
-            }
-            return PartialView("HienThiToa", dt);
+            List<Toa> toas = db.Toas.Where(t=>t.MaTau == maTau).ToList();
+            return PartialView("HienThiToa", toas);
         }
 
         public ActionResult HienThiKhoang(string maToa, string from,string to, string maNK,int oneway)
@@ -130,7 +118,11 @@ namespace QuanLyVeTau.Controllers
                 using (var adapter = new SqlDataAdapter(sql, connection))
                 {
                     adapter.Fill(dt);
-                    ViewBag.SoToa = dt.Rows[0]["SoToa"];
+                    string name = dt.Rows[0]["SoToa"].ToString();
+                    string dieuhoa = " không điều hoà";
+                    if (dt.Rows[0]["DieuHoa"].ToString() == "1")
+                        dieuhoa = " có điều hoà";
+                    ViewBag.SoToa = name+dieuhoa;
 
                 }
             }

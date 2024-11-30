@@ -2,16 +2,16 @@
 
 
 @{
-    foreach (DataRow row in Model.Rows)
+    foreach (QuanLyVeTau.Models.Toa row in Model)
     {
-        <div class="train__toa" onclick="loadToaDetails(this,'@row["MaToa"]')">
+        <div class="train__toa" onclick="loadToaDetails(this,'@row.MaToa')">
             <div class="window">
                 <div></div>
                 <div></div>
                 <div></div>
             </div>
             <div class="train__toa-number">
-                @row["SoToa"] <!-- Thay "SoToa" bằng tên cột trong DataTable của bạn -->
+                @row.SoToa <!-- Thay "SoToa" bằng tên cột trong DataTable của bạn -->
             </div>
         </div>
     }

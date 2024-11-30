@@ -31,7 +31,10 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult TimVe()
         {
-
+            List<Ga> Gas = db.Gas.ToList();
+            List<PhanHoi> phanHois = db.PhanHois.ToList();
+            ViewBag.Ratings = phanHois;
+            ViewBag.Gas = Gas;
             return View();
         }
 

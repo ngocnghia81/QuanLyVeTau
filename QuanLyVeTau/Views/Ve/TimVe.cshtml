@@ -1,12 +1,35 @@
 ﻿@{
     ViewBag.Title = "TimVe";
     Layout = "~/Views/Shared/_LayoutNguoiDung.cshtml";
+    List<QuanLyVeTau.Models.PhanHoi> phanHois = ViewBag.Ratings;
+    List<QuanLyVeTau.Models.Ga> gas = ViewBag.Gas;
 }
-<link href="~/Content/css/TopCus.css" rel="stylesheet" />
+<link href="~/Content/css/TimVe.css" rel="stylesheet" />
 <div class="tab-content" id="myTabContent">
     <!-- Hero Section Start  -->
     <div class="top-customers-container">
         @Html.Action("Top3KhachHangPartial", "BaoCao")
+    </div>
+    <div class="rating-container mt-4">
+        <h5>Đánh giá của người dùng</h5>
+        <ul class="rating-list-container">
+            @foreach (var phanHoi in phanHois)
+            {
+                <li class="rating-item">
+                    <div class="user-info">
+                        <strong>@phanHoi.HoaDon.KhachHang.TenKhach</strong>  <!-- Tên người dùng -->
+                    </div>
+                    <span class="stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <span class="star @(i <= phanHoi.SoSao ? "filled" : "")">★</span>
+                        }
+                    </span>
+                    <p class="rating-comment">@phanHoi.NoiDung</p>
+                    <p class="rating-date">@phanHoi.NgayPhanHoi</p>
+                </li>
+            }
+        </ul>
     </div>
 
     <section class="heroSection fade show active" id="heroSection" role="tabpanel" aria-labelledby="heroSection-tab">
@@ -27,8 +50,9 @@
                             {
                                 <div class="col-md-5 col-10 dropBox">
                                     <label for="from" class="form-label">Từ</label>
-                                    <input type="text" class="form-control search" name="from" id="from" required="">
-                                    <ul class="showList">
+                                    <input type="text" class="form-control search txtGa" name="from" id="from" required="" autocomplete="off">
+                                    <ul class="showList" id="suggestionsList">
+                                       
                                     </ul>
                                 </div>
                                 <div class="col-md-2 col-2 align-self-end">
@@ -38,10 +62,11 @@
                                 </div>
                                 <div class="col-md-5 col-12 dropBox">
                                     <label for="to" class="form-label">Đến</label>
-                                    <input type="text" class="form-control search" name="to" id="to" required="">
-                                    <ul class="showList">
+                                    <input type="text" class="form-control search txtGa" autocomplete="off" name="to" id="to" required="">
+                                    <ul class="showList" id="suggestionsList">
                                     </ul>
                                 </div>
+                   
                                 <div class="col-6">
                                     <label for="date" class="form-label">Ngày đi</label>
                                     <input type="date" class="form-control" name="date" id="date" required="">
@@ -74,6 +99,7 @@
     </section>
 </div>
 
+
 <script>
     document.getElementById("roundTripCheck").addEventListener("change", function() {
         document.getElementById("returnDate").disabled = !this.checked;
@@ -87,7 +113,6 @@
 
         // Lắng nghe sự kiện click trên nút đổi chỗ
         interchangeBtn.addEventListener('click', function () {
-            // Lấy giá trị của ô input "Từ" và "Đến"
             var fromValue = document.getElementById('from').value;
             var toValue = document.getElementById('to').value;
 
@@ -99,20 +124,66 @@
     document.addEventListener('DOMContentLoaded', function () {
         var dateInput = document.getElementById('date');
         var returnDateInput = document.getElementById('returnDate');
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const now = `${year}-${month}-${day}`;
 
-        // Khi người dùng chọn ngày đi
+        dateInput.setAttribute('min', now);
+
+
         dateInput.addEventListener('change', function () {
-            var selectedDate = dateInput.value; // Lấy ngày đã chọn từ "Ngày đi"
+            var selectedDate = dateInput.value;
 
-            // Đặt giá trị min cho "Ngày về" bằng giá trị của "Ngày đi"
+
             returnDateInput.setAttribute('min', selectedDate);
-
-            // Bật trường "Ngày về" khi "Ngày đi" có giá trị
-            //returnDateInput.disabled = false;
         });
     });
 
-    
+function GoiYGa(inputElement, suggestionsList) {
+    var gaSuggestions = [];
 
-    
+    // Chèn dữ liệu từ C# vào JavaScript
+    @foreach(var ga in gas) {
+        @:gaSuggestions.push('@Html.Raw(ga.TenGa)');
+    }
+    suggestionsList.style.display = 'block'
+    suggestionsList.innerHTML = "";  // Xóa danh sách gợi ý cũ
+
+    // Lọc và hiển thị các gợi ý ga
+    gaSuggestions.forEach(function (ga) {
+        var listItem = document.createElement("li");
+        listItem.textContent = ga;
+
+        // Thêm sự kiện click để chọn gợi ý
+        listItem.addEventListener("click", function () {
+            inputElement.value = ga;  // Gán giá trị vào ô input
+            suggestionsList.style.display = "none";  // Ẩn danh sách gợi ý sau khi chọn
+        });
+
+        suggestionsList.appendChild(listItem);
+    });
+}
+    document.getElementById('from').addEventListener('focus', function () {
+        var parent = this.closest('.dropBox');
+        var suggest = parent.querySelector('#suggestionsList')
+        GoiYGa(this, suggest)
+        document.addEventListener('click', function (e) {
+            if (!document.getElementById('from').contains(e.target)) {
+                suggest.style.display = "none";  // Ẩn danh sách gợi ý
+            }
+        });
+    })
+    document.getElementById('to').addEventListener('focus', function (event) {
+        var parent = this.closest('.dropBox')
+        var suggest = parent.querySelector('#suggestionsList');
+        GoiYGa(this, suggest);
+        document.addEventListener('click', function (e) {
+            if (!document.getElementById('to').contains(e.target)) {
+                suggest.style.display = "none";  // Ẩn danh sách gợi ý
+            }
+        });
+})
+
 </script>

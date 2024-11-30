@@ -1,10 +1,13 @@
-﻿using QuanLyVeTau.Models;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using PagedList;
+using QuanLyVeTau.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common.CommandTrees.ExpressionBuilder;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -36,6 +39,36 @@ namespace QuanLyVeTau.Controllers
             return PartialView("Top3KhachHangPartial", topKhachHang);
         }
 
+        public ActionResult DanhSachTop3KhachHang()
+        {
+            var topKhachHang = db.Top3KhachHangs.ToList()
+                .OrderByDescending(k => k.SoChuyenDi)
+                .ThenByDescending(k => k.TongTienMua).Take(3);
+
+            return View(topKhachHang);
+        }
+
+
+        public ActionResult DoanhThuTheoNgay(DateTime? from, DateTime? to, int page = 1)
+        {
+            var query = db.Vw_BaoCaoDoanhThuTheoNgays.AsQueryable();
+
+            if (from.HasValue)
+            {
+                query = query.Where(x => x.NgayLapHoaDon >= from.Value);
+            }
+
+            if (to.HasValue)
+            {
+                query = query.Where(x => x.NgayLapHoaDon <= to.Value);
+            }
+
+            int pageSize = 10;
+            var result = query.OrderByDescending(d => d.NgayLapHoaDon)
+                                .ThenByDescending(d => d.NgayGio)
+                                .ToPagedList(page, pageSize);
+            return View(result);
+        }
 
     }
 

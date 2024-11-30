@@ -76,7 +76,7 @@ namespace QuanLyVeTau.Controllers
             if (taiKhoan != null)
             {
                 FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);
-                TempData["Email"] = taiKhoan.Email;
+                Session["Email"] = taiKhoan.Email;
                 return RedirectToAction("DashBoard");
             }
             else if (!KiemTraDuLieu.KiemTraEmail(username))

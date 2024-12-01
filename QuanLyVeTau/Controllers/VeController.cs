@@ -261,7 +261,7 @@ namespace QuanLyVeTau.Controllers
                 GiaVe = ve.GiaVe,
                 TenKhachHang = khachHang?.TenKhach,
                 TenTau = tau?.TenTau,
-                TenLoaiToa = toa?.MaLoaiToa,
+                TenLoaiToa = toa?.LoaiToa.TenLoaiToa + ((toa?.LoaiToa.CoDieuHoa ?? false) ? " - Điều hoà" : ""),
                 TenLichTrinh = lichTrinh?.TenLichTrinh,
                 DiemDi = chiTietLichTrinhDi?.MaGa,
                 DiaChiDiemDi = db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDi.MaGa)?.DiaChi,

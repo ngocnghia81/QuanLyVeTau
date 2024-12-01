@@ -100,7 +100,7 @@ BEGIN
     RETURN @Ma;
 END;
 go
-select dbo.TaoMa('TA2',GETDATE())
+select dbo.TaoMa('TA2','12/2/2024 10:00:00 AM')
 
 CREATE PROCEDURE DangKy  
     @TenKhach NVARCHAR(100),

@@ -221,8 +221,8 @@ namespace QuanLyVeTau.Controllers
             var toa = db.Toas
                         .FirstOrDefault(t => t.MaToa == khoang.MaToa);
 
-            var nhatKt = db.NhatKyTaus.FirstOrDefault(nk => nk.MaNhatKy == ve.MaNhatKy);
-
+            var nhatKt = db.NhatKyTaus.FirstOrDefault(nk => nk.MaNhatKy == ve.MaNhatKy && nk.MaTau == toa.MaTau);
+            Debug.WriteLine(nhatKt.ToString());
             var lichTrinh = db.LichTrinhTaus
                               .FirstOrDefault(lt => lt.MaLichTrinh == nhatKt.MaLichTrinh);
 

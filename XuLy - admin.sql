@@ -1135,3 +1135,53 @@ GROUP BY
     cv.TenChucVu,
     h.MaHoaDon;
 ----------------- end BaoCao-------------------------
+
+SELECT * FROM LoaiToa
+SELECT * FROM Ve Where MaVe = 'VE0111243'
+SELEcT * FROM HoaDon WHERE MaHoaDon = 'HD0111241'
+SELECT * FROM Khoang WHERE MaKhoang = 'K196'
+SELECT * FROM Toa WHERE MaToa = 'TO85'
+SELECT * FROM NhatKyTau WHERE MaNhatKy = 'TA80411241' AND MaTau = 'TA10'
+SELECT * FROM ChiTietLichTrinh WHERE MaChiTiet = 'SE2-1'
+SELECT * FROM ChiTietLichTrinh WHERE MaChiTiet = 'SE2-6'
+SELECT * FROM LichTrinhTau WHERE MaLichTrinh = 'SE2'
+SELECt * FROM NhatKyTau WHERE MaLichTrinh = 'SE2'
+
+
+SELECT dbo.TinhTongThoiGianDiChuyen('TA80411241','11/4/2024 8:00:00 AM','SG','TH')
+
+SELECT * FROM ChiTietLichTrinh ct JOIN NhatKyTau nk ON ct.MaLichTrinh = nk.MaLichTrinh WHERE MaNhatKy = 'TA80411241'
+
+---------------------KhuyenMai----------------------
+CREATE TRIGGER trg_InsertKhuyenMai
+ON KhuyenMai
+INSTEAD OF INSERT
+AS
+BEGIN
+    -- Bắt đầu giao dịch để đảm bảo tính toàn vẹn dữ liệu
+    BEGIN TRANSACTION;
+
+    -- Tìm số thứ tự lớn nhất hiện tại trong MaKhuyenMai
+    DECLARE @maxStt INT;
+
+    SELECT @maxStt = ISNULL(MAX(CAST(SUBSTRING(MaKhuyenMai, 3, LEN(MaKhuyenMai) - 2) AS INT)), 0)
+    FROM KhuyenMai;
+
+    -- Thực hiện duyệt qua từng bản ghi được thêm
+    INSERT INTO KhuyenMai (MaKhuyenMai, TenKhuyenMai, SoTienGiamToiDa, PhanTramGiam, NgayBatDau, NgayKetThuc, SoLuong, SoLuongConLai)
+    SELECT 
+        'KM' + CAST(@maxStt + ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS VARCHAR),
+        TenKhuyenMai,
+        SoTienGiamToiDa,
+        PhanTramGiam,
+        NgayBatDau,
+        NgayKetThuc,
+        SoLuong,
+        SoLuongConLai
+    FROM INSERTED;
+
+    -- Kết thúc giao dịch
+    COMMIT TRANSACTION;
+END;
+
+---------------------end KhuyenMai----------------------

@@ -62,7 +62,9 @@
                         <td>@item.TenKhuyenMai</td>
                         <td>@item.PhanTramGiam %</td>
                         <td>@item.NgayBatDau.ToShortDateString()</td>
-                        <td>@item.NgayKetThuc.ToShortDateString()</td>
+                        <td>
+                            @(item.NgayKetThuc != null ? item.NgayKetThuc.Value.ToShortDateString() : "Chưa có ngày")
+                        </td>
                         <td>@item.SoLuong</td>
                         <td>@item.SoLuongConLai</td>
                         <td>@(item.SoLuong - item.SoLuongConLai)</td>
@@ -70,9 +72,7 @@
                             <!-- Chỉnh sửa -->
                             <a href="@Url.Action("ChinhSuaKhuyenMai", "KhuyenMai", new { id = item.MaKhuyenMai })" class="btn btn-warning btn-sm ms-2">
                                 <i class="bi bi-pencil-square"></i>
-                            </a
-
-                            <!-- Xem Hóa Đơn -->
+                            </a><!-- Xem Hóa Đơn -->
                             <a href="@Url.Action("XemHoaDon", "KhuyenMai", new { maKhuyenMai = item.MaKhuyenMai })" class="btn btn-info btn-sm ms-2">
                                 <i class="fas fa-file-alt"></i>
                             </a>

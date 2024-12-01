@@ -1,5 +1,4 @@
-﻿
-CREATE FUNCtION LayTenGa
+﻿CREATE FUNCtION LayTenGa
 (
 	@MaChiTiet varchar(100)
 )

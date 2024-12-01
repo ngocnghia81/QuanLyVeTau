@@ -25,6 +25,7 @@ namespace QuanLyVeTau.Controllers
             return View();
         }
 
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult HoaDon(string mahoadon)
         {
 
@@ -120,6 +121,7 @@ namespace QuanLyVeTau.Controllers
             return View();
         }
 
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult Lichsu()
         {
             KhachHang khachHang = db.KhachHangs.First(t=>t.Email == User.Identity.Name);
@@ -152,6 +154,7 @@ namespace QuanLyVeTau.Controllers
         }
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("User")]
         public JsonResult TraVe(string maVe)
         {
             try 
@@ -185,7 +188,8 @@ namespace QuanLyVeTau.Controllers
                 return false;
             }
         }
-    
+
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult CapNhatThongTin(string email,string message = null)
         {
             string sql = string.Format("select * from KhachHang where email = '{0}'", email);
@@ -195,6 +199,7 @@ namespace QuanLyVeTau.Controllers
             return View(khachHang);
         }
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult CapNhat(FormCollection form)
         {
             

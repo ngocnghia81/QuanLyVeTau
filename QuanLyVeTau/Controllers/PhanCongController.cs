@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
+
     public class PhanCongController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;
@@ -22,11 +23,13 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public List<NhanVien> LayDanhSachNhanVien()
         {
             return db.NhanViens.ToList();
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult XemLichPhanCong(DateTime? ngayBatDau = null)
         {
             if (ngayBatDau == null)
@@ -75,6 +78,7 @@ namespace QuanLyVeTau.Controllers
             return View(lichPhanCong);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public string PhanCong(string maNhanVien, string maPhanCong, string maNhatKy)
         {
             try
@@ -106,6 +110,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult PhanCongNhanVien(string maNhanVien, string maPhanCong, string maNhatKy)
         {
             try
@@ -141,6 +146,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpGet]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public JsonResult LayNhanVienPhuHopNhatKy(string maNhatKy)
         {
             using (var connection = new SqlConnection(connectionString))
@@ -194,6 +200,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public JsonResult XoaNhanVien(string maNhanVien)
         {
             try

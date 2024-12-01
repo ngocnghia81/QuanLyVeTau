@@ -29,6 +29,7 @@ namespace QuanLyVeTau.Controllers
             return View("TimVe");
         }
 
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult TimVe()
         {
             List<Ga> Gas = db.Gas.ToList();
@@ -38,6 +39,7 @@ namespace QuanLyVeTau.Controllers
             return View();
         }
 
+        [CustomRoleAuthorizeAttribute("User")]
         [HttpPost]
         public ActionResult ChonVe(FormCollection form)
         {
@@ -94,18 +96,21 @@ namespace QuanLyVeTau.Controllers
             return View("KetQuaChonVe"); 
         }
 
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult KetQuaChonVe()
         {
 
             return View();
         }
 
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult HienThiToa(string maTau)
         {
             List<Toa> toas = db.Toas.Where(t=>t.MaTau == maTau).ToList();
             return PartialView("HienThiToa", toas);
         }
 
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult HienThiKhoang(string maToa, string from,string to, string maNK,int oneway)
         {
             string sql = string.Format("SELECT * FROM LayKhoang('{0}') ORDER BY SoKhoang DESC", maToa);
@@ -156,6 +161,7 @@ namespace QuanLyVeTau.Controllers
 
 
         //Admin
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult DanhSachVe(bool? daThuHoi, string maTau = "", string maKhach = "", string maVe = "", string diemDi = "", string diemDen = "", int page = 1)
         {
             var ves = db.Ves.AsQueryable();
@@ -199,7 +205,7 @@ namespace QuanLyVeTau.Controllers
         }
 
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên, User")]
         public ActionResult ChiTietVe(string maVe)
         {
             var ve = db.Ves
@@ -315,6 +321,7 @@ namespace QuanLyVeTau.Controllers
         }
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên, User")]
         public ActionResult TaoVe([System.Web.Http.FromBody] DataSender data)
         {
             List<GheDaChon> dsGhe = data.dsGhe;
@@ -361,6 +368,7 @@ namespace QuanLyVeTau.Controllers
             return Json(new { success = true, message = "Dữ liệu đã được lưu thành công.", urlHoaDon = Url.Action("HoaDon","NguoiDung",new { mahoadon = maHoaDon}) });
         }                     
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public JsonResult ThemHanhLy(string maVe, float khoiLuong)
         {
             try

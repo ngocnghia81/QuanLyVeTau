@@ -18,6 +18,7 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult DanhSachKhachHang(string searchKeyword = "", bool? isDeleted = null, int page = 1)
         {
             var query = db.KhachHangs.Include(kh => kh.TaiKhoans).AsQueryable();
@@ -49,7 +50,7 @@ namespace QuanLyVeTau.Controllers
 
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult KhoaTaiKhoan(FormCollection form)
         {
             string id = form["id"];
@@ -77,6 +78,7 @@ namespace QuanLyVeTau.Controllers
             return View();
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult MoTaiKhoan(FormCollection form)
         {
             string id = form["id"];
@@ -103,7 +105,7 @@ namespace QuanLyVeTau.Controllers
             return View();
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult XemLichSuGiaoDich(string id)
         {
             var khachHang = db.KhachHangs.FirstOrDefault(kh => kh.MaKhach == id);
@@ -127,6 +129,7 @@ namespace QuanLyVeTau.Controllers
             return View(lichSuGiaoDich);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult XemPhanHoi(string id = null)
         {
             List<PhanHoi> phanHois = db.PhanHois.Where(p => p.HoaDon.MaKhach == id).ToList();

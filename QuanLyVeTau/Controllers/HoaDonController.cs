@@ -17,6 +17,7 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult DanhSachHoaDon(string maTau = "", string maKhach = "", bool? daChay = null, int page = 1)
         {
             var hoaDons = db.HoaDons.AsQueryable();

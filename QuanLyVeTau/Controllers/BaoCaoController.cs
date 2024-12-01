@@ -23,7 +23,7 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
-
+        [CustomRoleAuthorizeAttribute("*")]
         public ActionResult Top3KhachHangPartial()
         {
             var topKhachHang = db.Top3KhachHangs.ToList()
@@ -38,6 +38,7 @@ namespace QuanLyVeTau.Controllers
             return PartialView("Top3KhachHangPartial", topKhachHang);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult DanhSachTop3KhachHang()
         {
             var topKhachHang = db.Top3KhachHangs.ToList()
@@ -48,6 +49,7 @@ namespace QuanLyVeTau.Controllers
         }
 
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult DoanhThuTheoNgay(DateTime? from, DateTime? to, int page = 1)
         {
             var query = db.Vw_BaoCaoDoanhThuTheoNgays.AsQueryable();

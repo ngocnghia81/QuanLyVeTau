@@ -294,7 +294,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const Ves = document.querySelectorAll('.ve');
         Ves.forEach(ve => {
-            if (ve.getAttribute("data-isDone")) {
+            if (ve.getAttribute("data-isDone") != 'False') {
                 if (ve.classList.contains('Trave'))
                     return;
                 ve.classList.add("success");

@@ -27,7 +27,9 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult DangNhap()
         {
-            return View("DangNhap");
+            if (!User.Identity.IsAuthenticated)
+                return View("DangNhap");
+            return RedirectToAction("Index","NguoiDung");
         }
 
         [HttpPost]

@@ -139,31 +139,43 @@
         });
     });
 
-function GoiYGa(inputElement, suggestionsList) {
-    var gaSuggestions = [];
+    function GoiYGa(inputElement, suggestionsList) {
+        function removeDiacritics(str) {
+            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+        var gaSuggestions = [];
+        var filterGa = [];
+        @foreach(var ga in gas) {
+            @:gaSuggestions.push('@Html.Raw(ga.TenGa)');
+        }
+        var txt = inputElement.value;
+        if (txt.length != 0) {
+            var filterGa = gaSuggestions.filter(function (ga) {
+                return removeDiacritics(ga).toLowerCase().includes(removeDiacritics(txt).toLowerCase()); // Kiểm tra tên ga có chứa chuỗi nhập vào không
+            });
+        } else {
+        
+            filterGa = gaSuggestions;
+        }
 
-    // Chèn dữ liệu từ C# vào JavaScript
-    @foreach(var ga in gas) {
-        @:gaSuggestions.push('@Html.Raw(ga.TenGa)');
-    }
-    suggestionsList.style.display = 'block'
-    suggestionsList.innerHTML = "";  // Xóa danh sách gợi ý cũ
+        suggestionsList.style.display = 'block'
+        suggestionsList.innerHTML = "";  // Xóa danh sách gợi ý cũ
 
-    // Lọc và hiển thị các gợi ý ga
-    gaSuggestions.forEach(function (ga) {
-        var listItem = document.createElement("li");
-        listItem.textContent = ga;
+        // Lọc và hiển thị các gợi ý ga
+        filterGa.forEach(function (ga) {
+            var listItem = document.createElement("li");
+            listItem.textContent = ga;
 
-        // Thêm sự kiện click để chọn gợi ý
-        listItem.addEventListener("click", function () {
-            inputElement.value = ga;  // Gán giá trị vào ô input
-            suggestionsList.style.display = "none";  // Ẩn danh sách gợi ý sau khi chọn
-        });
+            // Thêm sự kiện click để chọn gợi ý
+            listItem.addEventListener("click", function () {
+                inputElement.value = ga;  // Gán giá trị vào ô input
+                suggestionsList.style.display = "none";  // Ẩn danh sách gợi ý sau khi chọn
+            });
 
-        suggestionsList.appendChild(listItem);
+            suggestionsList.appendChild(listItem);
     });
 }
-    document.getElementById('from').addEventListener('focus', function () {
+    document.getElementById('from').addEventListener('input', function () {
         var parent = this.closest('.dropBox');
         var suggest = parent.querySelector('#suggestionsList')
         GoiYGa(this, suggest)
@@ -173,7 +185,7 @@ function GoiYGa(inputElement, suggestionsList) {
             }
         });
     })
-    document.getElementById('to').addEventListener('focus', function (event) {
+    document.getElementById('to').addEventListener('input', function (event) {
         var parent = this.closest('.dropBox')
         var suggest = parent.querySelector('#suggestionsList');
         GoiYGa(this, suggest);

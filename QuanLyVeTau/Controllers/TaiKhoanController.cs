@@ -39,6 +39,13 @@ namespace QuanLyVeTau.Controllers
             string password = collection["pPassword"];
 
             var taiKhoan = db.TaiKhoans.SingleOrDefault(u => u.Email == username && u.MatKhau == password) ?? null;
+
+            if (taiKhoan.DaXoa.Value)
+            {
+                ViewBag.ErrorMessage = "Tài khoản không còn tồn tại";
+                return View();
+            }
+
             if (taiKhoan != null)
             {
                 FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);

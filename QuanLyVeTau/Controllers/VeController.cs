@@ -91,6 +91,8 @@ namespace QuanLyVeTau.Controllers
                 ).ToList();
             ViewBag.KMs = khuyenMai;
             ViewBag.dt = dt;
+            KhachHang kh = db.KhachHangs.First(t=>t.Email == User.Identity.Name);
+            ViewBag.TenKH = kh.TenKhach;
             return View("KetQuaChonVe"); 
         }
 

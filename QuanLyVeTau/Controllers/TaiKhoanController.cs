@@ -63,7 +63,7 @@ namespace QuanLyVeTau.Controllers
             }
         }
 
-        [Authorize]
+        [CustomRoleAuthorizeAttribute("*")]
         public ActionResult DangXuat()
         {
             FormsAuthentication.SignOut();

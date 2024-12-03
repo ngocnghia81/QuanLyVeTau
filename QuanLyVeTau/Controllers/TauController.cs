@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
+    [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
     public class TauController : Controller
     {
 

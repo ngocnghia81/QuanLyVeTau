@@ -22,6 +22,7 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]        
         public ActionResult DashBoard()
         {
             if (!User.Identity.IsAuthenticated)
@@ -75,9 +76,18 @@ namespace QuanLyVeTau.Controllers
 
             if (taiKhoan != null)
             {
-                FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);
-                Session["Email"] = taiKhoan.Email;
-                return RedirectToAction("DashBoard");
+                if(taiKhoan.DaXoa == true)
+                {
+                    ViewBag.ErrorMessage = "Tài khoản bị khoá!";
+                    return View();
+                }
+                else
+                {
+                    FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);
+                    Session["Email"] = taiKhoan.Email;
+                    Session["VaiTro"] = taiKhoan.VaiTro;
+                    return RedirectToAction("XemLichPhanCong","PhanCong");
+                }
             }
             else if (!KiemTraDuLieu.KiemTraEmail(username))
             {
@@ -91,6 +101,7 @@ namespace QuanLyVeTau.Controllers
             }
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult DangXuat()
         {
             FormsAuthentication.SignOut();

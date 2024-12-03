@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace QuanLyVeTau.Controllers
 {
+    [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
     public class PhanHoiController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;

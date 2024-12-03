@@ -138,6 +138,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Authenticate\CustomRoleAuthorizeAttribute.cs" />
     <Compile Include="Controllers\BaoCaoController.cs" />
     <Compile Include="Controllers\HanhLyController.cs" />
     <Compile Include="Controllers\KhuyenMaiController.cs" />
@@ -152,9 +153,11 @@
     <Compile Include="Controllers\TauController.cs" />
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\VeController.cs" />
+    <Compile Include="Models\AuthenticateController.cs" />
     <Compile Include="Models\BaoCaoHoaDonModel.cs" />
     <Compile Include="Models\BaoCaoHoaDonModel.cs" />
     <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
+    <Compile Include="Authenticate\CustomRoleProvider.cs" />
     <Compile Include="Models\DoanhThuNgay.cs" />
     <Compile Include="Models\HoaDonViewModel.cs" />
     <Compile Include="Models\LichTrinhViewModel.cs" />
@@ -348,6 +351,7 @@
     <Content Include="Views\NguoiDung\Index.cshtml" />
     <Content Include="Views\BaoCao\Top3KhachHangPartial.cshtml" />
     <Content Include="Views\Ve\KetQuaChonVe.cshtml" />
+    <Content Include="Views\Authenticate\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

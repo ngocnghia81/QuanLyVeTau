@@ -21,7 +21,7 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult DanhSachKhuyenMai(string search = "", DateTime? ngayBatDau = null, DateTime? ngayKetThuc = null, int page = 1)
         {
             // Truy vấn khuyến mãi từ database
@@ -55,13 +55,14 @@ namespace QuanLyVeTau.Controllers
             return View(result);
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult TaoKhuyenMai()
         {
             return View();
         }
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult TaoKhuyenMai(FormCollection form)
         {
             try
@@ -92,6 +93,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpGet]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult ChinhSuaKhuyenMai(string id)
         {
             var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.MaKhuyenMai == id);
@@ -107,6 +109,7 @@ namespace QuanLyVeTau.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult ChinhSuaKhuyenMai(string id, FormCollection collection)
         {
             var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.MaKhuyenMai == id);
@@ -144,7 +147,7 @@ namespace QuanLyVeTau.Controllers
         }
 
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult XemHoaDon(string maKhuyenMai, int page = 1)
         {
             // Lấy danh sách hóa đơn liên quan đến mã khuyến mãi
@@ -172,8 +175,5 @@ namespace QuanLyVeTau.Controllers
             return View(result);
 
         }
-
-
-
     }
 }

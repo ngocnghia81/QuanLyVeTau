@@ -1185,3 +1185,5 @@ BEGIN
 END;
 
 ---------------------end KhuyenMai----------------------
+
+SELECT * FROM KhuyenMai WHERE NgayBatDau = null

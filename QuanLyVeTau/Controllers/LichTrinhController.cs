@@ -19,7 +19,7 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult DanhSachLichTrinh(string search = "", DateTime? ngayGio = null, string trangThai = "", int page = 1)
         {
             var lichTrinhs = db.LichTrinhTaus.AsQueryable();
@@ -57,6 +57,7 @@ namespace QuanLyVeTau.Controllers
         }
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult ThemLichTrinh(FormCollection form)
         {
             string tienTo = form["tuyen"];
@@ -95,8 +96,8 @@ namespace QuanLyVeTau.Controllers
         }
 
 
-        
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult ChiTietLichTrinhModal(string maLichTrinh)
         {
             var chiTietLichTrinh = db.ChiTietLichTrinhs
@@ -117,6 +118,7 @@ namespace QuanLyVeTau.Controllers
         }
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult CapNhatTrangThai(string id, string trangThai)
         {
             try
@@ -148,6 +150,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult DoiTenLichTrinh(FormCollection collection)
         {
             string lichTrinhId = collection["lichTrinhId"]; 
@@ -178,6 +181,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult ThemChiTietLichTrinh(FormCollection form)
         {
             string maLichTrinh = form["MaLichTrinh"];
@@ -236,6 +240,7 @@ namespace QuanLyVeTau.Controllers
             }
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult LayCTLTTheoMa(string MaChiTiet)
         {
             try
@@ -269,6 +274,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult CapNhatCTLT(string MaChiTiet, int SttGa, string MaGa, string ThoiGianDiChuyen, float KhoangCach)
         {
             try
@@ -337,6 +343,7 @@ namespace QuanLyVeTau.Controllers
         }
 
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult XoaCTLT(string MaChiTiet)
         {
             try
@@ -356,6 +363,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public JsonResult ThemNhatKy(string maTau, string maLichTrinh, string ngayGioKhoiHanh)
         {
             try
@@ -426,6 +434,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpGet]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public JsonResult DanhSachTau(string search = "")
         {
             var taus = db.Taus
@@ -445,7 +454,7 @@ namespace QuanLyVeTau.Controllers
             return Json(taus.ToList(), JsonRequestBehavior.AllowGet); // Return as JSON
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult XemNhatKy(string MaLichTrinh = "", string tau = "", string TrangThai = "", int page = 1)
         {
             // Truy vấn cơ sở dữ liệu
@@ -489,6 +498,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public JsonResult CapNhatTrangThaiNhatKy(string MaNhatKy, string TrangThai)
         {
             try

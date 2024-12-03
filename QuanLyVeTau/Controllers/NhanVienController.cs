@@ -13,6 +13,7 @@ using QuanLyVeTau.Tools;
 
 namespace QuanLyVeTau.Controllers
 {
+    [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
     public class NhanVienController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;
@@ -24,6 +25,7 @@ namespace QuanLyVeTau.Controllers
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult DanhSachNhanVien(string Search = "", string VaiTro = "", string ChucVu = "", int page = 1)
         {
             var NhanViens = db.NhanViens.AsQueryable();
@@ -77,7 +79,7 @@ namespace QuanLyVeTau.Controllers
             return View(model);
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult LayThongTinNhanVien(string MaNhanVien)
         {
             var nv = db.NhanViens.FirstOrDefault(n => n.MaNhanVien == MaNhanVien);
@@ -104,6 +106,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult ThemNhanVien(FormCollection form)
         {
             try
@@ -173,7 +176,7 @@ namespace QuanLyVeTau.Controllers
 
         }
 
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult SuaNhanVien(FormCollection form)
         {
             try
@@ -222,7 +225,7 @@ namespace QuanLyVeTau.Controllers
                 return RedirectToAction("DanhSachNhanVien");
             }
         }
-
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult XoaNhanVien(string id)
         {
             try
@@ -266,6 +269,7 @@ namespace QuanLyVeTau.Controllers
             return new string(password);
         }
 
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult KhoiPhucNhanVien(string id)
         {
             try

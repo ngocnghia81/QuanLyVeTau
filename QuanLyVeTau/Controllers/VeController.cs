@@ -85,9 +85,10 @@ namespace QuanLyVeTau.Controllers
 
             }
             List<KhuyenMai> khuyenMai = db.KhuyenMais.Where(
-                    t => t.SoLuongConLai > 0 &&
+                    t => t.SoLuongConLai > 0 &&((
                     t.NgayBatDau <= DateTime.Now &&
-                    t.NgayKetThuc > DateTime.Now
+                    t.NgayKetThuc > DateTime.Now)
+                    || t.NgayKetThuc == null)
                 ).ToList();
             ViewBag.KMs = khuyenMai;
             ViewBag.dt = dt;
@@ -110,7 +111,7 @@ namespace QuanLyVeTau.Controllers
 
         public ActionResult HienThiKhoang(string maToa, string from,string to, string maNK,int oneway)
         {
-            string sql = string.Format("SELECT * FROM LayKhoang('{0}') ORDER BY SoKhoang DESC", maToa);
+            string sql = string.Format("SELECT * FROM LayKhoang('{0}','{1}',N'{2}',N'{3}') ORDER BY SoKhoang DESC", maToa,maNK,from,to);
             DataTable dt = new DataTable();
 
             using (var connection = new SqlConnection(connectionString))

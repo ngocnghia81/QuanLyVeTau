@@ -147,9 +147,9 @@ var selectedSeats = [];
 // Hàm xử lý khi nhấp vào ghế
 function selectSeat(element, makhoang, stt, giave) {
     var oneway = element.closest('.oneway') != null;
-    // Kiểm tra xem ghế đã bị "reserved" chưa
+
     if (element.classList.contains("reserved")) {
-        return;  // Dừng hàm nếu ghế đã bị "reserved"
+        return; 
     }
     // Kiểm tra xem ghế đã chọn chưa
     if (element.classList.contains("selected")) {
@@ -158,13 +158,19 @@ function selectSeat(element, makhoang, stt, giave) {
         element.classList.remove("selected");
         removeFromCart(makhoang, stt, giave,oneway);
         updateTotal(-giave);
-        updateSL(-1);
+        if (oneway)
+            updateSL(-1);
+        else
+            updateSLReturned(-1)
     } else {
         // Nếu chưa chọn, thêm class 'selected'
         element.classList.add("selected");
         saveToCart(makhoang, stt, giave,oneway);
         updateTotal(giave);       
-        updateSL(1);
+        if (oneway)
+            updateSL(1);
+        else
+            updateSLReturned(1)
     }
     
 }

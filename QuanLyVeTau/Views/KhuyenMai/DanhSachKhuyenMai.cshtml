@@ -27,8 +27,16 @@
 
                 <!-- Input chọn ngày kết thúc -->
                 <div class="input-group ms-2">
-                    <input type="date" name="ngayKetThuc" class="form-control" value="@Request["ngayKetThuc"]" />
+                    @if (string.IsNullOrEmpty(Request["ngayKetThuc"]))
+                    {
+                        <input type="date" name="ngayKetThuc" class="form-control" placeholder="Chưa có ngày" />
+                    }
+                    else
+                    {
+                        <input type="date" name="ngayKetThuc" class="form-control" value="@Request["ngayKetThuc"]" />
+                    }
                 </div>
+
 
                 <!-- Nút tìm kiếm -->
                 <button type="submit" class="btn btn-primary ms-2" style="height: calc(2.25rem + 2px);"><i class="bi bi-search"></i> Tìm kiếm</button>

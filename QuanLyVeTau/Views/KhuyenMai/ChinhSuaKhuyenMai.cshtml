@@ -40,8 +40,18 @@
 
                 <div class="form-group mb-3">
                     @Html.Label("NgayKetThuc", "Ngày Kết Thúc", new { @class = "font-weight-bold" })
-                    @Html.TextBox("NgayKetThuc", Model.NgayKetThuc.ToString("yyyy-MM-dd"), new { @class = "form-control", @type = "date" })
+
+                    @if (Model.NgayKetThuc == null)
+                    {
+                        @Html.TextBox("NgayKetThuc", "", new { @class = "form-control", @type = "date", placeholder = "Chưa có ngày" })
+                    }
+                    else
+                    {
+                        @Html.TextBox("NgayKetThuc", Model.NgayKetThuc.Value.ToString("yyyy-MM-dd"), new { @class = "form-control", @type = "date" })
+                    }
                 </div>
+
+
 
                 <div class="form-group mb-3">
                     @Html.Label("SoLuong", "Số Lượng", new { @class = "font-weight-bold" })

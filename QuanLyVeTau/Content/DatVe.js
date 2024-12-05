@@ -102,7 +102,7 @@ function loadTrainDetails(element, maTau) {
     // Gửi yêu cầu
     xhr.send();
 }
-function loadToaDetails(train,maToa) {
+function loadToaDetails(train, maToa) {
     const trains = document.querySelectorAll(".train__toa");
     var container = train.closest('.container');
     var toaDetail = container.querySelector('.toaDetailsContainer');
@@ -113,8 +113,15 @@ function loadToaDetails(train,maToa) {
 
     var index = container.classList.contains('oneway') ? 0 : 1;
     var maNK = JSON.parse(localStorage.getItem("Tau"))[index];
-    var from = JSON.parse(localStorage.getItem("TimVe"))[0].from;;
-    var to = JSON.parse(localStorage.getItem("TimVe"))[0].to;
+    if (index == 0) {
+        var from = JSON.parse(localStorage.getItem("TimVe"))[0].from;;
+        var to = JSON.parse(localStorage.getItem("TimVe"))[0].to;
+    }
+    else {
+        var from = JSON.parse(localStorage.getItem("TimVe"))[0].to;;
+        var to = JSON.parse(localStorage.getItem("TimVe"))[0].from;
+    }
+    
 
     var urlData =  "&from="+from+"&to="+to+"&maNK="+maNK+"&oneway="+index;
     console.log(urlData);

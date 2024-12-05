@@ -116,6 +116,7 @@ namespace QuanLyVeTau.Controllers
         [CustomRoleAuthorizeAttribute("User")]
         public ActionResult HienThiKhoang(string maToa, string from,string to, string maNK,int oneway)
         {
+
             string sql = string.Format("SELECT * FROM LayKhoang('{0}','{1}',N'{2}',N'{3}') ORDER BY SoKhoang DESC", maToa,maNK,from,to);
             DataTable dt = new DataTable();
 
@@ -136,17 +137,9 @@ namespace QuanLyVeTau.Controllers
             }
 
             Dictionary<string, string> data = new Dictionary<string, string>();
-            if (oneway == 0)
-            {
-                data.Add("from", from);
-                data.Add("to", to);
-            }
-            else
-            {
-                data.Add("to", from);
-                data.Add("from", to);
-            }
-            
+
+            data.Add("from", from);
+            data.Add("to", to);
             data.Add("maNK", maNK);
 
             var gheDaBanTheoKhoang = new Dictionary<string, HashSet<int>>();

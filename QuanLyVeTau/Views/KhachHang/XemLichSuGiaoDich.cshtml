@@ -63,7 +63,7 @@
                                 <div class="border rounded p-2 mb-2">
                                     <strong>Mã Vé:</strong>
                                     <!-- Link to ChiTietVe with MaVe as parameter -->
-                                    <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })">
+                                    <a href="@Url.Action("ChiTietVe","Ve", new { maVe = ve.MaVe })">
                                         @ve.MaVe
                                     </a>
                                     <br />

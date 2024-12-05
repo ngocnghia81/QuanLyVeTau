@@ -231,7 +231,6 @@ namespace QuanLyVeTau.Controllers
                         .FirstOrDefault(t => t.MaToa == khoang.MaToa);
 
             var nhatKt = db.NhatKyTaus.FirstOrDefault(nk => nk.MaNhatKy == ve.MaNhatKy && nk.MaTau == toa.MaTau);
-            Debug.WriteLine(nhatKt.ToString());
             var lichTrinh = db.LichTrinhTaus
                               .FirstOrDefault(lt => lt.MaLichTrinh == nhatKt.MaLichTrinh);
 
@@ -287,8 +286,6 @@ namespace QuanLyVeTau.Controllers
 
             return View(veChiTiet);
         }
-
-
 
         private DateTime LayTongThoiGianDiChuyen(string maNhatKy, DateTime thoiGianDi, string maGaDi, string maGaDen)
         {

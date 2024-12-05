@@ -11,7 +11,6 @@ using System.Web.Mvc;
 
 namespace QuanLyVeTau.Controllers
 {
-
     public class PhanCongController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;

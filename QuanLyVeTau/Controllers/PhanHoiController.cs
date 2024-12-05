@@ -7,7 +7,6 @@ using System.Web.UI.WebControls;
 
 namespace QuanLyVeTau.Controllers
 {
-    [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
     public class PhanHoiController : Controller
     {
         private readonly QuanLyVeTauDBDataContext db;
@@ -21,6 +20,7 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("User")]
         public ActionResult PhanHoi(FormCollection form, string mahoadon)
         {
             string noiDung = form["NoiDung"];
@@ -33,6 +33,9 @@ namespace QuanLyVeTau.Controllers
             db.ExecuteCommand(sql);
             return RedirectToAction("HoaDon", "NguoiDung", new { mahoadon });
         }
+
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
+
         public ActionResult DanhSachPhanHoi(string search = "", int? soSao = null, string trangThai = "", int page = 1)
         {
             var phanHois = db.PhanHois.AsQueryable();
@@ -67,6 +70,8 @@ namespace QuanLyVeTau.Controllers
 
 
         [HttpPost]
+        [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
+
         public JsonResult CapNhatTrangThai(string id, string trangThai)
         {
             var phanHoi = db.PhanHois.SingleOrDefault(p => p.MaHoaDon == id);

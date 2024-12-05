@@ -38,30 +38,30 @@ namespace QuanLyVeTau.Controllers
             string username = collection["pUsername"];
             string password = collection["pPassword"];
 
-            var taiKhoan = db.TaiKhoans.SingleOrDefault(u => u.Email == username && u.MatKhau == password) ?? null;
-
-            if (taiKhoan.DaXoa.Value)
-            {
-                ViewBag.ErrorMessage = "Tài khoản không còn tồn tại";
-                return View();
-            }
-
-            if (taiKhoan != null)
-            {
-                FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);
-                return RedirectToAction("TimVe", "Ve");
-            }
-            else if (!KiemTraDuLieu.KiemTraEmail(username))
+            if (!KiemTraDuLieu.KiemTraEmail(username))
             {
                 ViewBag.ErrorMessage = "Email không đúng định dạng!";
                 return View();
             }
-            else
+
+            var taiKhoan = db.TaiKhoans.FirstOrDefault(u => u.Email == username && u.MatKhau == password);
+
+            if (taiKhoan == null)
             {
                 ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng!";
                 return View();
             }
+
+            if (taiKhoan.DaXoa.HasValue && taiKhoan.DaXoa.Value)
+            {
+                ViewBag.ErrorMessage = "Tài khoản không còn tồn tại.";
+                return View();
+            }
+
+            FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);
+            return RedirectToAction("TimVe", "Ve");
         }
+
 
         [CustomRoleAuthorizeAttribute("*")]
         public ActionResult DangXuat()

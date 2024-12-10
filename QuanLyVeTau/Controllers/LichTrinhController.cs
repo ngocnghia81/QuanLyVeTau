@@ -374,8 +374,8 @@ namespace QuanLyVeTau.Controllers
             try
             {
                 ChiTietLichTrinh chiTietLichTrinh = db.ChiTietLichTrinhs.FirstOrDefault(ctlt => ctlt.MaChiTiet == MaChiTiet);
-
                 db.ChiTietLichTrinhs.DeleteOnSubmit(chiTietLichTrinh);
+                db.SubmitChanges();
                 return Json(new { success = true, message = "Xoá chi tiết lịch trình thành công." });
 
             }

@@ -38,7 +38,7 @@
         <!-- Nút Tìm Kiếm -->
         <div class="col-md-3 mb-2">
             <button type="submit" class="btn btn-primary btn-block">
-                <i class="fas fa-search"></i> Tìm kiếm
+                <i class="bi bi-search"></i> Tìm kiếm
             </button>
         </div>
     </div>
@@ -46,7 +46,7 @@
 <!-- Nút Thêm Nhân Viên -->
 <div class="px-4 mb-4">
     <button class="btn btn-success" data-toggle="modal" data-target="#addModal">
-        <i class="fas fa-plus"></i> Thêm nhân viên
+        <i class="bi bi-plus"></i> Thêm nhân viên
     </button>
 </div>
 @if (TempData["Success"] != null)
@@ -93,18 +93,18 @@
                         <td>@nv.MoTa</td>
                         <td class="d-flex">
                             <button class="btn btn-warning btn-sm edit-btn" data-id="@nv.MaNhanVien">
-                                <i class="fas fa-edit"></i>
+                                <i class="bi bi-pencil"></i>
                             </button>
                             @if (nv.DaXoa == true)
                             {
                                 <a href="@Url.Action("KhoiPhucNhanVien", new { id = nv.MaNhanVien })" class="btn btn-success btn-sm">
-                                    <i class="fas fa-undo"></i>
+                                    <i class="bi bi-undo"></i>
                                 </a>
                             }
                             else
                             {
                                 <a href="@Url.Action("XoaNhanVien", new { id = nv.MaNhanVien })" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash-alt"></i>
+                                    <i class="bi bi-trash"></i>
                                 </a>
                             }
                         </td>
@@ -312,10 +312,10 @@
 
 
 <!-- Thêm jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Content/boostrap/jquery-3.6.0.min.js"></script>
 
 <!-- Thêm Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="~/Content/boostrap/bootstrap4.5.2.bundle.min.js"></script>
 <script>
     $(document).ready(function () {
     // Khi click vào nút "Chỉnh sửa"

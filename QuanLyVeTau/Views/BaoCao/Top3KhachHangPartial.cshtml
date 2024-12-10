@@ -9,12 +9,17 @@
                 int rank = 1;
                 foreach (var item in Model)
                 {
+                    var tenKhach = item.TenKhach ?? "Không có tên";
+                    var soChuyenDi = item.SoChuyenDi ?? 0;
+                    var tongTienMua = item.TongTienMua ?? 0;
+
                     <span class="customer">
-                        <strong>Top @rank: </strong>@item.TenKhach (Chuyến đi: @item.SoChuyenDi, Tổng: @item.TongTienMua.ToString("C", new System.Globalization.CultureInfo("vi-VN")))
+                        <strong>Top @rank: </strong>@tenKhach (Chuyến đi: @soChuyenDi, Tổng: @tongTienMua.ToString("C", new System.Globalization.CultureInfo("vi-VN")))
                     </span>
                     rank++;
                 }
             }
+
             else
             {
                 <span>Không có dữ liệu!</span>

@@ -92,7 +92,7 @@
         <input type="text" name="searchKeyword" class="form-control" placeholder="Tìm kiếm khách hàng..." value="@Request.QueryString["searchKeyword"]" />
         <div class="input-group-append">
             <button type="submit" class="mr-3 btn btn-primary">
-                <i class="fas fa-search"></i>
+                <i class="bi bi-search"></i>
             </button>
         </div>
     </div>
@@ -148,14 +148,14 @@
                         <form method="get" action="@Url.Action("XemLichSuGiaoDich", "QuanTri")" class="d-inline-flex align-items-center">
                             <input type="hidden" name="id" value="@kh.MaKhach" />
                             <button type="submit" class="btn btn-info btn-sm">
-                                <i class="fa-regular fa-history"></i>
+                                <i class="bi bi-clock-history"></i>
                             </button>
                         </form>
 
                         <form method="get" action="@Url.Action("XemPhanHoi", "QuanTri")" class="d-inline-flex align-items-center">
                             <input type="hidden" name="id" value="@kh.MaKhach" />
                             <button type="submit" class="btn btn-warning btn-sm">
-                                <i class="fa-regular fa-comment-dots"></i>
+                                <i class="bi bi-chat-dots"></i>
                             </button>
                         </form>
                     </td>

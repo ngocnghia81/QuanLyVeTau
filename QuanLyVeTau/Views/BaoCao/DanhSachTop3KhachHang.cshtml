@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuanLyVeTau.Models.Top3KhachHang>
+﻿@model IEnumerable<QuanLyVeTau.Models.Top3KH>
 
 @{
     ViewBag.Title = "Danh Sách Top 3 Khách Hàng";
@@ -22,20 +22,17 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.MaKhach)</td>
-                    <td>@Html.DisplayFor(modelItem => item.TenKhach)</td>
-                    <td>@Html.DisplayFor(modelItem => item.SoChuyenDi)</td>
-                    <td>@(Convert.ToDecimal(item.TongTienMua).ToString("C0", new System.Globalization.CultureInfo("vi-VN")))</td>
+                    <td>@item.MaKhach</td> 
+                    <td>@item.TenKhach</td>
+                    <td>@item.SoChuyenDi</td>
+                    <td>@(item.TongTienMua.ToString("C0", new System.Globalization.CultureInfo("vi-VN")))</td>
                     <td>
                         <a href="@Url.Action("DanhSachHoaDon", "HoaDon", new { maKhach = item.MaKhach })" class="btn btn-link">
-                            <i class="fa fa-file-invoice"></i>
+                            <i class="fa fa-file-invoice"></i> Xem hóa đơn
                         </a>
                     </td>
-
-
                 </tr>
             }
         </tbody>
     </table>
 </div>
-

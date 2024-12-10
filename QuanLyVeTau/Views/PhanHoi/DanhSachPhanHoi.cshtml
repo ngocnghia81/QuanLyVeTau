@@ -66,13 +66,13 @@
                         <td>
                             @for (int i = 1; i <= phanHoi.SoSao; i++)
                             {
-                                <i class="fa fa-star text-warning"></i>
+                                <i class="bi bi-star text-warning"></i>
                             }
                             @if (phanHoi.SoSao < 5)
                             {
                                 for (int i = phanHoi.SoSao + 1; i <= 5; i++)
                                 {
-                                    <i class="fa fa-star text-secondary"></i>
+                                    <i class="bi bi-star text-secondary"></i>
                                 }
                             }
                         </td>
@@ -181,7 +181,7 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Content/boostrap/jquery-3.6.0.min.js"></script>
 <script>
     function updateTrangThai(maPhanHoi) {
         debugger;

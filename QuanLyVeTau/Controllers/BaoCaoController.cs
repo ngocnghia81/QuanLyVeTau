@@ -26,26 +26,76 @@ namespace QuanLyVeTau.Controllers
         [CustomRoleAuthorizeAttribute("*")]
         public ActionResult Top3KhachHangPartial()
         {
-            var topKhachHang = db.Top3KhachHangs.ToList()
-                .OrderByDescending(k => k.SoChuyenDi)
-                .ThenByDescending(k => k.TongTienMua).Take(3);
+            var topKhachHang = (from kh in db.KhachHangs
+                                join hd in db.HoaDons on kh.MaKhach equals hd.MaKhach
+                                join ve in db.Ves on hd.MaHoaDon equals ve.MaHoaDon
+                                join nk in db.NhatKyTaus on ve.MaNhatKy equals nk.MaNhatKy
+                                where nk.NgayGio >= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1) && nk.NgayGio <= DateTime.Now
+                                group new { kh, ve } by new { kh.MaKhach, kh.TenKhach } into grouped
+                                select new
+                                {
+                                    MaKhach = grouped.Key.MaKhach,
+                                    TenKhach = grouped.Key.TenKhach,
+                                    SoChuyenDi = grouped.Count(),
+                                    TongTienMua = grouped.Sum(x => x.ve.GiaVe)
+                                })
+                                .OrderByDescending(k => k.SoChuyenDi)
+                                .ThenByDescending(k => k.TongTienMua)
+                                .Take(3)
+                                .ToList();
 
             if (topKhachHang == null || !topKhachHang.Any())
             {
                 Console.WriteLine("Không có dữ liệu Top 3 khách hàng!");
             }
 
-            return PartialView("Top3KhachHangPartial", topKhachHang);
+            var topKhachHangView = topKhachHang.Select(x => new Top3KH
+            {
+                TenKhach = x.TenKhach,
+                SoChuyenDi = x.SoChuyenDi,
+                TongTienMua = x.TongTienMua
+            }).ToList();
+
+            return PartialView("Top3KhachHangPartial", topKhachHangView);
         }
+
+
 
         [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
         public ActionResult DanhSachTop3KhachHang()
         {
-            var topKhachHang = db.Top3KhachHangs.ToList()
-                .OrderByDescending(k => k.SoChuyenDi)
-                .ThenByDescending(k => k.TongTienMua).Take(3);
+            var topKhachHang = (from kh in db.KhachHangs
+                                join hd in db.HoaDons on kh.MaKhach equals hd.MaKhach
+                                join ve in db.Ves on hd.MaHoaDon equals ve.MaHoaDon
+                                join nk in db.NhatKyTaus on ve.MaNhatKy equals nk.MaNhatKy
+                                where nk.NgayGio >= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1) && nk.NgayGio <= DateTime.Now
+                                group new { kh, ve } by new { kh.MaKhach, kh.TenKhach } into grouped
+                                select new
+                                {
+                                    MaKhach = grouped.Key.MaKhach,
+                                    TenKhach = grouped.Key.TenKhach,
+                                    SoChuyenDi = grouped.Count(),
+                                    TongTienMua = grouped.Sum(x => x.ve.GiaVe)
+                                })
+                                .OrderByDescending(k => k.SoChuyenDi)
+                                .ThenByDescending(k => k.TongTienMua)
+                                .Take(3)
+                                .ToList();
 
-            return View(topKhachHang);
+            if (topKhachHang == null || !topKhachHang.Any())
+            {
+                Console.WriteLine("Không có dữ liệu Top 3 khách hàng!");
+            }
+
+            var topKhachHangView = topKhachHang.Select(x => new Top3KH
+            {
+                MaKhach = x.MaKhach,
+                TenKhach = x.TenKhach,
+                SoChuyenDi = x.SoChuyenDi,
+                TongTienMua = x.TongTienMua
+            }).ToList();
+
+            return View(topKhachHangView);
         }
 
 

@@ -171,6 +171,7 @@
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\ThongTinVe.cs" />
+    <Compile Include="Models\Top3KH.cs" />
     <Compile Include="Models\VeChiTietViewModel.cs" />
     <Compile Include="Models\VeRepository.cs" />
     <Compile Include="Models\XemToaViewModel.cs" />
@@ -184,6 +185,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\all.css" />
+    <Content Include="Content\boostrap\all.css" />
+    <Content Include="Content\boostrap\all.min.css" />
+    <Content Include="Content\boostrap\bootstrap-icons.min.css" />
+    <Content Include="Content\boostrap\bootstrap.bundle.min.js" />
+    <Content Include="Content\boostrap\bootstrap.min.css" />
+    <Content Include="Content\boostrap\bootstrap1.11.2-icons.min.css" />
+    <Content Include="Content\boostrap\bootstrap4.5.2.bundle.min.js" />
+    <Content Include="Content\boostrap\font.all.min.css" />
+    <Content Include="Content\boostrap\jquery-3.6.0.min.js" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\LabelInput.css" />
     <Content Include="Content\css\TimVe.css" />
@@ -206,6 +216,7 @@
     <Content Include="Content\Images\cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTA5L3Jhd3BpeGVsb2ZmaWNlMV9zdGVhbV90cmFpbl9pbl90aGVfYmVhdXRpZnVsX3RyYWluX2JyaWRnZV93aXRoX19iMzBkZTliZi03NzRhLTQzZDMtODZmOS00ZDczYTc1ODRkZmVfMS5.png" />
     <Content Include="Content\Images\cHJpdmF0ZS9zdGF0aWMvaW1hZ2VzL3dlYnNpdGUvMjAyMi0wNS9mbDE0NDMxMjI4ODI2LWltYWdlLWpvYjg0Ni0wMS5wbmc-removebg-preview.png" />
     <Content Include="Content\Images\da6e895893602b3e7271.jpg" />
+    <Content Include="Content\Images\gc.png" />
     <Content Include="Content\Images\he-thong-duong-sat-viet-nam.jpg" />
     <Content Include="Content\Images\hotel Image.jpg" />
     <Content Include="Content\Images\loading.gif" />
@@ -278,6 +289,8 @@
       <LastGenOutput>QuanLyVeTauDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Content\boostrap\fonts\bootstrap-icons.woff" />
+    <Content Include="Content\boostrap\fonts\bootstrap-icons.woff2" />
     <None Include="Models\QuanLyVeTauDB.dbml.layout">
       <DependentUpon>QuanLyVeTauDB.dbml</DependentUpon>
     </None>
@@ -350,6 +363,18 @@
     <Content Include="Views\BaoCao\Top3KhachHangPartial.cshtml" />
     <Content Include="Views\Ve\KetQuaChonVe.cshtml" />
     <Content Include="Views\Authenticate\AccessDenied.cshtml" />
+    <Content Include="Views\BaoCao\DanhSachTop3KhachHang.cshtml" />
+    <Content Include="Views\BaoCao\DanhSachTop3KhachHangPartial.cshtml" />
+    <Content Include="Views\BaoCao\DoanhThuTheoNgay.cshtml" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-brands-400.ttf" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-brands-400.woff2" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-regular-400.ttf" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-regular-400.woff2" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-solid-900.ttf" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-solid-900.woff2" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-v4compatibility.ttf" />
+    <Content Include="wwwroot\webfonts\fontawesome\fa-v4compatibility.woff2" />
+    <Content Include="Views\Ve\ChonVe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -133,7 +133,7 @@
                                                 <small class="hover-info" title="Tên: @(nv.TenNhanVien) - SĐT: @(nv.SDT)">
                                                     @(nv.TenNhanVien.Length > 20 ? nv.TenNhanVien.Substring(0, 10) + "..." : nv.TenNhanVien) - @(nv.SDT) - @nv.ChucVu.TenChucVu
                                                     <button class="btn btn-sm ml-2" onclick="deleteEmployee('@nv.MaNhanVien')">
-                                                        <i class="fas fa-trash-alt"></i>
+                                                        <i class="bi bi-trash"></i>
                                                     </button>
                                                 </small><br />
                                             </div>
@@ -176,7 +176,7 @@
                                             <small class="hover-info" title="Tên: @(nv.TenNhanVien) - SĐT: @(nv.SDT)">
                                                 @(nv.TenNhanVien.Length > 20 ? nv.TenNhanVien.Substring(0, 10) + "..." : nv.TenNhanVien) - @(nv.SDT) - @nv.ChucVu.TenChucVu
                                                 <button class="btn btn-sm ml-2" onclick="deleteEmployee('@nv.MaNhanVien')">
-                                                    <i class="fas fa-trash-alt"></i>
+                                                    <i class="bi bi-trash"></i>
                                                 </button>
                                             </small><br />
                                         }
@@ -232,7 +232,7 @@
 }
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Content/boostrap/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
         const maNhanVienSelect = $('#maNhanVien');

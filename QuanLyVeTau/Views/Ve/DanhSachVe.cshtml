@@ -78,11 +78,11 @@
                     <td>@(ve.DaThuHoi ? "Đã thu hồi" : "Chưa thu hồi")</td>
                     <td>
                         <a href="@Url.Action("ChiTietVe", new { maVe = ve.MaVe })" class="btn btn-info btn-sm">
-                            <i class="fas fa-eye"></i> <!-- Biểu tượng mắt (eye) -->
+                            <i class="bi bi-eye"></i> <!-- Biểu tượng mắt (eye) -->
                         </a>
 
                         <a href="javascript:void(0);" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addHanhLyModal" data-ma-ve="@ve.MaVe">
-                            <i class="fas fa-suitcase"></i>
+                            <i class="bi bi-suitcase me-2"></i>
                         </a>
                     </td>
                     <td>
@@ -210,8 +210,8 @@
 
 
 <!-- Thêm thư viện Bootstrap và jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="~/Content/boostrap/jquery-3.6.0.min.js"></script>
+<script src="~/Content/boostrap/bootstrap4.5.2.bundle.min.js"></script>
 
 <script>
     function updateTrangThai(maPhanHoi) {

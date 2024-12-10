@@ -111,25 +111,25 @@
 
                     <td>
                         <button type="button" class="btn btn-info btn-sm" onclick="window.location.href='@Url.Action("XemToa", "Tau", new { maTau = tau.MaTau })'">
-                            <i class="fas fa-eye"></i>
+                            <i class="bi bi-eye"></i>
                         </button>
 
                         <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#suaTauModal" data-ma="@tau.MaTau" data-ten="@tau.TenTau">
-                            <i class="fas fa-edit"></i>
+                            <i class="bi bi-pencil"></i>
                         </button>
 
                         @if (tau.DaXoa.Value)
                         {
                             <!-- Nếu tàu đã xóa, hiển thị nút khôi phục -->
                             <button type="button" class="btn btn-success btn-sm" onclick="if(confirm('Bạn có chắc chắn muốn khôi phục tàu này?')) { window.location.href='@Url.Action("KhoiPhucTau", "Tau", new { maTau = tau.MaTau })' }">
-                                <i class="fas fa-undo"></i>
+                                <i class="bi bi-undo"></i>
                             </button>
                         }
                         else
                         {
                             <!-- Nếu tàu chưa xóa, hiển thị nút xóa -->
                             <button type="button" class="btn btn-danger btn-sm" onclick="if(confirm('Bạn có chắc chắn muốn xóa tàu này?')) { window.location.href='@Url.Action("XoaTau", "Tau", new { maTau = tau.MaTau })' }">
-                                <i class="fas fa-trash-alt"></i>
+                                <i class="bi bi-trash"></i>
                             </button>
                         }
                     </td>
@@ -240,9 +240,9 @@
     </div>
 </div>
 
+<script src="~/Content/boostrap/bootstrap.bundle.min.js"></script>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+@*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>*@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const modalElement = document.getElementById('suaTauModal');

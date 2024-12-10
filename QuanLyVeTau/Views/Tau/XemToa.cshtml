@@ -99,7 +99,7 @@
                                 <form method="post" action="@Url.Action("XoaToa", "Tau")" class="d-inline">
                                     <input type="hidden" name="maToa" value="@toa.MaToa" />
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa toa này?')">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
                             </td>
@@ -335,11 +335,8 @@
 
             var maToa = button.getAttribute('data-matoa');
 
-            // Điền giá trị vào trường input ẩn
             document.getElementById('addKhoangMaToa').value = maToa;
 
-            // Nếu cần thiết, bạn có thể tùy chỉnh thêm các giá trị khác vào modal
-            // Ví dụ, hiển thị mã toa trong phần tiêu đề hoặc điền các giá trị khác
             // const modalTitle = document.getElementById('addKhoangModalLabel');
             // modalTitle.textContent = 'Thêm Khoang vào Toa ' + maToa;
         });

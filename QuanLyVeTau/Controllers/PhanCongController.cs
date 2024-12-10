@@ -138,7 +138,7 @@ namespace QuanLyVeTau.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Lỗi: {ex.Message}";
+                TempData["ErrorMessage"] = "Lỗi:" + ex.Message;
                 return RedirectToAction("XemLichPhanCong");
             }
         }

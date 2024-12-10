@@ -65,8 +65,14 @@ namespace QuanLyVeTau.Controllers
                                      CCCD = nv.CCCD,
                                      NamSinh = nv.NamSinh ?? 0,
                                      HeSoLuong = nv.HeSoLuong.HasValue ? (double)nv.HeSoLuong.Value : 0,
-                                     VaiTro = db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email)?.VaiTro,
-                                     DaXoa = db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email)?.DaXoa ?? false,
+                                     VaiTro = (db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email) != null) ?
+                                            db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email).VaiTro : null,
+
+                                     DaXoa = db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email) != null && db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email).DaXoa.HasValue
+                                            ? db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email).DaXoa.Value
+                                            : false,
+
+
                                      ChucVu = db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu).TenChucVu,
                                      MoTa = db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu).MoTa
                                  }).ToPagedList(page, 10);
@@ -96,9 +102,15 @@ namespace QuanLyVeTau.Controllers
                 SDT = nv.SDT,
                 CCCD = nv.CCCD,
                 NamSinh = nv.NamSinh.HasValue ? int.Parse(nv.NamSinh.ToString()) : 0,
-                VaiTro = db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email)?.VaiTro,
-                ChucVu = db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu)?.TenChucVu,
-                MoTa = db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu)?.MoTa,
+                VaiTro = db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email) != null ?
+                        db.TaiKhoanNhanViens.FirstOrDefault(tk => tk.Email == nv.Email).VaiTro : null,
+
+                ChucVu = db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu) != null ?
+                         db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu).TenChucVu : null,
+
+                MoTa = db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu) != null ?
+                       db.ChucVus.FirstOrDefault(cv => cv.MaChucVu == nv.MaChucVu).MoTa : null,
+
                 HeSoLuong = nv.HeSoLuong.HasValue ? (double)nv.HeSoLuong.Value : 0
             };
             return Json(model, JsonRequestBehavior.AllowGet);
@@ -211,7 +223,8 @@ namespace QuanLyVeTau.Controllers
                 nhanVien.TenNhanVien = tenNhanVien;
                 nhanVien.SDT = sdt;
                 nhanVien.CCCD = cccd;
-                nhanVien.MaChucVu = db.ChucVus.FirstOrDefault(cv => cv.TenChucVu == chucVu)?.MaChucVu;
+                var chucVuItem = db.ChucVus.FirstOrDefault(cv => cv.TenChucVu == chucVu);
+                nhanVien.MaChucVu = chucVuItem != null ? (int?)chucVuItem.MaChucVu : null;
                 nhanVien.HeSoLuong = luong;
                 nhanVien.NamSinh = namSinh;
                 db.SubmitChanges();

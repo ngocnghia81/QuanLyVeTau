@@ -19,7 +19,13 @@ namespace QuanLyVeTau.Models
             string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
             db = new QuanLyVeTauDBDataContext(connectionString);
         }
-        public override string ApplicationName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override string ApplicationName
+        {
+            get { throw new NotImplementedException("ApplicationName getter is not implemented yet."); }
+            set
+            {
+            }
+        }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
         {

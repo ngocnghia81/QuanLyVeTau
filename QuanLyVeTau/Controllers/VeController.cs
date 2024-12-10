@@ -260,22 +260,34 @@ namespace QuanLyVeTau.Controllers
             {
                 MaVe = ve.MaVe,
                 GiaVe = ve.GiaVe,
-                TenKhachHang = khachHang?.TenKhach,
-                TenTau = tau?.TenTau,
-                TenLoaiToa = toa?.LoaiToa.TenLoaiToa + ((toa?.LoaiToa.CoDieuHoa ?? false) ? " - Điều hoà" : ""),
-                TenLichTrinh = lichTrinh?.TenLichTrinh,
-                DiemDi = chiTietLichTrinhDi?.MaGa,
-                DiaChiDiemDi = db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDi.MaGa)?.DiaChi,
-                DiemDen = chiTietLichTrinhDen?.MaGa,
-                DiaChiDiemDen = db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDen.MaGa)?.DiaChi,
+                TenKhachHang = khachHang != null ? khachHang.TenKhach : null,
+                TenTau = tau != null ? tau.TenTau : null,
+                TenLoaiToa = toa != null && toa.LoaiToa != null
+                    ? toa.LoaiToa.TenLoaiToa + (toa.LoaiToa.CoDieuHoa ? " - Điều hoà" : "")
+                    : null,
+                TenLichTrinh = lichTrinh != null ? lichTrinh.TenLichTrinh : null,
+                DiemDi = chiTietLichTrinhDi != null ? chiTietLichTrinhDi.MaGa : null,
+                DiaChiDiemDi = chiTietLichTrinhDi != null ?
+                               (db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDi.MaGa) != null ?
+                               db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDi.MaGa).DiaChi : null)
+                               : null,
+
+                DiemDen = chiTietLichTrinhDen != null ? chiTietLichTrinhDen.MaGa : null,
+
+                DiaChiDiemDen = chiTietLichTrinhDen != null ?
+                               (db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDen.MaGa) != null ?
+                               db.Gas.FirstOrDefault(g => g.MaGa == chiTietLichTrinhDen.MaGa).DiaChi : null)
+                               : null,
+
                 ThoiGianKhoiHanh = tgkh,
                 ThoiGianDen = tgDen,
                 KhoangCach = kc,
                 SttGhe = ve.Stt_Ghe,
-                ThanhTien = hoaDon?.ThanhTien,
-                ThoiGianLapHoaDon = hoaDon?.ThoiGianLapHoaDon,
+                ThanhTien = hoaDon != null ? hoaDon.ThanhTien : (decimal?)null,
+                ThoiGianLapHoaDon = hoaDon != null ? hoaDon.ThoiGianLapHoaDon : null,
                 DaThuHoi = ve.DaThuHoi
             };
+
 
             return View(veChiTiet);
         }

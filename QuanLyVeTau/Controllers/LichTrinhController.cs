@@ -216,7 +216,6 @@ namespace QuanLyVeTau.Controllers
                     }
 
                     thoiGianDiChuyen = new TimeSpan(hours, minutes, 0);
-                    Console.WriteLine($"Thời gian di chuyển là: {thoiGianDiChuyen}");
                 }
                 else
                 {
@@ -333,13 +332,17 @@ namespace QuanLyVeTau.Controllers
                                 return Json(new { success = false, message = "Thời gian không hợp lệ!" });
                             }
                         }
-                        else if (int.TryParse(ThoiGianDiChuyen, out int soGio))
+                        else 
                         {
-                            thoiGianDiChuyen = new TimeSpan(soGio, 0, 0);
-                        }
-                        else
-                        {
-                            return Json(new { success = false, message = "Thời gian không hợp lệ!" });
+                            int soGio;
+                            if (int.TryParse(ThoiGianDiChuyen, out soGio))
+                            {
+                                thoiGianDiChuyen = new TimeSpan(soGio, 0, 0);
+                            }
+                            else
+                            {
+                                return Json(new { success = false, message = "Thời gian không hợp lệ!" });
+                            }
                         }
                     }
 
@@ -362,6 +365,7 @@ namespace QuanLyVeTau.Controllers
                 return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
             }
         }
+
 
 
         [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc")]
@@ -400,10 +404,12 @@ namespace QuanLyVeTau.Controllers
                     return Json(new { success = false, message = "Mã lịch trình không tồn tại" });
                 }
 
-                if (!DateTime.TryParse(ngayGioKhoiHanh, out DateTime parsedNgayGioKhoiHanh))
+                DateTime parsedNgayGioKhoiHanh;
+                if (!DateTime.TryParse(ngayGioKhoiHanh, out parsedNgayGioKhoiHanh))
                 {
                     return Json(new { success = false, message = "Định dạng ngày giờ không hợp lệ" });
                 }
+
                 List<NhatKyTau> nks = db.NhatKyTaus.Where(n => n.MaLichTrinh == maLichTrinh && n.MaTau == maTau).ToList();
                 if(nks.Count != 0)
                 {
@@ -449,7 +455,7 @@ namespace QuanLyVeTau.Controllers
             catch (Exception ex)
             {
                 // Trả về phản hồi thất bại với thông báo lỗi dưới dạng JSON
-                return Json(new { success = false, message = $"Lỗi hệ thống: {ex.Message}" });
+                return Json(new { success = false, message = "Lỗi hệ thống:" + ex.Message });
             }
         }
 

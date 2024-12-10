@@ -155,7 +155,6 @@
     <Compile Include="Controllers\VeController.cs" />
     <Compile Include="Models\AuthenticateController.cs" />
     <Compile Include="Models\BaoCaoHoaDonModel.cs" />
-    <Compile Include="Models\BaoCaoHoaDonModel.cs" />
     <Compile Include="Models\ChiTietLichTrinhViewModel.cs" />
     <Compile Include="Authenticate\CustomRoleProvider.cs" />
     <Compile Include="Models\DoanhThuNgay.cs" />
@@ -165,7 +164,6 @@
     <Compile Include="Models\NhatKyViewModel.cs" />
     <Compile Include="Models\DataSender.cs" />
     <Compile Include="Models\GheDaChon.cs" />
-    <Compile Include="Models\PhanCongViewModel.cs" />
     <Compile Include="Models\PhanCongViewModel.cs" />
     <Compile Include="Models\QuanLyVeTauDB.designer.cs">
       <AutoGen>True</AutoGen>

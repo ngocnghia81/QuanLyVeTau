@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web.Mvc;
+using System.Text.RegularExpressions;
 
 namespace QuanLyVeTau.Controllers
 {
@@ -70,7 +71,7 @@ namespace QuanLyVeTau.Controllers
 
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString3"].ConnectionString;
+                string connectionString = ConfigurationManager.ConnectionStrings["QL_VETAUConnectionString"].ConnectionString;
 
                 string sql = string.Format("EXEC ThemLichTrinh '{0}', N'{1}'", tienTo, tenLichTrinh.Trim());
 
@@ -188,21 +189,40 @@ namespace QuanLyVeTau.Controllers
             string maGa = form["MaGa"];
             int sttGa = Convert.ToInt32(form["SttGa"]);
             string thoiGianDiChuyenStr = form["ThoiGianDiChuyen"];
-            int soGio = 0;
-            TimeSpan thoiGianDiChuyen;
-            if (int.TryParse(thoiGianDiChuyenStr, out soGio))
-            {
-                thoiGianDiChuyen = new TimeSpan(soGio, 0, 0); // tạo TimeSpan từ số giờ
-                                                                       // Bây giờ bạn có TimeSpan với giá trị giờ được cung cấp
-                Console.WriteLine($"Thời gian di chuyển là: {thoiGianDiChuyen}");
-            }
-            else
-            {
-                // Nếu không thể chuyển thành số, mặc định TimeSpan bằng 0
-                thoiGianDiChuyen = TimeSpan.Zero;
-                Console.WriteLine($"Giá trị không hợp lệ, mặc định là: {thoiGianDiChuyen}");
-            }
 
+            TimeSpan thoiGianDiChuyen = TimeSpan.Zero;
+
+            // Kiểm tra và xử lý chuỗi nhập vào
+            if (!string.IsNullOrEmpty(thoiGianDiChuyenStr))
+            {
+                // Sử dụng Regex để lấy giờ và phút từ chuỗi nhập vào
+                var match = Regex.Match(thoiGianDiChuyenStr, @"(?:(\d+)h)?(\d+)");
+
+                if (match.Success)
+                {
+                    int hours = 0;
+                    int minutes = 0;
+
+                    // Lấy giờ nếu có
+                    if (match.Groups[1].Success)
+                    {
+                        hours = int.Parse(match.Groups[1].Value);
+                    }
+
+                    // Lấy phút
+                    if (match.Groups[2].Success)
+                    {
+                        minutes = int.Parse(match.Groups[2].Value);
+                    }
+
+                    thoiGianDiChuyen = new TimeSpan(hours, minutes, 0);
+                    Console.WriteLine($"Thời gian di chuyển là: {thoiGianDiChuyen}");
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Thời gian di chuyển không hợp lệ! Vui lòng nhập theo định dạng 'XhY' (ví dụ: 1h30)." });
+                }
+            }
 
             float khoangCach;
             if (!float.TryParse(form["KhoangCach"], out khoangCach))
@@ -239,6 +259,7 @@ namespace QuanLyVeTau.Controllers
                 return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
             }
         }
+
 
         [CustomRoleAuthorizeAttribute("Quản lý, Giám đốc, Nhân viên")]
         public ActionResult LayCTLTTheoMa(string MaChiTiet)

@@ -245,7 +245,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form Thêm Lịch Trình -->
-                <form id="formThemLichTrinh">
+                <form id="formThemLichTrinh" action="@Url.Action("ThemLichTrinh", "LichTrinh")" method="post">
                     <div class="mb-3">
                         <label for="tenLichTrinh" class="form-label">Tên Lịch Trình</label>
                         <input type="text" class="form-control" id="tenLichTrinh" name="tenLichTrinh" placeholder="Nhập tên lịch trình" required>
@@ -379,7 +379,7 @@
                     </div>
                     <div class="form-group">
                         <label for="thoiGianDiChuyen">Thời Gian Di Chuyển Từ Trạm Trước</label>
-                        <input type="number" class="form-control" id="thoiGianDiChuyen" name="ThoiGianDiChuyen">
+                        <input type="text" class="form-control" id="thoiGianDiChuyen" name="ThoiGianDiChuyen">
                     </div>
 
                     <div class="form-group">
@@ -430,10 +430,9 @@
 
 
 
-<!-- Thêm jQuery -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Thêm Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script>
     function loadChiTietLichTrinh(maLichTrinh) {

@@ -18,13 +18,13 @@ namespace QuanLyVeTau
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            var session = filterContext.HttpContext.Session; 
-            var username = session["Email"] as string;
-            if (string.IsNullOrEmpty(username))
-            {
-                filterContext.Result = new RedirectResult("/QuanTri/DangNhap");
-                return; 
-            }
+            //var session = filterContext.HttpContext.Session;
+            var username = filterContext.HttpContext.User.Identity.Name;
+            //if (string.IsNullOrEmpty(username))
+            //{
+            //    filterContext.Result = new RedirectResult("/QuanTri/DangNhap");
+            //    return; 
+            //}
             var roleProvider = new CustomRoleProvider();
             var roles = roleProvider.GetRolesForUser(username);
 

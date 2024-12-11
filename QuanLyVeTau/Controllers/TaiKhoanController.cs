@@ -59,6 +59,7 @@ namespace QuanLyVeTau.Controllers
             }
 
             FormsAuthentication.SetAuthCookie(taiKhoan.Email, false);
+            Session["Email"] = taiKhoan.Email;
             return RedirectToAction("TimVe", "Ve");
         }
 

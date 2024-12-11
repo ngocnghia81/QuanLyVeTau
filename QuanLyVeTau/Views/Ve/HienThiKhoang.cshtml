@@ -1,53 +1,56 @@
 ﻿@using System.Data;
 
-    <span class="toa__name">
-        Toa số @ViewBag.SoToa
-    </span>
-    <div class="toa__container">
-        @{
-            foreach (DataRow row in Model.Rows)
-            {
-                <div class="khoang">
-                    <div class="khoang__name">khoang @row["SoKhoang"]
-                    </div>
-
-                    <div class="khoang__container">
-                        @{
-                                        var gheDaBanTheoKhoang = (Dictionary<string, HashSet<int>>)ViewBag.GheDaBanTheoKhoang;
-                                        var maKhoang = row["MaKhoang"].ToString();
-                                        var loaiToa = row["LoaiToa"].ToString();
-                                        var giave = row["GiaVe"];
-
-                                        for (int i = 1; i < int.Parse(row["SLChoNgoi"].ToString()) + 1; i++)
-                                        {
-                                            var gheDaBan = gheDaBanTheoKhoang.ContainsKey(maKhoang) ? gheDaBanTheoKhoang[maKhoang] : new HashSet<int>();
-
-                                <div maKhoang ="@maKhoang" stt ="@i" class="seat seat--@loaiToa @(gheDaBan.Contains(i) ? "reserved" : "")"  onclick="selectSeat(this,'@maKhoang',@i,@giave)"  onmouseover="showPrice(this,@giave)" onmouseout="hidePrice(this)">
-                                 @if (loaiToa == "GM")
-                                    {
-                                     <i class="fa-duotone fa-solid fa-couch "></i>
-                                 }                              
-                                
-                           
-                                else if (loaiToa == "GI")
-                                {                                  
-                                    <i class="fa-solid fa-bed-empty"></i>
-                                }
-                                else if (loaiToa == "GC")
-                                {
-                                    <i class="fa-sharp fa-thin fa-seat-airline"></i>
-                                     
-                                } 
-                                 <span class="seat__number">@i</span>
-                                </div>
-                               
-                            }
-                        }
-
-
-                    </div>
+<span class="toa__name">
+    Toa số @ViewBag.SoToa
+</span>
+<div class="toa__container">
+    @{
+        foreach (DataRow row in Model.Rows)
+        {
+            <div class="khoang">
+                <div class="khoang__name">
+                    khoang @row["SoKhoang"]
                 </div>
+
+                <div class="khoang__container">
+                    @{
+            var gheDaBanTheoKhoang = (Dictionary<string, HashSet<int>>)ViewBag.GheDaBanTheoKhoang;
+            var maKhoang = row["MaKhoang"].ToString();
+            var loaiToa = row["LoaiToa"].ToString();
+            var giave = row["GiaVe"];
+
+            for (int i = 1; i < int.Parse(row["SLChoNgoi"].ToString()) + 1; i++)
+            {
+                var gheDaBan = gheDaBanTheoKhoang.ContainsKey(maKhoang) ? gheDaBanTheoKhoang[maKhoang] : new HashSet<int>();
+
+                <div makhoang="@maKhoang" stt="@i" class="seat seat--@loaiToa @(gheDaBan.Contains(i) ? "reserved" : "")" onclick="selectSeat(this,'@maKhoang',@i,@giave)" onmouseover="showPrice(this,@giave)" onmouseout="hidePrice(this)">
+                    @if (loaiToa == "GM")
+                    {
+
+                                                                        <img src="~/Content/Icons/couch.png" />
+
+                    }
+
+
+                    else if (loaiToa == "GI")
+                    {
+                                                <img src="~/Content/Icons/bed.png" />
+
+                    }
+                    else if (loaiToa == "GC")
+                    {
+                            <img src="~/Content/Icons/chair.png" />
+                    }
+                    <span class="seat__number">@i</span>
+                </div>
+
             }
+                    }
+
+
+                </div>
+            </div>
         }
-    </div>
+    }
+</div>
 

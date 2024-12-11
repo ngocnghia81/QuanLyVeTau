@@ -195,13 +195,17 @@
     <Content Include="Content\boostrap\font.all.min.css" />
     <Content Include="Content\boostrap\jquery-3.6.0.min.js" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\datve.css" />
     <Content Include="Content\css\LabelInput.css" />
     <Content Include="Content\css\TimVe.css" />
     <Content Include="Content\DatVe.js" />
     <Content Include="Content\Icons\arrows.png" />
     <Content Include="Content\Icons\Azadi-Ka-Amrit-Mahotsav-Logo.png" />
+    <Content Include="Content\Icons\bed.png" />
     <Content Include="Content\Icons\card.png" />
+    <Content Include="Content\Icons\chair.png" />
     <Content Include="Content\Icons\clock.png" />
+    <Content Include="Content\Icons\couch.png" />
     <Content Include="Content\Icons\download.png" />
     <Content Include="Content\Icons\flag.jpg" />
     <Content Include="Content\Icons\free-train-icon-1045-thumb.png" />
